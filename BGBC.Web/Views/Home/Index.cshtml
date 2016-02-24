@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<!-- <style>
+  .padd2{
+     width: 139%;margin-left: -190px;}
+</style>-->
+
+<div class="col-md-12 no-padd" style="background-image: url('/Content/images/bg-banner.jpg'); color: white">
+
+    <div class="col-md-8">
+        <div class="banner-left">
+            <h1 style="color:#fff;text-align:left;font-weight:normal">BGBC Management provides real solutions for property management and payment processing.... get started today with our services.</h1>
+            <ul class="arrow-list">
+                <li>Find or Rent Properties</li>
+                <li>Property Management & Application Screening Services</li>
+                <li>Collect Your Rent Online Today</li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="banner-right"><img src="~/Content/images/banner-home.png" alt=""></div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<div class="">
+
+    <div class="col-md-12 no-padd">
+
+        <div class="home content">
+            <div class="inner">
+                <div class="box">
+                    <div class="col-md-6">
+                        <div class="image left"><img src="~/Content/images/pic-1.jpg" alt=""></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-right">
+                            <h1>Begin searching immediately for your next home or to market your current rental property.</h1>
+                            <p>Having an expert guide you through today’s challenging real estate market is a smart way to make sure you earn more for your time and money. We can customize your search and provide you with the best real estate agents in the business.</p>
+                            @Html.Raw(HttpUtility.UrlDecode(Html.ActionLink("Learn More", "ListHome", "Home", new { id = "#contact" }, new { @class = "btn btn-warning" }).ToString()))
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="box">
+                    <div class="col-md-6">
+                        <div class="image left">
+                            <h1>Property Management Solutions.</h1>
+                            <p>Let BGBC handle your rental from start to finish. We can help you find tenants, handle the screening and selection process, provide the right documents you need, and manage the tenant-landlord process. With BGBC, you will increase the return on your rental investment without investing your precious time.</p>
+                            @Html.ActionLink("Learn More", "RentalManagement", "Home", null, new { @class = "btn btn-warning" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-right" style=" text-align: right;">
+                            <img src="~/Content/images/pic-2.jpg" class="margin-img" alt="">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="box">
+                    <div class="col-md-6">
+                        <div class="image-left"><img class="margin-img" src="~/Content/images/pic-3.jpg" alt=""></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <h1 class="text-left">Payment Processing Solutions</h1>
+                            <p class="text-left">Today credit cards and electronic payment options are a necessity, not a convenience. BGBC has a  number of options that allow you to provide your tenants with the security and convenience of online payments.</p>
+                            <img src="~/Content/images/pic-4.jpg" alt=""><br>
+                            @Html.ActionLink("Learn More", "PaymentProcess", "Home", null, new { @class = "btn btn-warning pull-right" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

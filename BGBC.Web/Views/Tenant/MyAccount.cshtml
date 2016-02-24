@@ -1,0 +1,156 @@
+﻿@model BGBC.Web.Models.MyAccount
+@{
+    ViewBag.Title = "MyAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 col-sm-6 no-padd">
+            <h1>My Account</h1>
+        </div>
+        <div class="col-md-6 col-sm-6 no-padd header-btn">
+            @Html.ActionLink("Back To My Dashboard", "Index", "Tenant", null, new { @class = "btn-button btn-primary pull-right" })
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <fieldset>
+        <legend></legend>
+        <div class="col-md-12 no-padd">
+            <div class="col-md-3">
+                @Html.Label("Property Manager :")
+                @Html.Label("Name :", new { style = "display:inline;" }) @Html.DisplayFor(model => model.Name)<br />
+                @Html.Label("Email :", new { style = "display:inline;" })  @Html.DisplayFor(model => model.Email)<br />
+                @Html.Label("Phone :", new { style = "display:inline;" }) @Html.DisplayFor(model => model.Phone)
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Rental Details :")
+                @Html.Label("Rent Amount :", new { style = "display:inline;" }) @Html.DisplayFor(model => model.RentAmount)<br />
+                @Html.Label("Rent Due :", new { style = "display:inline;" })  @Html.DisplayFor(model => model.RentDue)
+            </div>
+        </div>
+
+    </fieldset>
+    <div class="clearfix">&nbsp;</div>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+       
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                Due Date
+                            </th>
+                            <th>
+                                Charge
+                            </th>
+                            <th>
+                                Amount Due
+                            </th>
+                            <th>
+                                Select
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.TenantRent.Count(); i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(p => Model.TenantRent[i].DueDateDisplay)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => Model.TenantRent[i].Charge)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => Model.TenantRent[i].AmountDue)
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(p => Model.TenantRent[i].select)
+                                    @Html.HiddenFor(p => Model.TenantRent[i].ID)
+                                </td>
+                                 
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+             
+    </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 no-padd">
+                        <input type="submit" value="Pay Selected" class="btn btn-warning pull-right" />
+                    </div>
+                </div>
+           
+       
+    }
+
+
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 col-sm-6 no-padd">
+            <h1>Recent Payments</h1>
+        </div>
+        <div class="col-md-6  col-sm-6 no-padd header-btn">
+            @Html.ActionLink("View Full Payment History", "TenantPaymentHistory", "Reports", null, new { @class = "btn-button btn-primary pull-right" })
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Conformation #
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Payment Status
+                        </th>
+
+                        <th>
+                            Payment Amount
+                        </th>
+                        <th>
+                            Comment
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.RecentPayments.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(p => Model.RecentPayments[i].Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => Model.RecentPayments[i].Conformation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => Model.RecentPayments[i].Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => Model.RecentPayments[i].PaymentStatus)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => Model.RecentPayments[i].PaymentAmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => Model.RecentPayments[i].Comment)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+ 
+</div>

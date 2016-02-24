@@ -1,0 +1,251 @@
+﻿@model BGBC.Web.Models.Payments
+
+@{
+    ViewBag.Title = "TenantPayment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    @using (Html.BeginForm())
+    {
+        <div class="col-md-12 no-padd">
+            <div class="col-md-6  no-padd">
+                <h1>Make Payments</h1>
+            </div>
+            <div class="col-md-6  no-padd header-btn">
+                <input type="button" value="Back to My Account" class="btn btn-primary pull-right" onclick="location.href='@Url.Action("MyAccount", "Tenant")'" />
+                @*@Html.ActionLink("Back To My Accout", "Myaccount", "Tenant", new { @class = "btn-block btn-primary pull-right" })*@
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <h4>  Billing Info</h4>
+        <br />
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.FirstName, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.FirstName, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.FirstName, "", new { @class = "text-danger" })
+                @Html.HiddenFor(p => Model.PropertyID)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.LastName, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.LastName, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.Email, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.Email, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Phone, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.Phone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                @Html.ValidationMessageFor(p => p.Phone, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+        <h4> Billing Address</h4>
+        <div class="form-group">
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.CheckBoxFor(model => model.UsePropertyAddress, new { @onclick = "usePropertyAddress.call(this);" })
+                    @Html.DisplayNameFor(model => model.UsePropertyAddress)
+                    @Html.ValidationMessageFor(model => model.UsePropertyAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.BillingAddress, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.BillingAddress, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
+                @Html.ValidationMessageFor(p => p.BillingAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.BillingAddress_2, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(p => p.BillingAddress_2, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
+                @Html.ValidationMessageFor(p => p.BillingAddress_2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.BillingCty, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.BillingCty, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
+                @Html.ValidationMessageFor(p => p.BillingCty, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.BillingState, htmlAttributes: new { @class = "control-label required" })
+                @Html.DropDownListFor(p => p.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.BillingState, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.BillingZip, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.BillingZip, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
+                @Html.ValidationMessageFor(p => p.BillingZip, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <br />
+        <div class="pull-left">
+            <h4>Selected charges</h4>
+            <br />
+        </div>
+        <table class="table">
+            <tr>
+                <th>
+                    Due Date
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Amount
+                </th>
+            </tr>
+            @for (int i = 0; i < Model.TenantRent.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(p => Model.TenantRent[i].DueDateDisplay)
+                        @Html.HiddenFor(p => Model.TenantRent[i].DueDate)
+                        @Html.HiddenFor(p => Model.TenantRent[i].ID)
+                        @Html.HiddenFor(p => Model.TenantRent[i].PropertyID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => Model.TenantRent[i].Charge)
+                        @Html.HiddenFor(p => Model.TenantRent[i].Charge)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => Model.TenantRent[i].AmountDue)
+                        @Html.HiddenFor(p => Model.TenantRent[i].AmountDue)
+                    </td>
+
+                </tr>
+            }
+            <tr>
+                <td>
+                    Total
+                </td>
+                <td></td>
+                <td>
+                    @Html.DisplayFor(p => Model.OrderTotal)
+                    @Html.HiddenFor(p => Model.OrderTotal)
+                </td>
+
+            </tr>
+        </table>
+
+        <h4>Payment Method</h4>
+        <br />
+        <div class="form-group">
+            @Html.RadioButtonFor(model => model.PaymentMethod, "Credit Card", new { @id = "CreditCards", @onclick = "paymentMethodChange.call(this);" })Credit Card<br />
+            @Html.RadioButtonFor(model => model.PaymentMethod, "eCheck", new { @id = "eChecks", @onclick = "paymentMethodChange.call(this);" })eCheck<br />
+            @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger" })
+        </div>
+        <div class="row Creditcard">
+            <div class="col-md-7">
+                <span>Accepted methods: American Express, Discover, MasterCard, Visa</span>
+            </div>
+        </div>
+        <div class="form-group Creditcard">
+            @Html.LabelFor(model => model.CardNo, htmlAttributes: new { @class = "control-label required" })
+            @Html.EditorFor(model => model.CardNo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CardNo, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group Creditcard">
+            @Html.LabelFor(model => model.CardExpMon, htmlAttributes: new { @class = "control-label required" })
+            @Html.DropDownListFor(model => model.CardExpMon, (IEnumerable<SelectListItem>)ViewBag.Months, new { style = "display:inline;" })
+            @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years, new { style = "display:inline;" })
+        </div>
+        <div class="form-group Creditcard">
+            @Html.LabelFor(model => model.CVV, htmlAttributes: new { @class = "control-label required" })
+            @Html.EditorFor(model => model.CVV, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CVV, "", new { @class = "text-danger" })
+        </div>
+        <div class="row eCheck">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.BankAccountType, htmlAttributes: new { @class = "control-label required" })
+                @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label" }, { "onchange", "petDepositDueClick.call(this)" } })
+                @Html.ValidationMessageFor(model => model.BankAccountType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row eCheck">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.BankRoutingNumber, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.BankRoutingNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BankRoutingNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row eCheck">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10 checkbox">
+               @Html.CheckBoxFor(model => model.SaveCard)
+               @Html.DisplayNameFor(model => model.SaveCard)
+               @Html.ValidationMessageFor(model => model.SaveCard, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label" })
+            @Html.TextAreaFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control" }, @cols = 5, @rows = 10 })
+            @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+        </div>
+        <input type="submit" value="Pay Now" class="btn btn-primary  " />
+        @Html.ActionLink("Cancel", "Myaccount", "Tenant", null, new { })
+    }
+</div>
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            usePropertyAddress();
+            paymentMethodChange();
+        });
+
+        function usePropertyAddress() {
+            if ($('#UsePropertyAddress').prop('checked')) {
+                $('.billing-address-fields').hide();
+            }
+            else {
+                $('.billing-address-fields').show();
+            }
+
+        };
+
+        function paymentMethodChange() {
+            if ($('#CreditCards').prop('checked')) {
+                $('.Creditcard').show();
+                $('.savecard').show();
+                $('.eCheck').hide();
+            } else {
+                $('.Creditcard').hide();
+                $('.savecard').show();
+                $('.eCheck').show();
+            }
+        }
+
+    </script>
+}
+
+
+
+
+

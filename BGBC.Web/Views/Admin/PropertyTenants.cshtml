@@ -1,0 +1,59 @@
+﻿@model IEnumerable<BGBC.Model.TenantOutstanding>
+
+@{
+    ViewBag.Title = "PropertyTenants";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">    
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 no-padd">
+            <h1>@ViewBag.PropertyName Tenants</h1>
+        </div>
+        <div class="col-md-6 no-padd header-btn">
+            @Html.ActionLink("Back to Properties", "OwnerProperties", "Admin", new { id = @ViewBag.UserId }, new {@class = "btn-button btn-primary" })
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Outstanding Balance
+                    </th>
+                    <th>Options</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Balance)
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                @Html.ActionLink("Edit Tenant", "EditAdmin", "Tenant", new { id = item.UserID }, new { @class = "btn-button btn-primary btn-block" })
+                                @Html.ActionLink("View Tenant's Payments", "ViewTenantsPayments", "Tenant", new { id = item.UserID }, new { @class = "btn-button btn-primary btn-block" })
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+ 
+            </table>
+        </div>
+</div>
+     
+    
+          

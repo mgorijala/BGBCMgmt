@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "AccessDenied";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="back">
+    <div class="row">
+        <div class="col-lg-12" style="text-align:right">
+            @Html.ActionLink("Please click to go back", null, null, null, new { href = Request.UrlReferrer })
+        </div>
+    </div>
+    <div class="row" style="padding-top:15%">
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h3>Access Denied</h3></div>
+                <div class="panel-body">
+                    <p>You dont have enough permisions to access this page</p>
+                    @Html.ActionLink("Please click to go back", null, null, null, new { href = Request.UrlReferrer })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+
+        </div>
+    </div>
+   
+    
+    
+</div>

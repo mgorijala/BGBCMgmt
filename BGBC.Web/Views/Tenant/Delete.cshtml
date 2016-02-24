@@ -1,0 +1,617 @@
+﻿@model BGBC.Web.Models.TenantInfo
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .row {
+        padding-top: 10px;
+    }
+</style>
+<div class="back">
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>TenantInfo</h4>
+        <hr />
+        @Html.HiddenFor(model => model.TenantID)
+        @Html.HiddenFor(model => model.UserID)
+        @Html.HiddenFor(model => model.PropertyID)
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.FirstName)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.LastName)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Email)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Email)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.RentAmount)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.RentAmount)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.FinalDueDate)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.FinalDueDate)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Deposit)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Deposit)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.DepostDueDate)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.DepostDueDate)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.PetDepositDue)
+                    
+                </b>
+            </div>
+            <div class="col-md-9">
+                @if (Model.PetDepositDue.ToString() == "Yes")
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.PetDeposit)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.PetDeposit)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingAddressSame)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @if (Model.ProfileInfo.BillingAddressSame.ToString() == "true")
+                {
+                    <span>True</span>
+                }
+                else
+                {
+                    <span>False</span>
+                }
+              
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingAddress)
+                </b>
+            </div>
+            <div class="col-md-9">
+
+                @Html.DisplayFor(model => model.ProfileInfo.BillingAddress)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingAddress_2)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingAddress_2)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingCty)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingCty)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingState)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingState)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingZip)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingZip)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.HomePhone)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.HomePhone)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.MobilePhone)
+                </b>
+            </div>
+            <div class="col-md-9">
+
+                @Html.DisplayFor(model => model.ProfileInfo.MobilePhone)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.WorkPhone)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.WorkPhone)
+            </div>
+        </div>
+        <br/>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-danger" /> 
+                @Html.ActionLink("Cancel", "PropertyTenants", "Owner", new { id = Model.PropertyID }, new { @class = "btn-button btn-primary" })
+            </div>
+        }
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+

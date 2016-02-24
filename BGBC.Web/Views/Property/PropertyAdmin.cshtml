@@ -1,0 +1,52 @@
+﻿@model IEnumerable<BGBC.Model.User>
+
+@{
+    ViewBag.Title = "PropertyAdmin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="row">
+        <div class="col-md-9">
+            <h1>All Property Owners</h1>
+        </div>
+        <div class="col-md-3" style="padding-top:30px;">
+            @Html.ActionLink("Back to Dashboard", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var item in Model)
+                     {*@
+                    <tr>
+                        <td>
+                            owner
+                        </td>
+                        <td>
+                            Owner@test.com
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                @Html.ActionLink("View Properties", "OwnerProperties", "Admin", null, new { @class = "btn-button btn-primary" })
+                                @Html.ActionLink("View Tenants", "AllPropertyTenants", "Admin", null, new { @class = "btn-button btn-primary" })
+                                @Html.ActionLink("View Tenant Payments", "ViewPayments", "Tenant", null, new { @class = "btn-button btn-primary" })                                                               
+                            </div>
+                        </td>
+                    </tr>
+                    @*}*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

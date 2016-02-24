@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "AdminDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+ .back1 {
+        background: #fff !important;
+        padding: 20px !important;
+        padding-bottom: 150px !important;
+    }
+    </style>
+<div class="back1">
+    <h1 style="padding-top:0px;">Admin Dashboard</h1>
+    @Html.ActionLink("PROPERTY OWNERS,PROPERTIES,TENANTS & PAYMENTS", "OwnerProperty", "Home", new { @class = "btn-primary btn-sm" })<br/><br />
+    @Html.ActionLink("MANAGE PRODUCTS & SERVICES", "ProductServices", "Home", new { @class = "btn-primary  btn-sm" })<br/><br />
+    @Html.ActionLink("REPORTS", "", "Home",new { @class = "btn-primary  btn-sm" })
+</div>
+

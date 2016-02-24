@@ -1,0 +1,107 @@
+﻿@model BGBC.Model.Property
+
+@{
+    ViewBag.Title = "EditPropertyAdmin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AdminConfirm", "Property"))
+{
+    @Html.AntiForgeryToken() 
+    @Html.HiddenFor(model => model.PropertyID)
+    @Html.HiddenFor(model => model.Createdon)
+    @Html.HiddenFor(model => model.UserID)
+    <div class="col-md-12 back">
+        <h1>Edit Property</h1>
+        <label><span style="color:red">&#42;</span>  indicates a required field</label>
+        <label><span style="color:blue">&dagger;</span>  indicates information that can only be updated by BGBC Management. To request a change, please fill out <a>this form.</a></label>
+        <br />
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Nickname, htmlAttributes: new { @class = "control-label col-md-0" })
+                @Html.EditorFor(model => model.Nickname, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nickname, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address2, htmlAttributes: new { @class = "control-label col-md-0" })
+                @Html.EditorFor(model => model.Address2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label required" })
+                @Html.DropDownListFor(model => model.State, (IEnumerable<SelectListItem>)ViewBag.States, "--Select State--", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Zip, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Zip, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="">Rent Due Monthly On(Please Select which day of the month the rent is due)</label>
+                @Html.DropDownListFor(model => model.RentDueDay, (IEnumerable<SelectListItem>)ViewBag.MonthDays, "Select", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="">Grace Period(Number of days before late fees are assessed )</label>
+                @Html.DropDownListFor(model => model.GracePeriod, (IEnumerable<SelectListItem>)ViewBag.MonthDays, "Select", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="">Late Penalty Charge</label>
+                @Html.EditorFor(model => model.Penalty, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Penalty, "", new { @class = "text-danger" })
+                <br />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="">Daily Late Penalty Charge(Additional Fee Charged Each Day After Initial Late Penalty Charge)</label>
+                @Html.EditorFor(model => model.DailyPenalty, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DailyPenalty, "", new { @class = "text-danger" })
+                <br />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Save Changes" class="btn btn-button" /> 
+                @Html.ActionLink("Cancel", "OwnerProperties", "Admin", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" })
+                @*<input type="button" value="Cancel" class="btn btn-button" onclick="location.href='@Request.UrlReferrer'" />*@
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

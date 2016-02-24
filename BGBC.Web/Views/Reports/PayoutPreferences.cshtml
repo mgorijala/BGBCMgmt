@@ -1,0 +1,85 @@
+﻿@model IEnumerable<BGBC.Model.User>
+
+@{
+    ViewBag.Title = "PayoutPreferences";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back"> 
+    <div class="col-md-12 no-padd">
+        <div class="col-md-11 col-sm-6 no-padd">
+            <h1>All Property Manager's Payout Preferences</h1>
+        </div>
+        <div class="col-md-1 col-sm-6 no-padd header-btn">
+            @Html.ActionLink("Back", "", "", null, new { @class = "btn-button btn-primary pull-right", @href = Request.UrlReferrer })
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Payout Method
+                        </th>
+                        <th>
+                            Paypal Email
+                        </th>
+                        <th>
+                            Payout Mailing Address
+                        </th>
+                        <th>
+                            Payout Mailing Address2
+                        </th>
+                        <th>
+                            Payout Mailing City
+                        </th>
+                        <th>
+                            Payout Mailing State
+                        </th>
+                        <th>
+                            Payout Mailing Zip
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var profiles = item.Profiles.ToList();
+
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(p => profiles[0].PaymentMethod)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => profiles[0].PaypalEmail)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => profiles[0].PayoutMailAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => profiles[0].PayoutMailAddress2)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => profiles[0].PayoutMailCity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => profiles[0].PayoutMailState)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => profiles[0].PayoutMailZip)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    
+</div>

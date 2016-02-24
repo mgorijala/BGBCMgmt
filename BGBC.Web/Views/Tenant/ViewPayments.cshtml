@@ -1,0 +1,126 @@
+﻿@model IEnumerable<BGBC.Web.Models.AllPropertiesAndTenant>
+
+@{
+    ViewBag.Title = "ViewPayments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 col-sm-6 no-padd">
+            <h1>
+                Recent Tenant Payments for<br />
+                All Properties belonging to Test Owner
+
+            </h1>
+        </div>
+        <div class="col-md-6 col-sm-6 no-padd header-btn">
+
+            @if (Request.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                   @Html.ActionLink("Back to All Properties", "OwnerProperties", "Admin",null, htmlAttributes: new { @class = "btn-button btn-primary", @Href = Request.UrlReferrer})
+                }
+               
+                else 
+                {
+                    @Html.ActionLink("Back to All Properties", "Index", "Home", null, new { @class = "btn-button btn-primary pull-right" })
+
+                }
+            }
+            
+        
+        </div>
+   </div>
+   
+    <div class="clearfix">&nbsp;</div>
+       @foreach (var prop in Model)
+       {
+        <h1>@Html.DisplayFor(p => prop.Pname)</h1>
+           if (prop.tenantRentPay.Count > 0)
+          {
+           for (int i = 0; i < prop.tenantRentPay.Count; i++)
+           {
+               int value = prop.tenantRentPay[i].RentPayment.Count;
+              
+            <div class="col-md-12 no-padd">
+                <div class="col-md-8">     
+                   @if (prop.tenantRentPay[i].tname != string.Empty)
+                   {
+                    <p>@Html.DisplayFor(p => prop.tenantRentPay[i].tname)</p>
+                   }
+                   else
+                   {
+                    <p>Property has no Tenants.</p>
+                   }      
+                                  
+                </div>
+                <div class="col-md-4 no-padd">
+                    @if (value > 0)
+                    {
+                    @Html.ActionLink("View Full Payment History", "TenantPaymentHistory", "Reports", null, new { @class = "btn-button btn-primary pull-right" })
+                    }
+                    
+                </div>
+            </div>
+    <div class="clearfix">&nbsp;</div>
+               if (value > 0)
+               {
+              
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Date / Time
+                                    </th>
+                                    <th>
+                                        Confirmation#
+                                    </th>
+                                    <th>
+                                        Description
+                                    </th>
+                                    <th>
+                                        Payment Amount
+                                    </th>
+                                    <th>
+                                        Comment
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>                          
+                                  @for (int j = 0; j < value; j++)
+                                    {
+                                    <tr>
+                                        <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TransDate)</td>
+                                        <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TransID)</td>
+                                        <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].Description)</td>
+                                        <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].Amount)</td>
+                                        <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].Comments)</td>
+                                    </tr>
+                                    }
+                          
+                           
+                            </tbody>
+                        </table>
+                   
+                </div>
+                }
+                else
+                {
+                    <div class="col-md-12 no-padd">
+                        Tenant has not submitted any Payments yet. 
+                    </div>
+                }
+           }
+          }
+           else
+           {
+            <p>Property has no Tenants.</p>
+           }
+                <hr />
+       }
+</div>
+
+
+   

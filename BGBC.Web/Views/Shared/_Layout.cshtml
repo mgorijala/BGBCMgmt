@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGBC Management - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+
+<body>
+    <div class="container padd">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 no-padd">
+                    <nav>
+                        <ul class="user-nav" style="float:right">
+                            <li>@Html.ActionLink("Help", "Contact", "Home")</li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li>@Html.ActionLink("Products", "Manage", "Products")</li>
+                            }
+                            else
+                            {
+                                <li>@Html.ActionLink("Products", "Index", "Products")</li>
+                            }
+
+                            @if (!User.IsInRole("Admin"))
+                            {
+                                HttpCookie authCookie = Request.Cookies[".BGBCProducts"];
+                                if (authCookie != null && (!(string.IsNullOrEmpty(authCookie.Value))))
+                                {
+                                    string[] ids = authCookie.Value.ToString().Split(',');
+                                    <li>@Html.ActionLink("View Cart (" + ids.Length + ")", "Index", "Cart")</li>
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink("View Cart", "Index", "Cart")</li>
+                                }
+                            }
+
+                            @if (Request.IsAuthenticated)
+                            {
+                                if (User.IsInRole("Admin"))
+                                {
+                                    <li>@Html.ActionLink(User.Identity.Name, "Profile", "Admin")</li>
+                                }
+                                else if (User.IsInRole("Owner"))
+                                {
+                                    <li>@Html.ActionLink(User.Identity.Name, "Profile", "Owner")</li>
+                                }
+                                else if (User.IsInRole("Tenant"))
+                                {
+                                    <li>@Html.ActionLink(User.Identity.Name, "Profile", "Tenant")</li>
+                                }
+                                else if (User.IsInRole("Customer"))
+                                {
+                                    <li>@Html.ActionLink(User.Identity.Name, "Profile", "Customer")</li>
+                                }
+
+                                <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
+                                if (User.IsInRole("Admin"))
+                                {
+                                    <li>@Html.ActionLink("Dashboard", "Index", "Admin")</li>
+                                }
+                                else if (User.IsInRole("Owner"))
+                                {
+                                    <li>@Html.ActionLink("Dashboard", "Index", "Owner")</li>
+                                }
+                                else if (User.IsInRole("Tenant"))
+                                {
+                                    <li>@Html.ActionLink("Dashboard", "Index", "Tenant")</li>
+                                }
+                                else if (User.IsInRole("Customer"))
+                                {
+                                    <li>@Html.ActionLink("Dashboard", "Index", "Customer")</li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="btn btn-login">@Html.ActionLink("Login", "Login", "Home")</li>
+                                <li class="btn btn-register">@Html.ActionLink("Get Started", "Register", "Home")</li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-12 no-padd">
+                    <div class="col-md-6 col-sm-6 col-xs-6 no-padd">
+                        <h1 id="logo" class="logo">
+                            @Html.ActionLink("Index", "Index", "Home")
+                        </h1>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <button type="button" class="navbar-toggle collapsed btn btn-primary" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="background-color:#0b6295">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 no-padd">
+            <div class="collapse navbar-collapse no-padd" id="bs-example-navbar-collapse-1">
+                <div id="google_translate_element">
+                </div>
+                <nav>
+                    <ul class="menu">
+                        <li>@Html.ActionLink("About Us", "About", "Home")</li>
+                        <li>
+                            <a href="javascript:void(0)">Property Management</a>
+                            <ul>
+                                <li>
+                                    @Html.ActionLink("Tenants", "Tenants", "Home")
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Rental Management", "Rentalmanagement", "Home")
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            @Html.ActionLink("Find/List Home", "ListHome", "Home")
+                        </li>
+                        <li>
+                            @Html.ActionLink("Payment Processing", "PaymentProcess", "Home")
+                        </li>
+                        <li>
+                            @Html.ActionLink("Contact Us", "Contact", "Home")
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li>
+                                @Html.ActionLink("Products", "Manage", "Products")
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                @Html.ActionLink("Products", "Index", "Products")
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-12 no-padd">
+        <div class="container padd ">
+            @RenderBody()
+            <div class="col-md-12 no-padd">
+                <footer>
+                    <ul class="footer-menu">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About Us", "About", "Home")</li>
+                        <li>@Html.ActionLink("Rental Management", "RentalManagement", "Home")</li>
+                        <li>@Html.ActionLink("Find/List Home", "ListHome", "Home")</li>
+                        <li>@Html.ActionLink("Payment Processing", "PaymentProcess", "Home")</li>
+                        <li>@Html.ActionLink("Contact Us", "contact", "Home")</li>
+                    </ul>
+                    <p>
+                        &copy;@DateTime.Now.Year BGBC Inc. All rights reserved.<br>
+                        <a href="http://bgbcmarketing.com" style="color:#fff;text-decoration:none;">Need Help Growing Your Company? Check out BGBC Marketing</a>
+                    </p>
+                    <section class="badges">
+                        <span id="siteseal">
+                            <script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=jGrkfWYpRP3lObqNn00bgYFVmvO7WWQoaroOWNvt4TWl8Pov1MKQdnFh4712"></script>
+                        </span>
+                        <a href="https://www.facebook.com/bgbcmanagement" target="_blank" class="facebook-badge"><img src="~/Content/images/FB_FindUsOnFacebook-100.png" alt=""></a>
+                    </section>
+                </footer>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

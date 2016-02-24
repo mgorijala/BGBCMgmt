@@ -1,0 +1,272 @@
+﻿@model BGBC.Model.Property
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+} 
+<style type="text/css">
+    .row {
+        padding-top: 10px;
+    }
+</style>
+<div class="back">
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <hr />
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Name)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Nickname)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Nickname)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Address)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Address)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Address2)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Address2)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.City)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.City)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.State)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.State)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Zip)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Zip)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.RentDueDay)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.RentDueDay)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.GracePeriod)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.GracePeriod)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Penalty)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Penalty)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.DailyPenalty)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.DailyPenalty)
+            </div>
+        </div>
+        <br/>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" />
+                @Html.ActionLink("Cancel", "MyProperties", "Owner")
+                @*<input type="button" value="Cancel" class="btn btn-default" onclick="location.href='@Request.UrlReferrer'" />*@
+            </div>
+        }
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

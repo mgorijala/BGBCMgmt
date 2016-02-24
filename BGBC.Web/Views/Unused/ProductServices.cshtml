@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "ProductServices";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .back1 {
+        background: #fff !important;
+        padding: 5px !important;
+        padding-bottom: 150px !important;
+        height: 450px;
+    }
+</style>
+
+    
+<div class="back">
+    <div class="col-lg-6">
+        <h1 style="font-size:29px;padding-top:20px;">Manage Products & Services</h1>
+        @Html.ActionLink("Add New Product", "AddProduct", "Home", new { @class = "btn btn primary" })
+    </div>
+    <div class="col-lg-6">
+
+        <a id="referralBtn" class="button" href="tenant-referral.html" style="margin-top:25px;float:right;">Back to My Dashboard </a>
+    </div>
+    <div>
+        <div class="col-lg-12 back">
+            <table class="table  table-hover ">
+                <thead>
+                    <tr>
+                        <th class="text-left" style="width:500px">
+                            Name
+                        </th>
+                        <th class="text-left" style="width:900px">
+                            Description
+                        </th>
+                        <th class="text-left" style="width:500px">
+                           Price
+                        </th>
+                        <th class="text-left" style="width:400px">
+                            Avilability
+                        </th>
+                        <th style="width:400px"></th>
+            </table>
+            <table class="table  table-hover ">
+                <thead>
+                    <tr>
+                        <th class="text-left" style="padding-bottom:50px">
+                          
+                        </th>
+                        <th class="text-center" style="padding-bottom:50px;">
+                           
+                        </th>
+                        <th class="text-center" style="padding-bottom:50px">
+                           
+                        </th>
+                        <th class="text-center" style="padding-bottom:50px"></th>
+                        <th></th>
+                        <td>
+                            <div class="pull-right">
+                                @Html.ActionLink("Edit Product", "EditProduct", "Home", new { @class = "btn-primary btn-block btn-sm" })
+                                @Html.ActionLink("View Product Orders", "Details", "Home", new { @class = "btn-primary btn-block btn-sm" })
+                                @Html.ActionLink("Remove Product", "PropertyEdit", "Home", new { @class = " btn-danger btn-block btn-sm" })
+                            </div>
+                        </td>
+
+            </table>
+        </div>
+    </div>
+</div>

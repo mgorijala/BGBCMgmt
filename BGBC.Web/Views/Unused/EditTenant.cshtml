@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "EditTenant";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    <br />
+    <h2 style="color:navy;margin-left:11px "><b>Test Property 1-Edit Tenant</b></h2>
+    <br />
+
+    <h5 style="margin-left:11px"> <span style="color:red">*</span>Indiacates a required field</h5>
+    <h5 style=" margin-left:11px"><span style="color:blue">&#134;</span>Indicates information that  can be updated by  BGBC Management.To request a change,Please fill out <span style="color:blue">this form</span></h5><br />
+    <h6 style=" margin-left:11px"><b>Property Manager Name</b></h6><br />
+    <p style=" margin-left:11px">Test Admin</p>
+    <h6 style=" margin-left:11px"><b>Property Address </b></h6>
+    <p style=" margin-left:11px">123 Testing St.</p>
+    <p style=" margin-left:11px">Unit 101</p>
+    <p style=" margin-left:11px">TestingVille,TN 37201</p>
+
+
+        <div class="editor-label">
+            @Html.Label("First Name", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" First Name", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Last Name", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Last Name", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Email", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Email", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Confirm Email", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Confirm Email", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Alternate Email", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Alternate Email", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Confirm Alternate Email", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Confirm Alternate Email", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Billing Address State", new { @class = "required" })
+
+            @Html.DropDownList("Select State", new List<SelectListItem> {
+                new SelectListItem{Text="Nellore", Value="Nellore"},
+                new SelectListItem{Text="Hyderabad", Value="Hyderabad"}
+                }, "Select a State", new { @class = "form-control" })
+
+        </div>
+
+        <div class="editor-label">
+            @Html.CheckBox("property")Same As Property Address
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Billing Address Street", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Billing Address Street", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Billing Address Street2", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Billing Address Street2", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Billing Address City", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Billing Address City", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Billing Address State", new { @class = "required" })
+        </div>
+        @Html.DropDownList("State", new List<SelectListItem>{
+                   new SelectListItem{Text="Select a state", Value="1"},
+                       new SelectListItem{Text="Property Owner", Value="1"},
+                       new SelectListItem{Text="Customer", Value="1"}
+               })
+        <div class="editor-label">
+            @Html.Label("Billing Address Zip", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Billing Address Zip", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Home Phone", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Home Phone", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Work Phone", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" work Phone", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Mobile Phone", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Mobile Phone", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Tenant Rent Amount", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Tenant Rent Amount", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Tenant Rent Final Due Date", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Tenant Rent Final Due Date", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Deposite Amount", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Deposite Amount", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Deposite Due Date", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Deposite Due Date", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Pet Deposite Due", new { @class = "required" })
+        </div>
+        @Html.DropDownList("Deposite", new List<SelectListItem>{
+                   new SelectListItem{Text="Select a state", Value="1"},
+                       new SelectListItem{Text="No", Value="1"},
+                       new SelectListItem{Text="Yes", Value="1"}
+               })
+
+        <p>
+            <input type="submit" value="Save Changes" />
+
+            @Html.ActionLink("Cancel", "Property", "Property")
+        </p>
+
+    </div>
+
+

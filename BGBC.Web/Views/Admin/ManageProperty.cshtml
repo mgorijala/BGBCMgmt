@@ -1,0 +1,52 @@
+﻿@model IEnumerable<BGBC.Model.User>
+
+@{
+    ViewBag.Title = "ManageProperty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 no-padd">
+            <h1>All Property Owners</h1>
+        </div>
+        <div class="col-md-6 no-padd header-btn">
+            @Html.ActionLink("Back to Dashboard", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>   
+                            <td>
+                                <div class="pull-right">
+                                    @Html.ActionLink("View Properties", "OwnerProperties", "Admin", new { id = item.UserID }, new { @class = "btn-button btn-primary" })
+                                    @Html.ActionLink("View Tenants", "AllPropertyTenants", "Admin", new { id = item.UserID }, new { @class = "btn-button btn-primary" })
+                                    @Html.ActionLink("View Tenant Payments", "ViewPayments", "Tenant", new { id = item.UserID }, new { @class = "btn-button btn-primary" })
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+</div>
+ 

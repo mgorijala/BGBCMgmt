@@ -1,0 +1,584 @@
+﻿@model BGBC.Web.Models.TenantProfile
+
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(p => p.ProfileInfo.ProfileID)
+        @Html.HiddenFor(p => p.Ref1.UserReferenceID)
+        @Html.HiddenFor(p => p.Ref2.UserReferenceID)
+        @Html.HiddenFor(m => m.Createdon)
+        @Html.HiddenFor(m => m.Updatedon)
+        <div class="col-md-12 no-padd">
+            <div class="col-md-6 col-sm-6 no-padd">
+                <h1>Edit Profile</h1>
+            </div>
+            <div class="col-md-6 col-sm-6 no-padd header-btn">
+                @Html.ActionLink("Back to Dashboard", "Index", "Tenant", null, new { @class = "btn-button btn-primary" })
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        if (TempData["SucessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SucessMessage"]</div>
+        }
+
+        <fieldset>
+            <legend>Basic Information</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.FirstName, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.LastName, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Email, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ConfirmEmail, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.ConfirmEmail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.ConfirmEmail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.NewPassword, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.NewPassword, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.NewPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.CurrentPassword, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.CurrentPassword, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.CurrentPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Note:You must enter your Current Password when Changing your E-mail or Password </label>
+                </div>
+            </div>
+        </fieldset>
+        <div class="clearfix">&nbsp;</div>
+        <fieldset>
+            <legend>Contact Information</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.AltEmail, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.AltEmail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.AltEmail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ConfirmAltEmail, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.ConfirmAltEmail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.ConfirmAltEmail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ProfileInfo.HomePhone, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.ProfileInfo.HomePhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                        @Html.ValidationMessageFor(p => p.ProfileInfo.HomePhone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ProfileInfo.WorkPhone, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.ProfileInfo.WorkPhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                        @Html.ValidationMessageFor(p => p.ProfileInfo.WorkPhone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ProfileInfo.MobilePhone, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.ProfileInfo.MobilePhone, new { htmlAttributes = new { @class = "form-control  phoneno-mask" } })
+                        @Html.ValidationMessageFor(p => p.ProfileInfo.MobilePhone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    @Html.CheckBox("SMS", new Dictionary<String, object> { { "class", "control-label" } })<b>SMS Messages Opt-In </b>
+                    @Html.Label("Opt-in to have reminders send to your mobile phone via SMS*  *Wireless carrier charges may apply ")
+
+                </div>
+            </div>
+
+        </fieldset>
+        <fieldset>
+            <legend>Payment Information</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.LabelFor(p => p.ProfileInfo.BillingAddressSame, htmlAttributes: new { @class = "" })
+
+                    @Html.CheckBoxFor(p => p.ProfileInfo.BillingAddressSame, new Dictionary<String, object> { { "class", "control-label" }, { "id", "Sameaddress" }, { "data-on-text", "complete" }, { "data-off-text", "incomplete" } })<b> Same As Property Address</b>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 billing-address-fields">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ProfileInfo.BillingAddress, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.ProfileInfo.BillingAddress, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.ProfileInfo.BillingAddress, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6 billing-address-fields">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ProfileInfo.BillingAddress_2, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.ProfileInfo.BillingAddress_2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.ProfileInfo.BillingAddress_2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6  billing-address-fields">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ProfileInfo.BillingCty, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.ProfileInfo.BillingCty, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.ProfileInfo.BillingCty, "", new { @class = "text-danger" })
+
+
+                    </div>
+                </div>
+
+                <div class="col-md-6 billing-address-fields ">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ProfileInfo.BillingState, htmlAttributes: new { @class = "control-label required" })
+                        @Html.DropDownListFor(model => model.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(p => p.ProfileInfo.BillingState, "", new { @class = "text-danger" })
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 billing-address-fields">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.ProfileInfo.BillingZip, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.ProfileInfo.BillingZip, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.ProfileInfo.BillingZip, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            @*<br />Mohan
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentMethod, htmlAttributes: new { @class = "control-label required" })
+            @Html.RadioButtonFor(model => model.PaymentMethod, "Credit Card", new { @id = "CreditCards", @checked = "true" })Credit Card<br />
+            @Html.RadioButtonFor(model => model.PaymentMethod, "eCheck", new { @id = "eChecks" })eCheck<br />
+            @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="row Creditcard">
+        <div class="col-md-7">
+            <div class="form-group">
+                <span>Accepted methods: American Express, Discover, MasterCard, Visa</span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row Creditcard">
+        <div class="col-md-7">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CardNo, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.CardNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CardNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row Creditcard hidden ">
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
+            </div>
+        </div>
+    </div>
+    <div class="row Creditcard">
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
+                <div class="col-md-3 col-xs-3 no-padd">
+                    @Html.DropDownListFor(model => model.CardExpMon, (IEnumerable<SelectListItem>)ViewBag.Months, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CardExpMon, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 no-padd">
+                    @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CardExpYear, "", new { @class = "text-danger" })
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="row Creditcard">
+        <div class="col-md-7">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CVV, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.CVV, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CVV, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row Creditcard">
+        <div class="col-md-1  col-xs-2 col-sm-2" style="width:10px;">
+            <div class="form-group">
+                @Html.CheckBoxFor(model => model.savecard, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.savecard, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                @Html.LabelFor(model => model.savecard, htmlAttributes: new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row eCheck">
+        <div class="col-md-6">
+            @Html.LabelFor(model => model.BankAccountType, htmlAttributes: new { @class = "control-label required" })
+            @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label" }, { "onchange", "petDepositDueClick.call(this)" } })
+            @Html.ValidationMessageFor(model => model.BankAccountType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="row eCheck">
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.BankRoutingNumber, htmlAttributes: new { @class = "control-label required" })
+            @Html.EditorFor(model => model.BankRoutingNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.BankRoutingNumber, "", new { @class = "text-danger" })
+        </div>
+
+
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="row eCheck">
+        <div class="col-md-1  col-xs-2 col-sm-2" style="width:10px;">
+            <div class="form-group">
+                @Html.CheckBoxFor(model => model.ChargeAccount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ChargeAccount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ChargeAccount, htmlAttributes: new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row eCheck" style="text-align:right">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.MonthlyRent, htmlAttributes: new { @class = "control-label" })
+                @Html.LabelFor(model => model.ServiceFee, htmlAttributes: new { @class = "control-label" })
+                @Html.LabelFor(model => model.TotalCharges, htmlAttributes: new { @class = "control-label" })
+            </div>
+        </div>
+    </div>*@
+
+        </fieldset>
+
+
+
+
+        <div>
+            <fieldset>
+                <legend>Personal Reference #1</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.Name, htmlAttributes: new { @class = "control-label required" })
+                            @Html.EditorFor(p => p.Ref1.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(p => p.Ref1.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.Phone, htmlAttributes: new { @class = "control-label required" })
+                            @Html.EditorFor(p => p.Ref1.Phone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                            @Html.ValidationMessageFor(p => p.Ref1.Phone, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.EMail, htmlAttributes: new { @class = "control-label required" })
+                            @Html.EditorFor(p => p.Ref1.EMail, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(p => p.Ref1.EMail, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.Address, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(p => p.Ref1.Address, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(p => p.Ref1.Address, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.Address2, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(p => p.Ref1.Address2, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(p => p.Ref1.Address2, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.City, htmlAttributes: new { @class = "control-label required" })
+                            @Html.EditorFor(p => p.Ref1.City, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(p => p.Ref1.City, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.State, htmlAttributes: new { @class = "control-label required" })
+                            @Html.DropDownListFor(p => p.Ref1.State, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "" })
+                            @Html.ValidationMessageFor(p => p.Ref1.State, "", new { @class = "text-danger" })
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.Zip, htmlAttributes: new { @class = "control-label required" })
+                            @Html.EditorFor(p => p.Ref1.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(p => p.Ref1.Zip, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Ref1.Relationship, htmlAttributes: new { @class = "control-label required" })
+                            @Html.EditorFor(p => p.Ref1.Relationship, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(p => p.Ref1.Relationship, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+            </fieldset>
+        </div>
+        <fieldset>
+            <legend>Personal Reference #2</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.Name, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.Ref2.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.Ref2.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.Phone, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.Ref2.Phone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                        @Html.ValidationMessageFor(p => p.Ref2.Phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.EMail, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.Ref2.EMail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.Ref2.EMail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.Address, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.Ref2.Address, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.Ref2.Address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.Address2, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.Ref2.Address2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.Ref2.Address2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.City, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.Ref2.City, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.Ref2.City, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.State, htmlAttributes: new { @class = "control-label required" })
+                        @Html.DropDownListFor(p => p.Ref2.State, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "" })
+                        @Html.ValidationMessageFor(p => p.Ref2.State, "", new { @class = "text-danger" })
+
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.Zip, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.Ref2.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.Ref2.Zip, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.Ref2.Relationship, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(p => p.Ref2.Relationship, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(p => p.Ref2.Relationship, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+
+        </fieldset>
+        <div>
+            @Html.LabelFor(m => m.Createdon, new { style = "display:inline;" }):
+            @Html.DisplayFor(m => m.Createdon)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Updatedon, new { style = "display:inline;" }):
+            @Html.DisplayFor(m => m.Updatedon)
+        </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-default" />
+            @Html.ActionLink("Cancel", "Index", "Tenant")
+        </div>
+
+    }
+</div>
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(function () {
+            if ($(Sameaddress).is(':checked')) {
+                $('.billing-address-fields').hide();
+            }
+            else {
+                $('.billing-address-fields').show();
+            }
+            $('#Sameaddress').change(function () {
+                if ($(this).is(':checked')) {
+                    $('.billing-address-fields').hide();
+                }
+                else {
+                    $('.billing-address-fields').show();
+
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            if ($(CreditCards).is(':checked')) {
+                $('.Creditcard').show();
+                $('.eCheck').hide();
+            }
+            else {
+                $('.Creditcard').hide();
+                $('.eCheck').show();
+            }
+            if ($(eChecks).is(':checked')) {
+                $('.Creditcard').hide();
+                $('.eCheck').show();
+
+            }
+            else {
+                $('.Creditcard').show();
+                $('.eCheck').hide();
+
+            }
+
+            $('#CreditCards').change(function () {
+                if ($(CreditCards).is(':checked')) {
+                    $('.Creditcard').show();
+
+                    $('.eCheck').hide();
+                }
+                else {
+                    $('.Creditcard').hide();
+                    $('.eCheck').show();
+                }
+            });
+            $('#eChecks').change(function () {
+                if ($(eChecks).is(':checked')) {
+                    $('.Creditcard').hide();
+                    $('.eCheck').show();
+
+                }
+                else {
+                    $('.Creditcard').show();
+                    $('.eCheck').hide();
+
+                }
+            });
+        });
+    </script>
+}
+

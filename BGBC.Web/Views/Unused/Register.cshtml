@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="back ">
+    <h1>Register</h1>
+
+        <div class="form-group">
+            @Html.Label("First Name", new { @class = "required" })
+            @Html.Editor(" First Name", new { @class = "required" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Last Name", new { @class = "required" })    
+            @Html.Editor("Last Name", new { @class = "required" })
+        </div>
+        <div class="form-group">
+            @Html.Label("User Type", new { @class = "required" })
+    
+        @Html.DropDownList("User Type", new List<SelectListItem>{
+                       new SelectListItem{Text="--Select--", Value="1"},
+                           new SelectListItem{Text="Property Owner", Value="1"},
+                           new SelectListItem{Text="Customer", Value="1"}
+                   })
+        </div>
+        <div class="form-group">
+            @Html.Label("Email", new { @class = "required" })
+    
+            @Html.Editor("Email", new { @class = "required" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Password", new { @class = "required" })
+    
+            @Html.Editor("Password", new { @class = "required" })
+        </div>
+        <div class="form-group">
+                @Html.Label("Confirm Password", new { @class = "required" })     
+                @Html.Editor("Confirm Password", new { @class = "required" })
+         </div>
+    
+    <br/>
+    <input type="submit" value="Submit">
+  
+</div>

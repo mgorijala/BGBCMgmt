@@ -1,0 +1,112 @@
+﻿@model BGBC.Web.Models.Contact
+
+@{
+    ViewBag.Title = "ListHome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" async="" src="https://www.gstatic.com/recaptcha/api2/r20160127172231/recaptcha__en.js"></script>
+<script type="text/javascript" async="" src="https://www.gstatic.com/recaptcha/api2/r20160127172231/recaptcha__en.js"></script>
+<div id="" class="back">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        if (TempData["SucessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SucessMessage"]</div>
+        }
+        <br />
+        <div class="find-list-home" style="position: relative; min-height: 100%; top: 0px;">
+            <div id="wrapper">
+                <div id="content-container" style="background:white">
+                    <iframe src="http://search.har.com/idx/?siteType=aws&amp;cid=0481192" scrolling="yes" frameborder="0" style="border:none; overflow:scroll; width: 100%; height: 1100px;" allowtransparency="false"></iframe>
+                    <h2 id="contact">Contact A Realtor</h2>
+                    <p>Ready to FIND or LIST your property? Need the perfect place to rent? Search here and see the listings BGBC can help explore. Simply fill out this form and we will contact you within 24 hours to set up your meeting with an A+ realtor.</p>
+                    
+                        <input name="_token" type="hidden" value="mj573YOGjGMVny9zAFtUNiK8NwukoxivKvPic9Cq">
+                        <div class="no-padd" style="width:100%;min-height:0px;">
+                            <div class="row">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label required" })
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control required" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.EMail, htmlAttributes: new { @class = "control-label required" })
+                                    @Html.EditorFor(model => model.EMail, new { htmlAttributes = new { @class = "form-control mask_email required" } })
+                                    @Html.ValidationMessageFor(model => model.EMail, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label required" })
+                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control required phoneno-mask" } })
+                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MessageText, htmlAttributes: new { @class = "control-label" })
+                                    @Html.TextAreaFor(model => model.MessageText, new { htmlAttributes = new { @class = "form-control" }, @cols = 50, @rows = 10 })
+                                    @Html.ValidationMessageFor(model => model.MessageText, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                var RecaptchaOptions = { "curl_timeout": 1 };
+                            </script>
+                            <script src="https://www.google.com/recaptcha/api.js?render=onload"></script>
+
+                            <div class="g-recaptcha" data-sitekey="6LeElAETAAAAADOYRYxAue_AIlGMbM89oaJQnBGf" style="min-height:0px;">
+                                <div style="width: 304px; height: 0px;">
+                                    <iframe src="https://www.google.com/recaptcha/api2/anchor?k=6LeElAETAAAAADOYRYxAue_AIlGMbM89oaJQnBGf&amp;co=aHR0cDovL3d3dy5iZ2JjbWFuYWdlbWVudC5jb206ODA.&amp;hl=en&amp;v=r20160127172231&amp;size=normal&amp;cb=6nd1ffss5d" title="recaptcha widget" width="304" height="78" role="presentation" frameborder="0" scrolling="no"></iframe>
+                                </div><textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid #c1c1c1; margin: 10px 25px; padding: 0px; resize: none;  display: none; "></textarea>
+                                <noscript>
+                                    &lt;div style="width: 302px; height: 352px;"&gt;
+                                    &lt;div style="width: 302px; height: 352px; position: relative;"&gt;
+                                    &lt;div style="width: 302px; height: 352px; position: absolute;"&gt;
+                                    &lt;iframe src="https://www.google.com/recaptcha/api/fallback?k=6LeElAETAAAAADOYRYxAue_AIlGMbM89oaJQnBGf"
+                                    frameborder="0" scrolling="no"
+                                    style="width: 302px; height:352px; border-style: none;"&gt;
+                                    &lt;/iframe&gt;
+                                    &lt;/div&gt;
+                                    &lt;div style="width: 250px; height: 80px; position: absolute; border-style: none;
+                                    bottom: 21px; left: 25px; margin: 0px; padding: 0px; right: 25px;"&gt;
+                                    &lt;textarea id="g-recaptcha-response" name="g-recaptcha-response"
+                                    class="g-recaptcha-response"
+                                    style="width: 250px; height: 80px; border: 1px solid #c1c1c1;
+                                    margin: 0px; padding: 0px; resize: none;" value=""&gt;
+                                    &lt;/textarea&gt;
+                                    &lt;/div&gt;
+                                    &lt;/div&gt;
+                                    &lt;/div&gt;
+                                </noscript>
+                                <div class="buttons">
+                                    <input type="submit" value="Submit" style="margin-top: 100px;" class="btn btn-default">
+                                </div>
+                            </div>
+                        </div>
+                       
+                    
+
+                </div>
+
+            </div>
+        </div>
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,es', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+            }
+        </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script><div id="goog-gt-tt" class="skiptranslate" dir="ltr"><div style="padding: 8px;"><div><div class="logo"><img src="https://www.gstatic.com/images/branding/product/1x/translate_24dp.png" width="20" height="20"></div></div></div><div class="top" style="padding: 8px; float: left; width: 100%;"><h1 class="title gray">Original text</h1></div><div class="middle" style="padding: 8px;"><div class="original-text"></div></div><div class="bottom" style="padding: 8px;"><div class="activity-links"><span class="activity-link">Contribute a better translation</span><span class="activity-link"></span></div><div class="started-activity-container"><hr style="color: #CCC; background-color: #CCC; height: 1px; border: none;"><div class="activity-root"></div></div></div><div class="status-message" style="display: none;"></div></div>
+
+
+        <iframe frameborder="0" class="goog-te-menu-frame skiptranslate" style="visibility: visible; box-sizing: content-box; width: 133px; height: 56px; display: none;"></iframe>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

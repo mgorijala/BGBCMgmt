@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "AddPropertyOwner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .editor-label {
+        color: black;
+    }
+
+    .editor-field {
+        color: black;
+    }
+
+    .back1 {
+        background: #fff !important;
+        padding: 20px !important;
+        padding-bottom: 150px !important;
+        height: 971px;
+    }
+</style>
+<div class="col-lg-12 back1">
+    <h1 style="font-size:29px;padding-top:0px">Add a Property</h1>
+    <fieldset style="margin-left:20px; margin-right:20px">
+        <legend style=" width:96px; border-bottom-width:0px;margin-bottom:5px;">Basic Info</legend>
+
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Property Name", new { @class = "required" })
+            </div>
+            <div class="editor-field">
+                @Html.Editor("Property Name")
+                <br />
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Property Nickname")
+            </div>
+            <div class="editor-field">
+                @Html.Editor("Property Nickname")
+                <br />
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Address", new { @class = "required" })
+            </div>
+            <div class="editor-field">
+                @Html.Editor("Address")
+                <br />
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Address2")
+            </div>
+            <div class="editor-field">
+                @Html.Editor("Address2")
+                <br />
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("City", new { @class = "required" })
+            </div>
+            <div class="editor-field">
+                @Html.Editor("City")
+                <br />
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("State", new { @class = "required" })
+            </div>
+            <div class="editor-field">
+                @Html.DropDownList("State", new List<SelectListItem> {
+                new SelectListItem{Text="Abc", Value="Abc"},
+                new SelectListItem{Text="xyz", Value="xyz"}
+                }, "Select a State")
+                <br />
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Zip", new { @class = "required" })
+            </div>
+            <div class="editor-field">
+                @Html.Editor("Zip")
+                <br />
+            </div>
+        </div>
+    </fieldset>
+    <fieldset style="margin-left:20px; margin-right:20px">
+        <legend style=" width:126px; border-bottom-width:0px;margin-bottom:5px;">Payment Info</legend>
+
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Rent Due Monthly On")
+            </div>
+            <p style="font-size:small">Please Select which day of the month the rent is due </p>
+            @Html.DropDownList("RentDue", new List<SelectListItem> {
+                new SelectListItem{Text="1", Value="1"},
+                new SelectListItem{Text="2", Value="2"}
+                })
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Grace Period")
+            </div>
+            <p style="font-size:small">Number of days before late fees are assessed </p>
+            @Html.DropDownList("Grace Period", new List<SelectListItem> {
+                new SelectListItem{Text="1", Value="1"},
+                new SelectListItem{Text="2", Value="2"}
+                })
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Late Penalty Charge")
+            </div>
+            <p style="font-size:small">fee charged after grace period has elasped  </p>
+            @Html.Editor("Late Penalty Charge")
+        </div>
+        <div class="col-lg-6">
+            <div class="editor-label">
+                @Html.Label("Daily Late Penalty Charge")
+            </div>
+            <p style="font-size:small">Additional fee charged each day after initial late penalty charge</p>
+            @Html.Editor("Daily Late Penalty Charge")
+        </div>
+    </fieldset>
+    <div style="background-color:lightblue; margin-left:20px; margin-right:20px">
+        <p>
+            &nbsp;&nbsp; Please note that you will not be able to change the following fields once you've added this tenant.
+        </p>
+        <p>
+            &nbsp;&nbsp; You will need to contact BGBC Management to change these values.
+        </p>
+        <div>
+            <li>Rent Due Monthly On</li>
+            <li>Grace Period</li>
+            <li>Late Penalty Charge</li>
+            <li>Daily Late Penalty Charge</li>
+        </div>
+    </div>
+    <br>
+    <div class="col-lg-3">
+        <input type="submit" value="Add Property">
+        @Html.ActionLink("Cancel", "AddPropertyOwner", "Home")
+    </div>
+
+</div>

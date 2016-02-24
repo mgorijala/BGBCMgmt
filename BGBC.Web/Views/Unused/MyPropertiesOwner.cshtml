@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "MyPropertiesOwner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .editor-label {
+        color: black;
+    }
+
+    .editor-field {
+        color: black;
+    }
+
+    .back1 {
+        background: #fff !important;
+        padding: 20px !important;
+        padding-bottom: 150px !important;
+        height: 500px;
+    }
+</style>
+<div class="col-lg-12 back1">
+    <div class="col-lg-6">
+        <h1 style="font-size:25px;padding-top:10px">My Properties</h1>
+        @Html.ActionLink("Add Property", "AddPropertyOwner", "Home", new { @class = "btn btn primary" })
+    </div>
+    <div class="col-lg-6">
+        <a id="referralBtn" class="button" href="tenant-referral.html" style="margin:15px;float:right;">Back to My Dashboard </a>
+    </div>
+
+    <div class="container padd" style="padding-left: 15px;">
+        <div class="col-md-12 no-padd back" style="width: 850px;  height: 100px; ">
+            <table class="table  table-hover ">
+                <tr>
+                    <th style="width:177px; border-top:none">
+                        @Html.DisplayName("Name")
+                    </th>
+                    <th style="width:177px;border-top:none">
+                        @Html.DisplayName("Address")
+                    </th>
+                    <th style="width:177px;border-top:none">
+                        @Html.DisplayName("Tenants")
+                    </th>
+                    <th style="width:177px;border-top:none">
+                        @Html.DisplayName("Rent")
+                    </th>
+                    <th style="width:177px;border-top:none">
+                        @Html.DisplayName("Options")
+                    </th>
+
+                </tr>
+                <tr>
+                    <td style="width: 100px;padding-left: 7px; padding-top: 57px;">
+                        @Html.Display("Name")
+                    </td>
+
+                    <td style="width: 60px;padding-left: 7px; padding-top: 57px;">
+                        @Html.Display("Address")
+                    </td>
+                    <td style="width: 60px;padding-left: 7px; padding-top: 57px;">
+                        @Html.Display("Tenants")
+                    </td>
+
+
+
+                    <th>
+                    <td style="width:200px">
+
+                        @Html.ActionLink("Manage Tenants", "ManageTenant", "Home", new { @class = "btn-primary btn-block btn-sm" })
+                        @Html.ActionLink("View Payment", "Details", "Home", new { @class = "btn-primary btn-block btn-sm" })
+                        @Html.ActionLink("Edit Property", "EditProperty", "Home", new { @class = " btn-primary btn-block btn-sm" })
+                        @Html.ActionLink("Delete Property", "Delete", "Home", new { @class = " btn-danger btn-block btn-sm" })
+                    </td>
+                </tr>
+
+
+            </table>
+        </div>
+    </div>
+
+</div>

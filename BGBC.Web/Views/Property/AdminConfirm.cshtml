@@ -1,0 +1,290 @@
+﻿@model BGBC.Model.Property
+
+@{
+    ViewBag.Title = "AdminConfirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .row {
+        padding-top: 10px;
+    }
+</style>
+<div class="back">
+    <h1>Edit Property - Confirm</h1>
+   
+    
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.Name)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.Name)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.Nickname)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.Nickname)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.Address)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.Address)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.Address2)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.Address2)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.City)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.City)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.State)
+            </b>
+        </div>
+        <div class="col-md-9">
+
+            @Html.DisplayFor(model => model.State)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.Zip)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.Zip)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.RentDueDay)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.RentDueDay)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.GracePeriod)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.GracePeriod)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.Penalty)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.Penalty)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.DailyPenalty)
+            </b>
+        </div>
+        <div class="col-md-9"> 
+            
+                @Html.DisplayFor(model => model.DailyPenalty)
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-6">
+            @using (Html.BeginForm("AdminEdit", "Property"))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-actions no-color">
+                    <input type="submit" value="Save Property" class="btn-button btn-primary" />
+                    @Html.ActionLink("Edit", "AdminEdit", "Property", new { id = Model.PropertyID }, new { @class = "btn-button btn-primary" })
+                    @Html.ActionLink("Cancel", null, null, null, new { href=Request.UrlReferrer})
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

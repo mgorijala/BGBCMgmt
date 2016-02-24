@@ -1,0 +1,81 @@
+﻿@model IEnumerable<BGBC.Model.vRentPayment>
+
+@{
+    ViewBag.Title = "TenantPayments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 col-sm-6  no-padd">
+            @*<h1>Payment activity</h1>*@
+        </div>
+        <div class="col-md-6 col-sm-6 no-padd header-btn">
+            @Html.ActionLink("Back to all Property Owners", "Index", "Owner", null, new { @class = "btn-button btn-primary pull-right" })
+            @*<input type="button" value="Back to all Property Owners" class="btn btn-primary" />*@
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+            <div class="col-md-12 no-padd">
+                <h1>
+                    @ViewBag.Name
+                    </h1>
+                <h2>Property name</h2>
+            </div>
+           
+        <div class="clearfix">&nbsp;</div>
+       
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                Date / Time
+                            </th>
+
+                            <th>
+                                Conformations
+                            </th>
+                            <th>
+                                Desc.
+                            </th>
+                            <th>
+                                Payment Status
+                            </th>
+                            <th>
+                                Paymnet amount
+                            </th>
+                            <th>
+                                Comments
+                            </th>
+                        </tr>
+                    </thead>
+                   
+                    <tbody>
+                        @foreach (var prop in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(p => prop.TransDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => prop.TransID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => prop.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => prop.StatusText)
+                                </td>
+
+                                <td>@Html.DisplayFor(p => prop.Amount)</td>
+                                <td>@Html.DisplayFor(p => prop.Comments)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            
+               
+         
+</div>
+</div>

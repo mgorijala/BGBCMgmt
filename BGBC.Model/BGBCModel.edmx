@@ -1,0 +1,1627 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BGBCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ContactForm">
+          <Key>
+            <PropertyRef Name="ContactusID" />
+          </Key>
+          <Property Name="ContactusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountName" Type="varchar" MaxLength="255" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="EMail" Type="varchar" MaxLength="255" />
+          <Property Name="Phone" Type="varchar" MaxLength="255" />
+          <Property Name="MessageText" Type="varchar(max)" />
+          <Property Name="MessageType" Type="int" Nullable="false" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Emails">
+          <Key>
+            <PropertyRef Name="EmailID" />
+          </Key>
+          <Property Name="EmailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ToAddress" Type="varchar" MaxLength="255" />
+          <Property Name="Subject" Type="varchar" MaxLength="255" />
+          <Property Name="Body" Type="nvarchar(max)" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="JobStatus">
+          <Key>
+            <PropertyRef Name="JobStatusID" />
+          </Key>
+          <Property Name="JobStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobType" Type="smallint" />
+          <Property Name="JobName" Type="varchar" MaxLength="255" />
+          <Property Name="RunDate" Type="datetime" />
+          <Property Name="Createdon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="TransDate" Type="datetime" Nullable="false" />
+          <Property Name="AccountNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AccountType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TransId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StatusCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StatusText" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CustomerIP" Type="varchar" MaxLength="50" />
+          <Property Name="BillAddress" Type="varchar" MaxLength="1024" />
+          <Property Name="Comments" Type="varchar(max)" />
+          <Property Name="Createdon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PasswordReset">
+          <Key>
+            <PropertyRef Name="PasswordResetID" />
+          </Key>
+          <Property Name="PasswordResetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmailID" Type="varchar" MaxLength="255" />
+          <Property Name="Token" Type="varchar" MaxLength="255" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="TransDate" Type="datetime" Nullable="false" />
+          <Property Name="AccountNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AccountType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TransId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StatusCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StatusText" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CustomerIP" Type="varchar" MaxLength="50" />
+          <Property Name="BillAddress" Type="varchar" MaxLength="1024" />
+          <Property Name="Total" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Comments" Type="varchar(max)" />
+          <Property Name="Createdon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="Price" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="isLocal" Type="bit" Nullable="false" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+          <Property Name="Deletedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ProductOrders">
+          <Key>
+            <PropertyRef Name="ProductOrderID" />
+          </Key>
+          <Property Name="ProductOrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="ProductID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="Price" Type="decimal" Precision="15" Scale="2" />
+        </EntityType>
+        <EntityType Name="Profile">
+          <Key>
+            <PropertyRef Name="ProfileID" />
+          </Key>
+          <Property Name="ProfileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="AltEmail" Type="varchar" MaxLength="255" />
+          <Property Name="BillingAddressSame" Type="bit" Nullable="false" />
+          <Property Name="BillingAddress" Type="varchar" MaxLength="255" />
+          <Property Name="BillingAddress_2" Type="varchar" MaxLength="255" />
+          <Property Name="BillingCty" Type="varchar" MaxLength="255" />
+          <Property Name="BillingState" Type="varchar" MaxLength="255" />
+          <Property Name="BillingZip" Type="varchar" MaxLength="255" />
+          <Property Name="HomePhone" Type="varchar" MaxLength="255" />
+          <Property Name="WorkPhone" Type="varchar" MaxLength="255" />
+          <Property Name="MobilePhone" Type="varchar" MaxLength="255" />
+          <Property Name="FaxNumber" Type="varchar" MaxLength="255" />
+          <Property Name="SMSOpt" Type="bit" />
+          <Property Name="PaymentMethod" Type="varchar" MaxLength="255" />
+          <Property Name="PaypalEmail" Type="varchar" MaxLength="255" />
+          <Property Name="PayoutMailAddress" Type="varchar" MaxLength="255" />
+          <Property Name="PayoutMailAddress2" Type="varchar" MaxLength="255" />
+          <Property Name="PayoutMailCity" Type="varchar" MaxLength="255" />
+          <Property Name="PayoutMailState" Type="varchar" MaxLength="255" />
+          <Property Name="PayoutMailZip" Type="varchar" MaxLength="255" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Properties">
+          <Key>
+            <PropertyRef Name="PropertyID" />
+          </Key>
+          <Property Name="PropertyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="Nickname" Type="varchar" MaxLength="255" />
+          <Property Name="Address" Type="varchar" MaxLength="255" />
+          <Property Name="Address2" Type="varchar" MaxLength="255" />
+          <Property Name="City" Type="varchar" MaxLength="255" />
+          <Property Name="State" Type="varchar" MaxLength="255" />
+          <Property Name="Zip" Type="varchar" MaxLength="255" />
+          <Property Name="RentDueDay" Type="smallint" />
+          <Property Name="GracePeriod" Type="smallint" />
+          <Property Name="Penalty" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="DailyPenalty" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+          <Property Name="Deletedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="RentDue">
+          <Key>
+            <PropertyRef Name="RentDueID" />
+          </Key>
+          <Property Name="RentDueID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="PropertyID" Type="int" />
+          <Property Name="DueMon" Type="int" />
+          <Property Name="DueYear" Type="int" />
+          <Property Name="DueDate" Type="datetime" />
+          <Property Name="DueAmount" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" />
+          <Property Name="DueStatus" Type="bit" />
+          <Property Name="Createdon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="RentPayment">
+          <Key>
+            <PropertyRef Name="RentPaymentID" />
+          </Key>
+          <Property Name="RentPaymentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PropertyID" Type="int" />
+          <Property Name="PaymentID" Type="int" />
+          <Property Name="RentMon" Type="int" />
+          <Property Name="RentYear" Type="int" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
+          <Property Name="Amount" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Createdon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TenantReferral">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="Email" Type="varchar" MaxLength="255" />
+          <Property Name="Phone" Type="varchar" MaxLength="255" />
+          <Property Name="LandlordName" Type="varchar" MaxLength="255" />
+          <Property Name="LandlordPhone" Type="varchar" MaxLength="255" />
+          <Property Name="LandlordEmail" Type="varchar" MaxLength="255" />
+          <Property Name="LandlordAddress" Type="varchar" MaxLength="255" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Tenants">
+          <Key>
+            <PropertyRef Name="TenantID" />
+          </Key>
+          <Property Name="TenantID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PropertyID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="RentAmount" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="FinalDueDate" Type="datetime" />
+          <Property Name="Deposit" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="DepostDueDate" Type="datetime" />
+          <Property Name="PetDepositDue" Type="bit" Nullable="false" />
+          <Property Name="PetDeposit" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+          <Property Name="Deletedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserCC">
+          <Key>
+            <PropertyRef Name="UserCCID" />
+          </Key>
+          <Property Name="UserCCID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="PaymentType" Type="smallint" />
+          <Property Name="CCNO" Type="varchar" MaxLength="512" />
+          <Property Name="ExpMon" Type="varchar" MaxLength="512" />
+          <Property Name="ExpYear" Type="varchar" MaxLength="512" />
+          <Property Name="CVV" Type="varchar" MaxLength="512" />
+          <Property Name="AccountType" Type="varchar" MaxLength="512" />
+          <Property Name="RoutingNo" Type="varchar" MaxLength="512" />
+          <Property Name="AccountNo" Type="varchar" MaxLength="512" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserReferences">
+          <Key>
+            <PropertyRef Name="UserReferenceID" />
+          </Key>
+          <Property Name="UserReferenceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="Phone" Type="varchar" MaxLength="255" />
+          <Property Name="EMail" Type="varchar" MaxLength="255" />
+          <Property Name="Address" Type="varchar" MaxLength="255" />
+          <Property Name="Address2" Type="varchar" MaxLength="255" />
+          <Property Name="City" Type="varchar" MaxLength="255" />
+          <Property Name="State" Type="varchar" MaxLength="255" />
+          <Property Name="Zip" Type="varchar" MaxLength="255" />
+          <Property Name="Relationship" Type="varchar" MaxLength="255" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="255" />
+          <Property Name="LastName" Type="varchar" MaxLength="255" />
+          <Property Name="Email" Type="varchar" MaxLength="255" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+          <Property Name="UserType" Type="smallint" Nullable="false" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
+          <Property Name="Deletedon" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'BGBC.dbo.vProductOrders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vProductOrders">
+          <Key>
+            <PropertyRef Name="ProductOrderID" />
+            <PropertyRef Name="ProductID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="TransId" />
+            <PropertyRef Name="TransDate" />
+            <PropertyRef Name="UserType" />
+          </Key>
+          <Property Name="ProductOrderID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="TransId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TransDate" Type="datetime" Nullable="false" />
+          <Property Name="CustomerFName" Type="varchar" MaxLength="255" />
+          <Property Name="CustomerLName" Type="varchar" MaxLength="255" />
+          <Property Name="UserType" Type="smallint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="Price" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="Comments" Type="varchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vRentPayment">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="PropertyID" />
+            <PropertyRef Name="TransDate" />
+            <PropertyRef Name="TransID" />
+            <PropertyRef Name="TenantUserID" />
+            <PropertyRef Name="StatusText" />
+            <PropertyRef Name="Amount" />
+            <PropertyRef Name="OwnerUserID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="PropertyID" Type="int" Nullable="false" />
+          <Property Name="TransDate" Type="datetime" Nullable="false" />
+          <Property Name="TransID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TenantUserID" Type="int" Nullable="false" />
+          <Property Name="TenantFirstName" Type="varchar" MaxLength="255" />
+          <Property Name="TenantLastName" Type="varchar" MaxLength="255" />
+          <Property Name="StatusText" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Comments" Type="varchar(max)" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
+          <Property Name="Amount" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="OwnerFirstName" Type="varchar" MaxLength="255" />
+          <Property Name="OwnerLastName" Type="varchar" MaxLength="255" />
+          <Property Name="OwnerUserID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Orders_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductOrders_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="ProductOrders" Type="Self.ProductOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="ProductOrders">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductOrders_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="ProductOrders" Type="Self.ProductOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="ProductOrders">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profile_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Profile" Type="Self.Profile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Profile">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Properties_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Properties" Type="Self.Properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Properties">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentDue_Property">
+          <End Role="Properties" Type="Self.Properties" Multiplicity="0..1" />
+          <End Role="RentDue" Type="Self.RentDue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="RentDue">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentDue_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="RentDue" Type="Self.RentDue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RentDue">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentPayment_Payment">
+          <End Role="Payment" Type="Self.Payment" Multiplicity="0..1" />
+          <End Role="RentPayment" Type="Self.RentPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Payment">
+              <PropertyRef Name="PaymentID" />
+            </Principal>
+            <Dependent Role="RentPayment">
+              <PropertyRef Name="PaymentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentPayment_Property">
+          <End Role="Properties" Type="Self.Properties" Multiplicity="0..1" />
+          <End Role="RentPayment" Type="Self.RentPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="RentPayment">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tenants_Properties">
+          <End Role="Properties" Type="Self.Properties" Multiplicity="0..1" />
+          <End Role="Tenants" Type="Self.Tenants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="Tenants">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tenants_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Tenants" Type="Self.Tenants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tenants">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCC_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="UserCC" Type="Self.UserCC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCC">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserReferences_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="UserReferences" Type="Self.UserReferences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserReferences">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="USP_NextInvoiceNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_ProductTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="i_UserID" Type="int" Mode="In" />
+          <Parameter Name="i_InvoiceID" Type="int" Mode="In" />
+          <Parameter Name="v_AccountNumber" Type="varchar" Mode="In" />
+          <Parameter Name="v_AccountType" Type="varchar" Mode="In" />
+          <Parameter Name="v_TransId" Type="varchar" Mode="In" />
+          <Parameter Name="v_StatusCode" Type="varchar" Mode="In" />
+          <Parameter Name="v_StatusText" Type="varchar" Mode="In" />
+          <Parameter Name="v_CustomerIP" Type="varchar" Mode="In" />
+          <Parameter Name="v_Address" Type="varchar(max)" Mode="In" />
+          <Parameter Name="v_Comments" Type="varchar(max)" Mode="In" />
+          <Parameter Name="v_Products" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_RentCalcSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DT_SELDATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="USP_RentPayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="i_UserID" Type="int" Mode="In" />
+          <Parameter Name="i_InvoiceID" Type="int" Mode="In" />
+          <Parameter Name="v_AccountNumber" Type="varchar" Mode="In" />
+          <Parameter Name="v_AccountType" Type="varchar" Mode="In" />
+          <Parameter Name="v_TransId" Type="varchar" Mode="In" />
+          <Parameter Name="v_StatusCode" Type="varchar" Mode="In" />
+          <Parameter Name="v_StatusText" Type="varchar" Mode="In" />
+          <Parameter Name="v_CustomerIP" Type="varchar" Mode="In" />
+          <Parameter Name="d_Total" Type="decimal" Mode="In" />
+          <Parameter Name="v_Comments" Type="varchar(max)" Mode="In" />
+          <Parameter Name="v_Address" Type="varchar(max)" Mode="In" />
+          <Parameter Name="v_RentDueids" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_TenantOutstanding" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="i_PropertyID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="BGBCModelStoreContainer">
+          <EntitySet Name="ContactForm" EntityType="Self.ContactForm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Emails" EntityType="Self.Emails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobStatus" EntityType="Self.JobStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PasswordReset" EntityType="Self.PasswordReset" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductOrders" EntityType="Self.ProductOrders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profile" EntityType="Self.Profile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Properties" EntityType="Self.Properties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RentDue" EntityType="Self.RentDue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RentPayment" EntityType="Self.RentPayment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TenantReferral" EntityType="Self.TenantReferral" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tenants" EntityType="Self.Tenants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserCC" EntityType="Self.UserCC" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserReferences" EntityType="Self.UserReferences" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vProductOrders" EntityType="Self.vProductOrders" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vProductOrders].[ProductOrderID] AS [ProductOrderID], 
+    [vProductOrders].[ProductID] AS [ProductID], 
+    [vProductOrders].[UserID] AS [UserID], 
+    [vProductOrders].[TransId] AS [TransId], 
+    [vProductOrders].[TransDate] AS [TransDate], 
+    [vProductOrders].[CustomerFName] AS [CustomerFName], 
+    [vProductOrders].[CustomerLName] AS [CustomerLName], 
+    [vProductOrders].[UserType] AS [UserType], 
+    [vProductOrders].[Name] AS [Name], 
+    [vProductOrders].[Description] AS [Description], 
+    [vProductOrders].[Price] AS [Price], 
+    [vProductOrders].[Comments] AS [Comments]
+    FROM [dbo].[vProductOrders] AS [vProductOrders]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vRentPayment" EntityType="Self.vRentPayment" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vRentPayment].[ID] AS [ID], 
+    [vRentPayment].[PropertyID] AS [PropertyID], 
+    [vRentPayment].[TransDate] AS [TransDate], 
+    [vRentPayment].[TransID] AS [TransID], 
+    [vRentPayment].[TenantUserID] AS [TenantUserID], 
+    [vRentPayment].[TenantFirstName] AS [TenantFirstName], 
+    [vRentPayment].[TenantLastName] AS [TenantLastName], 
+    [vRentPayment].[StatusText] AS [StatusText], 
+    [vRentPayment].[Comments] AS [Comments], 
+    [vRentPayment].[Description] AS [Description], 
+    [vRentPayment].[Amount] AS [Amount], 
+    [vRentPayment].[OwnerFirstName] AS [OwnerFirstName], 
+    [vRentPayment].[OwnerLastName] AS [OwnerLastName], 
+    [vRentPayment].[OwnerUserID] AS [OwnerUserID]
+    FROM [dbo].[vRentPayment] AS [vRentPayment]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Orders_User" Association="Self.FK_Orders_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_User" Association="Self.FK_Payment_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductOrders_Orders" Association="Self.FK_ProductOrders_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="ProductOrders" EntitySet="ProductOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductOrders_Product" Association="Self.FK_ProductOrders_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductOrders" EntitySet="ProductOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profile_Users" Association="Self.FK_Profile_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Profile" EntitySet="Profile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Properties_Users" Association="Self.FK_Properties_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Properties" EntitySet="Properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentDue_Property" Association="Self.FK_RentDue_Property">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="RentDue" EntitySet="RentDue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentDue_User" Association="Self.FK_RentDue_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="RentDue" EntitySet="RentDue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentPayment_Payment" Association="Self.FK_RentPayment_Payment">
+            <End Role="Payment" EntitySet="Payment" />
+            <End Role="RentPayment" EntitySet="RentPayment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentPayment_Property" Association="Self.FK_RentPayment_Property">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="RentPayment" EntitySet="RentPayment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tenants_Properties" Association="Self.FK_Tenants_Properties">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="Tenants" EntitySet="Tenants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tenants_Users" Association="Self.FK_Tenants_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Tenants" EntitySet="Tenants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCC_User" Association="Self.FK_UserCC_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserCC" EntitySet="UserCC" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserReferences_Users" Association="Self.FK_UserReferences_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserReferences" EntitySet="UserReferences" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BGBCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BGBCEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ContactForms" EntityType="BGBCModel.ContactForm" />
+          <EntitySet Name="Emails" EntityType="BGBCModel.Email" />
+          <EntitySet Name="JobStatus" EntityType="BGBCModel.JobStatu" />
+          <EntitySet Name="Orders" EntityType="BGBCModel.Order" />
+          <EntitySet Name="PasswordResets" EntityType="BGBCModel.PasswordReset" />
+          <EntitySet Name="Payments" EntityType="BGBCModel.Payment" />
+          <EntitySet Name="Products" EntityType="BGBCModel.Product" />
+          <EntitySet Name="ProductOrders" EntityType="BGBCModel.ProductOrder" />
+          <EntitySet Name="Profiles" EntityType="BGBCModel.Profile" />
+          <EntitySet Name="Properties" EntityType="BGBCModel.Property" />
+          <EntitySet Name="RentDues" EntityType="BGBCModel.RentDue" />
+          <EntitySet Name="RentPayments" EntityType="BGBCModel.RentPayment" />
+          <EntitySet Name="TenantReferrals" EntityType="BGBCModel.TenantReferral" />
+          <EntitySet Name="Tenants" EntityType="BGBCModel.Tenant" />
+          <EntitySet Name="UserCCs" EntityType="BGBCModel.UserCC" />
+          <EntitySet Name="UserReferences" EntityType="BGBCModel.UserReference" />
+          <EntitySet Name="Users" EntityType="BGBCModel.User" />
+          <EntitySet Name="vProductOrders" EntityType="BGBCModel.vProductOrder" />
+          <EntitySet Name="vRentPayments" EntityType="BGBCModel.vRentPayment" />
+          <AssociationSet Name="FK_Orders_User" Association="BGBCModel.FK_Orders_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductOrders_Orders" Association="BGBCModel.FK_ProductOrders_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="ProductOrder" EntitySet="ProductOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_User" Association="BGBCModel.FK_Payment_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Payment" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentPayment_Payment" Association="BGBCModel.FK_RentPayment_Payment">
+            <End Role="Payment" EntitySet="Payments" />
+            <End Role="RentPayment" EntitySet="RentPayments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductOrders_Product" Association="BGBCModel.FK_ProductOrders_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductOrder" EntitySet="ProductOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profile_Users" Association="BGBCModel.FK_Profile_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Profile" EntitySet="Profiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Properties_Users" Association="BGBCModel.FK_Properties_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Property" EntitySet="Properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentDue_Property" Association="BGBCModel.FK_RentDue_Property">
+            <End Role="Property" EntitySet="Properties" />
+            <End Role="RentDue" EntitySet="RentDues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentPayment_Property" Association="BGBCModel.FK_RentPayment_Property">
+            <End Role="Property" EntitySet="Properties" />
+            <End Role="RentPayment" EntitySet="RentPayments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tenants_Properties" Association="BGBCModel.FK_Tenants_Properties">
+            <End Role="Property" EntitySet="Properties" />
+            <End Role="Tenant" EntitySet="Tenants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentDue_User" Association="BGBCModel.FK_RentDue_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="RentDue" EntitySet="RentDues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tenants_Users" Association="BGBCModel.FK_Tenants_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Tenant" EntitySet="Tenants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCC_User" Association="BGBCModel.FK_UserCC_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserCC" EntitySet="UserCCs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserReferences_Users" Association="BGBCModel.FK_UserReferences_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserReference" EntitySet="UserReferences" />
+          </AssociationSet>
+          <FunctionImport Name="SP_NextInvoiceNo" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="SP_ProductTrans" EntitySet="Orders" ReturnType="Collection(BGBCModel.Order)">
+            <Parameter Name="i_UserID" Mode="In" Type="Int32" />
+            <Parameter Name="i_InvoiceID" Mode="In" Type="Int32" />
+            <Parameter Name="v_AccountNumber" Mode="In" Type="String" />
+            <Parameter Name="v_AccountType" Mode="In" Type="String" />
+            <Parameter Name="v_TransId" Mode="In" Type="String" />
+            <Parameter Name="v_StatusCode" Mode="In" Type="String" />
+            <Parameter Name="v_StatusText" Mode="In" Type="String" />
+            <Parameter Name="v_CustomerIP" Mode="In" Type="String" />
+            <Parameter Name="v_Address" Mode="In" Type="String" />
+            <Parameter Name="v_Comments" Mode="In" Type="String" />
+            <Parameter Name="v_Products" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_RentCalcSchedule">
+            <Parameter Name="DT_SELDATE" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_RentPayment" EntitySet="Payments" ReturnType="Collection(BGBCModel.Payment)">
+            <Parameter Name="i_UserID" Mode="In" Type="Int32" />
+            <Parameter Name="i_InvoiceID" Mode="In" Type="Int32" />
+            <Parameter Name="v_AccountNumber" Mode="In" Type="String" />
+            <Parameter Name="v_AccountType" Mode="In" Type="String" />
+            <Parameter Name="v_TransId" Mode="In" Type="String" />
+            <Parameter Name="v_StatusCode" Mode="In" Type="String" />
+            <Parameter Name="v_StatusText" Mode="In" Type="String" />
+            <Parameter Name="v_CustomerIP" Mode="In" Type="String" />
+            <Parameter Name="d_Total" Mode="In" Type="Decimal" />
+            <Parameter Name="v_Comments" Mode="In" Type="String" />
+            <Parameter Name="v_Address" Mode="In" Type="String" />
+            <Parameter Name="v_RentDueids" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_TenantOutstanding" ReturnType="Collection(BGBCModel.TenantOutstanding)">
+            <Parameter Name="i_PropertyID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="ContactForm">
+          <Key>
+            <PropertyRef Name="ContactusID" />
+          </Key>
+          <Property Name="ContactusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EMail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MessageText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MessageType" Type="Int32" Nullable="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Email">
+          <Key>
+            <PropertyRef Name="EmailID" />
+          </Key>
+          <Property Name="EmailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ToAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Subject" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="JobStatu">
+          <Key>
+            <PropertyRef Name="JobStatusID" />
+          </Key>
+          <Property Name="JobStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobType" Type="Int16" />
+          <Property Name="JobName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="RunDate" Type="DateTime" Precision="3" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="TransDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AccountNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccountType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TransId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StatusCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StatusText" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerIP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BillAddress" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_Orders_User" FromRole="Order" ToRole="User" />
+          <NavigationProperty Name="ProductOrders" Relationship="BGBCModel.FK_ProductOrders_Orders" FromRole="Order" ToRole="ProductOrder" />
+        </EntityType>
+        <EntityType Name="PasswordReset">
+          <Key>
+            <PropertyRef Name="PasswordResetID" />
+          </Key>
+          <Property Name="PasswordResetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Token" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="TransDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AccountNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccountType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TransId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StatusCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StatusText" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerIP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BillAddress" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_Payment_User" FromRole="Payment" ToRole="User" />
+          <NavigationProperty Name="RentPayments" Relationship="BGBCModel.FK_RentPayment_Payment" FromRole="Payment" ToRole="RentPayment" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="isLocal" Type="Boolean" Nullable="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <Property Name="Deletedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ProductOrders" Relationship="BGBCModel.FK_ProductOrders_Product" FromRole="Product" ToRole="ProductOrder" />
+        </EntityType>
+        <EntityType Name="ProductOrder">
+          <Key>
+            <PropertyRef Name="ProductOrderID" />
+          </Key>
+          <Property Name="ProductOrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="ProductID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="15" Scale="2" />
+          <NavigationProperty Name="Order" Relationship="BGBCModel.FK_ProductOrders_Orders" FromRole="ProductOrder" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="BGBCModel.FK_ProductOrders_Product" FromRole="ProductOrder" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Profile">
+          <Key>
+            <PropertyRef Name="ProfileID" />
+          </Key>
+          <Property Name="ProfileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="AltEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="BillingAddressSame" Type="Boolean" Nullable="false" />
+          <Property Name="BillingAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="BillingAddress_2" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="BillingCty" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="BillingState" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="BillingZip" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="HomePhone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="WorkPhone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MobilePhone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FaxNumber" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="SMSOpt" Type="Boolean" />
+          <Property Name="PaymentMethod" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PaypalEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PayoutMailAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PayoutMailAddress2" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PayoutMailCity" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PayoutMailState" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PayoutMailZip" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_Profile_Users" FromRole="Profile" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Property">
+          <Key>
+            <PropertyRef Name="PropertyID" />
+          </Key>
+          <Property Name="PropertyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Nickname" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="RentDueDay" Type="Int16" />
+          <Property Name="GracePeriod" Type="Int16" />
+          <Property Name="Penalty" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="DailyPenalty" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <Property Name="Deletedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_Properties_Users" FromRole="Property" ToRole="User" />
+          <NavigationProperty Name="RentDues" Relationship="BGBCModel.FK_RentDue_Property" FromRole="Property" ToRole="RentDue" />
+          <NavigationProperty Name="RentPayments" Relationship="BGBCModel.FK_RentPayment_Property" FromRole="Property" ToRole="RentPayment" />
+          <NavigationProperty Name="Tenants" Relationship="BGBCModel.FK_Tenants_Properties" FromRole="Property" ToRole="Tenant" />
+        </EntityType>
+        <EntityType Name="RentDue">
+          <Key>
+            <PropertyRef Name="RentDueID" />
+          </Key>
+          <Property Name="RentDueID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="PropertyID" Type="Int32" />
+          <Property Name="DueMon" Type="Int32" />
+          <Property Name="DueYear" Type="Int32" />
+          <Property Name="DueDate" Type="DateTime" Precision="3" />
+          <Property Name="DueAmount" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DueStatus" Type="Boolean" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Property" Relationship="BGBCModel.FK_RentDue_Property" FromRole="RentDue" ToRole="Property" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_RentDue_User" FromRole="RentDue" ToRole="User" />
+        </EntityType>
+        <EntityType Name="RentPayment">
+          <Key>
+            <PropertyRef Name="RentPaymentID" />
+          </Key>
+          <Property Name="RentPaymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PropertyID" Type="Int32" />
+          <Property Name="PaymentID" Type="Int32" />
+          <Property Name="RentMon" Type="Int32" />
+          <Property Name="RentYear" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Payment" Relationship="BGBCModel.FK_RentPayment_Payment" FromRole="RentPayment" ToRole="Payment" />
+          <NavigationProperty Name="Property" Relationship="BGBCModel.FK_RentPayment_Property" FromRole="RentPayment" ToRole="Property" />
+        </EntityType>
+        <EntityType Name="TenantReferral">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LandlordName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LandlordPhone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LandlordEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LandlordAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Tenant">
+          <Key>
+            <PropertyRef Name="TenantID" />
+          </Key>
+          <Property Name="TenantID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PropertyID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="RentAmount" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="FinalDueDate" Type="DateTime" Precision="3" />
+          <Property Name="Deposit" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="DepostDueDate" Type="DateTime" Precision="3" />
+          <Property Name="PetDepositDue" Type="Boolean" Nullable="false" />
+          <Property Name="PetDeposit" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <Property Name="Deletedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Property" Relationship="BGBCModel.FK_Tenants_Properties" FromRole="Tenant" ToRole="Property" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_Tenants_Users" FromRole="Tenant" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserCC">
+          <Key>
+            <PropertyRef Name="UserCCID" />
+          </Key>
+          <Property Name="UserCCID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="PaymentType" Type="Int16" />
+          <Property Name="CCNO" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="ExpMon" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="ExpYear" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="CVV" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="AccountType" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="RoutingNo" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="AccountNo" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_UserCC_User" FromRole="UserCC" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserReference">
+          <Key>
+            <PropertyRef Name="UserReferenceID" />
+          </Key>
+          <Property Name="UserReferenceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EMail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Relationship" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_UserReferences_Users" FromRole="UserReference" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UserType" Type="Int16" Nullable="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <Property Name="Deletedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Orders" Relationship="BGBCModel.FK_Orders_User" FromRole="User" ToRole="Order" />
+          <NavigationProperty Name="Payments" Relationship="BGBCModel.FK_Payment_User" FromRole="User" ToRole="Payment" />
+          <NavigationProperty Name="Profiles" Relationship="BGBCModel.FK_Profile_Users" FromRole="User" ToRole="Profile" />
+          <NavigationProperty Name="Properties" Relationship="BGBCModel.FK_Properties_Users" FromRole="User" ToRole="Property" />
+          <NavigationProperty Name="RentDues" Relationship="BGBCModel.FK_RentDue_User" FromRole="User" ToRole="RentDue" />
+          <NavigationProperty Name="Tenants" Relationship="BGBCModel.FK_Tenants_Users" FromRole="User" ToRole="Tenant" />
+          <NavigationProperty Name="UserCCs" Relationship="BGBCModel.FK_UserCC_User" FromRole="User" ToRole="UserCC" />
+          <NavigationProperty Name="UserReferences" Relationship="BGBCModel.FK_UserReferences_Users" FromRole="User" ToRole="UserReference" />
+        </EntityType>
+        <EntityType Name="vProductOrder">
+          <Key>
+            <PropertyRef Name="ProductOrderID" />
+            <PropertyRef Name="ProductID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="TransId" />
+            <PropertyRef Name="TransDate" />
+            <PropertyRef Name="UserType" />
+          </Key>
+          <Property Name="ProductOrderID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="TransId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TransDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CustomerFName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerLName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UserType" Type="Int16" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="vRentPayment">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="PropertyID" />
+            <PropertyRef Name="TransDate" />
+            <PropertyRef Name="TransID" />
+            <PropertyRef Name="TenantUserID" />
+            <PropertyRef Name="StatusText" />
+            <PropertyRef Name="Amount" />
+            <PropertyRef Name="OwnerUserID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="PropertyID" Type="Int32" Nullable="false" />
+          <Property Name="TransDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TransID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TenantUserID" Type="Int32" Nullable="false" />
+          <Property Name="TenantFirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TenantLastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="StatusText" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="OwnerFirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="OwnerLastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="OwnerUserID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Orders_User">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BGBCModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductOrders_Orders">
+          <End Type="BGBCModel.Order" Role="Order" Multiplicity="0..1" />
+          <End Type="BGBCModel.ProductOrder" Role="ProductOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="ProductOrder">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_User">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BGBCModel.Payment" Role="Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentPayment_Payment">
+          <End Type="BGBCModel.Payment" Role="Payment" Multiplicity="0..1" />
+          <End Type="BGBCModel.RentPayment" Role="RentPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Payment">
+              <PropertyRef Name="PaymentID" />
+            </Principal>
+            <Dependent Role="RentPayment">
+              <PropertyRef Name="PaymentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductOrders_Product">
+          <End Type="BGBCModel.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="BGBCModel.ProductOrder" Role="ProductOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="ProductOrder">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profile_Users">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="1" />
+          <End Type="BGBCModel.Profile" Role="Profile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Profile">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Properties_Users">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="1" />
+          <End Type="BGBCModel.Property" Role="Property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Property">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentDue_Property">
+          <End Type="BGBCModel.Property" Role="Property" Multiplicity="0..1" />
+          <End Type="BGBCModel.RentDue" Role="RentDue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="RentDue">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentPayment_Property">
+          <End Type="BGBCModel.Property" Role="Property" Multiplicity="0..1" />
+          <End Type="BGBCModel.RentPayment" Role="RentPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="RentPayment">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tenants_Properties">
+          <End Type="BGBCModel.Property" Role="Property" Multiplicity="0..1" />
+          <End Type="BGBCModel.Tenant" Role="Tenant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="Tenant">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentDue_User">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BGBCModel.RentDue" Role="RentDue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RentDue">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tenants_Users">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BGBCModel.Tenant" Role="Tenant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tenant">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCC_User">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BGBCModel.UserCC" Role="UserCC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCC">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserReferences_Users">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BGBCModel.UserReference" Role="UserReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserReference">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="TenantOutstanding">
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="255" />
+          <Property Type="Decimal" Name="Balance" Nullable="false" Precision="38" Scale="2" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BGBCModelStoreContainer" CdmEntityContainer="BGBCEntities">
+          <EntitySetMapping Name="ContactForms">
+            <EntityTypeMapping TypeName="BGBCModel.ContactForm">
+              <MappingFragment StoreEntitySet="ContactForm">
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="MessageType" ColumnName="MessageType" />
+                <ScalarProperty Name="MessageText" ColumnName="MessageText" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="ContactusID" ColumnName="ContactusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Emails">
+            <EntityTypeMapping TypeName="BGBCModel.Email">
+              <MappingFragment StoreEntitySet="Emails">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="ToAddress" ColumnName="ToAddress" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobStatus">
+            <EntityTypeMapping TypeName="BGBCModel.JobStatu">
+              <MappingFragment StoreEntitySet="JobStatus">
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="RunDate" ColumnName="RunDate" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="JobStatusID" ColumnName="JobStatusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="BGBCModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="BillAddress" ColumnName="BillAddress" />
+                <ScalarProperty Name="CustomerIP" ColumnName="CustomerIP" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="TransId" ColumnName="TransId" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PasswordResets">
+            <EntityTypeMapping TypeName="BGBCModel.PasswordReset">
+              <MappingFragment StoreEntitySet="PasswordReset">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="PasswordResetID" ColumnName="PasswordResetID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="BGBCModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="BillAddress" ColumnName="BillAddress" />
+                <ScalarProperty Name="CustomerIP" ColumnName="CustomerIP" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="TransId" ColumnName="TransId" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="BGBCModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Deletedon" ColumnName="Deletedon" />
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="isLocal" ColumnName="isLocal" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductOrders">
+            <EntityTypeMapping TypeName="BGBCModel.ProductOrder">
+              <MappingFragment StoreEntitySet="ProductOrders">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ProductOrderID" ColumnName="ProductOrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profiles">
+            <EntityTypeMapping TypeName="BGBCModel.Profile">
+              <MappingFragment StoreEntitySet="Profile">
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="PayoutMailZip" ColumnName="PayoutMailZip" />
+                <ScalarProperty Name="PayoutMailState" ColumnName="PayoutMailState" />
+                <ScalarProperty Name="PayoutMailCity" ColumnName="PayoutMailCity" />
+                <ScalarProperty Name="PayoutMailAddress2" ColumnName="PayoutMailAddress2" />
+                <ScalarProperty Name="PayoutMailAddress" ColumnName="PayoutMailAddress" />
+                <ScalarProperty Name="PaypalEmail" ColumnName="PaypalEmail" />
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ScalarProperty Name="SMSOpt" ColumnName="SMSOpt" />
+                <ScalarProperty Name="FaxNumber" ColumnName="FaxNumber" />
+                <ScalarProperty Name="MobilePhone" ColumnName="MobilePhone" />
+                <ScalarProperty Name="WorkPhone" ColumnName="WorkPhone" />
+                <ScalarProperty Name="HomePhone" ColumnName="HomePhone" />
+                <ScalarProperty Name="BillingZip" ColumnName="BillingZip" />
+                <ScalarProperty Name="BillingState" ColumnName="BillingState" />
+                <ScalarProperty Name="BillingCty" ColumnName="BillingCty" />
+                <ScalarProperty Name="BillingAddress_2" ColumnName="BillingAddress_2" />
+                <ScalarProperty Name="BillingAddress" ColumnName="BillingAddress" />
+                <ScalarProperty Name="BillingAddressSame" ColumnName="BillingAddressSame" />
+                <ScalarProperty Name="AltEmail" ColumnName="AltEmail" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ProfileID" ColumnName="ProfileID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Properties">
+            <EntityTypeMapping TypeName="BGBCModel.Property">
+              <MappingFragment StoreEntitySet="Properties">
+                <ScalarProperty Name="Deletedon" ColumnName="Deletedon" />
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="DailyPenalty" ColumnName="DailyPenalty" />
+                <ScalarProperty Name="Penalty" ColumnName="Penalty" />
+                <ScalarProperty Name="GracePeriod" ColumnName="GracePeriod" />
+                <ScalarProperty Name="RentDueDay" ColumnName="RentDueDay" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RentDues">
+            <EntityTypeMapping TypeName="BGBCModel.RentDue">
+              <MappingFragment StoreEntitySet="RentDue">
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="DueStatus" ColumnName="DueStatus" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DueAmount" ColumnName="DueAmount" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="DueYear" ColumnName="DueYear" />
+                <ScalarProperty Name="DueMon" ColumnName="DueMon" />
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RentDueID" ColumnName="RentDueID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RentPayments">
+            <EntityTypeMapping TypeName="BGBCModel.RentPayment">
+              <MappingFragment StoreEntitySet="RentPayment">
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="RentYear" ColumnName="RentYear" />
+                <ScalarProperty Name="RentMon" ColumnName="RentMon" />
+                <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+                <ScalarProperty Name="RentPaymentID" ColumnName="RentPaymentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TenantReferrals">
+            <EntityTypeMapping TypeName="BGBCModel.TenantReferral">
+              <MappingFragment StoreEntitySet="TenantReferral">
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="LandlordAddress" ColumnName="LandlordAddress" />
+                <ScalarProperty Name="LandlordEmail" ColumnName="LandlordEmail" />
+                <ScalarProperty Name="LandlordPhone" ColumnName="LandlordPhone" />
+                <ScalarProperty Name="LandlordName" ColumnName="LandlordName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tenants">
+            <EntityTypeMapping TypeName="BGBCModel.Tenant">
+              <MappingFragment StoreEntitySet="Tenants">
+                <ScalarProperty Name="Deletedon" ColumnName="Deletedon" />
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="PetDeposit" ColumnName="PetDeposit" />
+                <ScalarProperty Name="PetDepositDue" ColumnName="PetDepositDue" />
+                <ScalarProperty Name="DepostDueDate" ColumnName="DepostDueDate" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="FinalDueDate" ColumnName="FinalDueDate" />
+                <ScalarProperty Name="RentAmount" ColumnName="RentAmount" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+                <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCCs">
+            <EntityTypeMapping TypeName="BGBCModel.UserCC">
+              <MappingFragment StoreEntitySet="UserCC">
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="RoutingNo" ColumnName="RoutingNo" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="CVV" ColumnName="CVV" />
+                <ScalarProperty Name="ExpYear" ColumnName="ExpYear" />
+                <ScalarProperty Name="ExpMon" ColumnName="ExpMon" />
+                <ScalarProperty Name="CCNO" ColumnName="CCNO" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserCCID" ColumnName="UserCCID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserReferences">
+            <EntityTypeMapping TypeName="BGBCModel.UserReference">
+              <MappingFragment StoreEntitySet="UserReferences">
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserReferenceID" ColumnName="UserReferenceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="BGBCModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Deletedon" ColumnName="Deletedon" />
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vProductOrders">
+            <EntityTypeMapping TypeName="BGBCModel.vProductOrder">
+              <MappingFragment StoreEntitySet="vProductOrders">
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="CustomerLName" ColumnName="CustomerLName" />
+                <ScalarProperty Name="CustomerFName" ColumnName="CustomerFName" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransId" ColumnName="TransId" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductOrderID" ColumnName="ProductOrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vRentPayments">
+            <EntityTypeMapping TypeName="BGBCModel.vRentPayment">
+              <MappingFragment StoreEntitySet="vRentPayment">
+                <ScalarProperty Name="OwnerUserID" ColumnName="OwnerUserID" />
+                <ScalarProperty Name="OwnerLastName" ColumnName="OwnerLastName" />
+                <ScalarProperty Name="OwnerFirstName" ColumnName="OwnerFirstName" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="TenantLastName" ColumnName="TenantLastName" />
+                <ScalarProperty Name="TenantFirstName" ColumnName="TenantFirstName" />
+                <ScalarProperty Name="TenantUserID" ColumnName="TenantUserID" />
+                <ScalarProperty Name="TransID" ColumnName="TransID" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_NextInvoiceNo" FunctionName="BGBCModel.Store.USP_NextInvoiceNo" />
+          <FunctionImportMapping FunctionImportName="SP_ProductTrans" FunctionName="BGBCModel.Store.USP_ProductTrans">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_RentCalcSchedule" FunctionName="BGBCModel.Store.USP_RentCalcSchedule" />
+          <FunctionImportMapping FunctionImportName="SP_RentPayment" FunctionName="BGBCModel.Store.USP_RentPayment">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_TenantOutstanding" FunctionName="BGBCModel.Store.USP_TenantOutstanding">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="BGBCModel.TenantOutstanding">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

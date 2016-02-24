@@ -1,0 +1,94 @@
+﻿@model IEnumerable<BGBC.Model.Product>
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-10 col-sm-6 no-padd">
+            <h1>Products &amp; Services</h1>
+        </div>
+        <div class="col-md-2 col-sm-6 no-padd header-btn">
+            @if (!User.IsInRole("Admin"))
+            {
+                HttpCookie authCookie = Request.Cookies[".BGBCProducts"];
+                if (authCookie != null && (!(string.IsNullOrEmpty(authCookie.Value))))
+                {
+                    string[] ids = authCookie.Value.ToString().Split(',');
+                    @Html.ActionLink("View Cart (" + ids.Length + ")", "Index", "Cart", null, new { @class = "btn-button btn-primary pull-right" })
+                }
+                else
+                {
+                    @Html.ActionLink("View Cart", "Index", "Cart", null, new { @class = "btn-button btn-primary pull-right" })
+                }
+            }
+        </div>
+    </div>
+    <div class="clearfix"> &nbsp;</div>
+    <div class="col-md-12">
+        @if (TempData["SucessMessage"] != null)
+        {
+
+            <div class="alert alert-success">@TempData["SucessMessage"]</div>
+
+        }
+    </div>
+    <div class="clearfix"> &nbsp;</div>
+
+    <div class="table-responsive">
+        <table class="table table-hover ">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.isLocal)
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @if (item.isLocal.ToString() == "True")
+                            {
+                                <span>Houston, TX</span>
+                            }
+                            else
+                            {
+                                <span>National</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                @Html.ActionLink("Add to Cart", "Addtocart", "Cart", new { id = item.ProductID }, new { @class = "btn-button btn-primary" })
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+</div>

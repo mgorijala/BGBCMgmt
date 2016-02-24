@@ -1,0 +1,295 @@
+﻿@model BGBC.Web.Models.Checkout
+
+
+@{
+    ViewBag.Title = "Checkoutconfirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 no-padd ">
+            <h1>Checkout</h1>
+        </div>
+        <div class="col-md-6 no-padd header-btn">
+            @Html.ActionLink("Back", "Checkout", "Cart", null, htmlAttributes: new { @class = "btn-button btn-primary" })
+            @*<input type="submit" value="Back" class="btn btn-default" />*@
+        </div>
+
+    </div>
+
+
+    <div class="col-md-12 no-padd">
+        <h5>Billing info</h5>
+        <br />
+        <div class=" checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FirstName)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.FirstName)
+            </div>
+        </div>
+        <div class=" checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.LastName)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.LastName)
+            </div>
+        </div>
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Phone)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.Phone)
+            </div>
+        </div>
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Email)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.Email)
+            </div>
+        </div>
+        <br />
+        <h5>Billing Address</h5>
+        <br />
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.BillingAddress)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.BillingAddress)
+            </div>
+        </div>
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.BillingAddress_2)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.BillingAddress_2)
+            </div>
+        </div>
+
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.BillingCty)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.BillingCty)
+            </div>
+        </div>
+
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.BillingState)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.BillingState)
+            </div>
+        </div>
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.BillingZip)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.BillingZip)
+            </div>
+        </div>
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.SaveBillingAddress)
+            </div>
+            <div class="col-sm-9">
+                @if (Model.SaveBillingAddress.ToString() == "True")
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
+            </div>
+        </div>
+        <br />
+        <h5>Service Address</h5>
+        <br />
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.ServiceBillingAddressSame)
+            </div>
+            <div class="col-sm-9">
+                @if (Model.ServiceBillingAddressSame.ToString() == "True")
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
+            </div>
+        </div>
+        <br />
+        <h5>Payment Info</h5>
+        <br />
+
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.PaymentMethod)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.PaymentMethod)
+            </div>
+        </div>
+        @if (Model.PaymentMethod == "eCheck")
+        {
+            <div class="row checkoutconform">
+                <div class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.BankAccountType)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DisplayFor(model => model.BankAccountType)
+                </div>
+            </div>
+            <div class="row checkoutconform">
+                <div class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.BankRoutingNumber)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DisplayFor(model => model.BankRoutingNumber)
+                </div>
+            </div>
+            <div class="row checkoutconform">
+                <div class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.BankAccountNumber)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DisplayFor(model => model.BankAccountNumber)
+                </div>
+            </div>
+        }
+        else
+        { <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.CardNo)
+            </div>
+            <div class="col-sm-9">
+                @Html.DisplayFor(model => model.CardNo)
+            </div>
+        </div>
+
+            <div class="row checkoutconform">
+                <div class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CardExpMon)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DisplayFor(model => model.CardExpMon)
+                </div>
+            </div>
+
+            <div class="row checkoutconform">
+                <div class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CardExpYear)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DisplayFor(model => model.CardExpYear)
+                </div>
+            </div>}
+        <div class="row checkoutconform">
+            <div class="col-sm-3">
+                @Html.DisplayNameFor(model => model.SaveCard)
+            </div>
+            <div class="col-sm-9">
+                @if (Model.SaveCard.ToString() == "True")
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
+            </div>
+        </div>
+
+        <br />
+        <h5>Order Summary</h5>
+        <br />
+        <div class="table-responsive">
+            <table class="table cust-table">
+                <tr>
+                    <th>
+                        Item
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th>
+                        Subtotal
+                    </th>
+                </tr>
+                @for (int i = 0; i < Model.OrderList.Count(); i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(p => Model.OrderList[i].Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(p => Model.OrderList[i].Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(p => Model.OrderList[i].Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(p => Model.OrderList[i].Subtotal)
+                        </td>
+
+                    </tr>
+
+                }
+                <tfoot>
+                <td></td>
+                <td></td>
+                <td>@Html.LabelFor(model => model.OrderTotal, htmlAttributes: new { @class = "control-label" })</td>
+                <td>@Html.DisplayFor(model => model.OrderTotal)</td>
+                </tfoot>
+            </table>
+        </div>
+
+
+
+        @*<div class="row">
+                <div class=" col-sm-6 col-xs-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OrderTotal, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-6 text-right">@Html.DisplayFor(model => model.OrderTotal)</div>
+            </div>*@
+        <div class="form-group">
+            <h4>Comments</h4>
+            <span>@Html.DisplayFor(model => model.Comments)</span>
+        </div>
+
+        @using (Html.BeginForm("Transaction", "Cart"))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Submit Payment" class="btn btn-button btn-primary" onclick="location.href='@Url.Action("OrderHistory ", "Reports")'" />
+                @Html.ActionLink("Edit", "Checkout", "Cart", null, new { @class = " btn-button btn-primary" })
+
+
+                @*@Html.ActionLink("Submit Payment", "OrderHistory", "Reports", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" })*@
+                @*<input type="button" value="Edit" class="btn btn-button" onclick="location.href='@Url.Action("Checkout", "Cart")'" />*@
+
+            </div>
+        }
+    </div>
+    <div class="clearfix"></div>
+</div>

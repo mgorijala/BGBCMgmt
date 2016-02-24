@@ -1,0 +1,102 @@
+﻿@model BGBC.Web.Models.UserProfile
+
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken() 
+        @Html.HiddenFor(m => m.Createdon)
+        @Html.HiddenFor(m => m.Updatedon)
+        <h1>Edit Profile</h1>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })       
+         if (TempData["SucessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SucessMessage"]</div>
+            }
+        <fieldset>           
+            <legend>Basic Information</legend>           
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.FirstName, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(tuple => tuple.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(tuple => tuple.FirstName, "", new { @class = "text-danger" })                    
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.LastName, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(tuple => tuple.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(tuple => tuple.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.Email, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(tuple => tuple.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(tuple => tuple.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>            
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.ConfirmEmail, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(tuple => tuple.ConfirmEmail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(tuple => tuple.ConfirmEmail, "", new { @class = "text-danger" })                   
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                            @Html.LabelFor(tuple => tuple.NewPassword, htmlAttributes: new { @class = "control-label" })                    
+                        @Html.EditorFor(tuple => tuple.NewPassword, new { htmlAttributes = new { @class = "form-control", @data_val = "off" } })
+                            @Html.ValidationMessageFor(tuple => tuple.NewPassword, "", new { @class = "text-danger" })                   
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                            @Html.LabelFor(tuple => tuple.ConfirmPassword, htmlAttributes: new { @class = "control-label" })                    
+                        @Html.EditorFor(tuple => tuple.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @data_val = "off" } })
+                            @Html.ValidationMessageFor(tuple => tuple.ConfirmPassword, "", new { @class = "text-danger" })                   
+                    </div>
+                </div>
+            </div>
+           <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                            @Html.LabelFor(tuple => tuple.CurrentPassword, htmlAttributes: new { @class = "control-label" })                    
+                        @Html.EditorFor(tuple => tuple.CurrentPassword, new { htmlAttributes = new { @class = "form-control", @data_val = "off" } })
+                            @Html.ValidationMessageFor(tuple => tuple.CurrentPassword, "", new { @class = "text-danger" })                    
+                    </div>
+                </div>
+           </div>                      
+            <div class="row">
+                <div class="col-md-12">Note: You Must Enter Your Current Password when changing your Email or Password</div>
+            </div>
+        </fieldset>
+         
+    <div>
+            @Html.LabelFor(m => m.Createdon, new { style = "display:inline;" }):
+            @Html.DisplayFor(m => m.Createdon)
+    </div>
+    <div>
+            @Html.LabelFor(m => m.Updatedon, new { style = "display:inline;" }):
+            @Html.DisplayFor(m => m.Updatedon)
+    </div>
+        <br/>
+            <div class="form-group" style="margin-left:0px">
+                <input type="submit" value="Save" class="btn">
+              @Html.ActionLink("Cancel", "Index", "Admin", null, new { @class = "btn-button btn-primary" })             
+            </div>
+
+            }
+        </div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

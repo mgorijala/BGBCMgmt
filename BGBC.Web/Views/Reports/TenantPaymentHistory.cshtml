@@ -1,0 +1,80 @@
+﻿@model IEnumerable<BGBC.Web.Models.TenantViewPayment>
+
+@{
+    ViewBag.Title = "TenantPaymentHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 col-sm-6 no-padd">
+            <h1>Payment Activity</h1>
+        </div>
+        <div class="col-md-6 col-sm-6 no-padd header-btn">
+            @if (User.IsInRole("Owner"))
+            {
+                @Html.ActionLink("Back", "Index", "Owner", null, new { @class = "btn-button btn-primary pull-right" })
+            }
+            else if (User.IsInRole("Tenant"))
+            {
+                @Html.ActionLink("Back", "Index", "Tenant", null, new { @class = "btn-button btn-primary pull-right" })
+            }
+            else if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Back", "ViewAllTenantPayments", "Tenant", new { @class = "btn-button btn-primary pull-right",@Href = Request.UrlReferrer })
+            }
+
+        </div>
+    </div>
+    @foreach (var prop in Model)
+    {
+        <div class="clearfix">&nbsp;</div>
+            <div class="col-md-12 no-padd">
+                <h2>@Html.DisplayFor(p => prop.PropertyName)</h2>
+            </div>
+    <div class="clearfix">&nbsp;</div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+
+                                    Date / Time
+                                </th>
+
+                                <th>
+                                    Confirmation #
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Payment Status
+                                </th>
+                                <th>
+                                    Payment Amount
+                                </th>
+                                <th>
+                                    Comments
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < prop.RentPayment.Count; i++)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(p => prop.RentPayment[i].TransDate)</td>
+                                    <td>@Html.DisplayFor(p => prop.RentPayment[i].TransID)</td>
+                                    <td>@Html.DisplayFor(p => prop.RentPayment[i].Description)</td>
+                                    <td>@Html.DisplayFor(p => prop.RentPayment[i].StatusText)</td>
+                                    <td>@Html.DisplayFor(p => prop.RentPayment[i].Amount)</td>
+                                    <td>@Html.DisplayFor(p => prop.RentPayment[i].Comments)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+         
+    }
+</div>

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<BGBC.Model.Tenant>
+@{
+    ViewBag.Title = "PropertyTenants";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 col-sm-6 no-padd">
+            <h1> Test Property 1 Tenants</h1>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12  no-padd header-btn">
+            @Html.ActionLink("Back to My Properties", "MyProperties", "Property", null, new { @class = "btn-button btn-primary" })
+        </div>
+    </div>
+
+@if (TempData["SucessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SucessMessage"]</div>
+}
+    <div class="clearfix">&nbsp;</div>
+        @Html.ActionLink("Add Tenant", "Add", "Tenant", "", new { @class = "btn btn primary" })
+        <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Outstanding Balance
+                    </th>
+
+                    <th>
+                         Options
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TenantID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TenantID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TenantID)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Edit Tenant", "Edit", "Tenant", new { id = item.TenantID }, new { @class = "btn-button btn-primary" })
+                            @Html.ActionLink("View Payments", "Manage", "Products", new { id = item.TenantID }, new { @class = "btn-button btn-primary" })
+                            @Html.ActionLink("Remove Tenant", "Delete", "Tenant", new { id = item.TenantID }, new { @class = "btn-button btn-primary" })                                                       
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

@@ -1,0 +1,95 @@
+﻿@model BGBC.Web.Models.Checkout
+
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+
+    <div class="col-md-6 col-sm-6 col-xs-12 no-padd">
+        <h1>Cart</h1>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-12 no-padd header-btn">
+        <input type="button" value="Continue Shopping" onclick="location.href='@Url.Action("Index", "Products")'" class="btn btn-button btn-primary" />
+    </div>
+
+    <div class="clearfix">&nbsp;</div>
+    @if (Model.OrderList.Count() == 0)
+    {
+        <div class="col-md-12 no-padd">
+            <p>Your shopping cart is empty.</p>
+        </div>
+    }
+    else
+    {
+
+        <div class="table-responsive">
+
+            <table class="table  table-hover ">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Name
+                        </th>
+                        <th class="text-center">
+                            Price
+                        </th>
+                        <th class="text-center">
+                            Quantity
+                        </th>
+                        <th class="text-center">
+                            Subtotal
+                        </th>
+                        <th class="text-center">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.OrderList != null)
+                    {
+                        for (int i = 0; i < Model.OrderList.Count(); i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(p => Model.OrderList[i].Item)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => Model.OrderList[i].Price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => Model.OrderList[i].Quantity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => Model.OrderList[i].Price)
+                                </td>
+                                <td>
+                                    <div class="pull-right">
+                                        <input type="button" value="Remove From Cart" class="btn btn-danger" onclick="location.href='@Url.Action("Removefromcart", "Cart", new { id = Model.OrderList[i].ProductID })'" />
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <strong>Order Total:</strong>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.OrderTotal)
+                        </td>
+                        <td></td>
+
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+        <input type="button" value="Checkout" onclick="location.href='@Url.Action("Checkout", "Cart")'" class=" btn btn-primary btn-button pull-right" />
+        <div class="clearfix"></div>
+    }
+</div>

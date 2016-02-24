@@ -1,0 +1,252 @@
+﻿
+@{
+    ViewBag.Title = "EditTenantOwner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .editor-label {
+        color: black;
+    }
+
+    .editor-field {
+        color: black;
+    }
+
+    .back1 {
+        background: #fff !important;
+        padding: 20px !important;
+        padding-bottom: 150px !important;
+        height: 1900px;
+    }
+</style>
+<div class="col-lg-12 back1">
+
+    <h1 style="font-size:29px;padding-top:0px">Test Property 1-Edit Tenant</h1>
+    <label><span style="color:red">&#42;</span>  Indicates a required field</label>
+    <label><span style="color:blue">&dagger;</span>  indicates information that can only be updated by BGBC Management. To request a change, please fill out <a>this form.</a></label>
+    <br />
+    <div class="col-lg-12">
+        <div class="editor-label">
+            @Html.Label("Property Manager Name")
+        </div>
+        <p style="font-size:small">Test Owner</p>
+    </div>
+    <div class="col-lg-3">
+        <div class="editor-label">
+            @Html.Label("Property Address")
+        </div>
+        <p style="font-size:small;padding:0px">123 Testing st.</p>
+        <p style="font-size:small;padding:0px;"> Unit 101</p>
+        <p style="font-size:small;padding:0px">Testingville, TN 37201</p>
+        <br />
+    </div>
+    <div class="col-lg-12">
+        <div class="editor-label">
+            @Html.Label("First Name", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("First Name")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="editor-label">
+            @Html.Label("Last Name", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Last Name")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="editor-label">
+            @Html.Label("Email", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Email")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Confirm Email", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Confirm Email")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Alternate Email")
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Alternate Email")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Confirm Alternate Email")
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Confirm Alternate Email")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Billing Address")
+        </div>
+        <div class="editor-field">
+            @Html.CheckBox("Same as Property Address", true)Same as Property Address<br />
+
+        </div>
+        <br />
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Billing Address Street", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Billing Address Street")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Billing Address Street 2")
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Billing Address Street 2")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Billing Address City", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Billing Address City")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="editor-label">
+            @Html.Label("Billing Address State", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Billing Address State", new List<SelectListItem> {
+                new SelectListItem{Text="Abc", Value="Abc"},
+                new SelectListItem{Text="xyz", Value="xyz"}
+                }, "Select a State")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Billing Address Zip", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Billing Address Zip")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Home Phone", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Home Phone")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Work Phone")
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Work Phone")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label">
+            @Html.Label("Mobile Phone")
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Mobile Phone")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label" style="">
+            <label for="">Tenant Rent Amount <span style="color:blue">&dagger;</span></label>
+            @* @Html.Label("Rent Due Monthly On(Please Select which day of the month the rent is due)")&#134;*@
+        </div>
+        <div class="editor-label">
+            @Html.Label("$500.00")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label" style="">
+            <label for="">Tenant Rent-Final Due Date <span style="color:blue">&dagger;</span></label>
+            @* @Html.Label("Rent Due Monthly On(Please Select which day of the month the rent is due)")&#134;*@
+        </div>
+        <div class="editor-label">
+            @Html.Label("0000-00-00")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label" style="">
+            <label for="">Deposit Amount <span style="color:blue">&dagger;</span></label>
+            @* @Html.Label("Rent Due Monthly On(Please Select which day of the month the rent is due)")&#134;*@
+        </div>
+        <div class="editor-label">
+            @Html.Label("$0.00")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label" style="">
+            <label for="">Deposit Due Date<span style="color:blue">&dagger;</span></label>
+            @* @Html.Label("Rent Due Monthly On(Please Select which day of the month the rent is due)")&#134;*@
+        </div>
+        <div class="editor-label">
+            @Html.Label("2016-01-20")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label" style="">
+            <label for="">Pet Deposit Due <span style="color:blue">&dagger;</span></label>
+            @* @Html.Label("Rent Due Monthly On(Please Select which day of the month the rent is due)")&#134;*@
+        </div>
+        <div class="editor-label">
+            @Html.Label("No")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-11">
+        <div class="editor-label" style="">
+            <label for="">Pet Deposit Amount <span style="color:blue">&dagger;</span></label>
+            @* @Html.Label("Rent Due Monthly On(Please Select which day of the month the rent is due)")&#134;*@
+        </div>
+        <div class="editor-label">
+            @Html.Label("$0.00")
+            <br />
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <input type="submit" value="Save Changes">
+        @Html.ActionLink("Cancel", "Index")
+    </div>
+
+</div>
+
+﻿
+

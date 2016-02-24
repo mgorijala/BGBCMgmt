@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "AddProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <h1>Add a Product</h1>
+
+    <div class="inner">
+        <div class="box" style="background-color:#d5d4d4">
+            @*@using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)*@
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+
+                    <div class="editor-label" style="margin-top:10px;">
+                        @Html.Label("Product Name", new { @class = "required" })
+                    </div>
+
+                    <div class=" editor-field" style="margin-bottom:5px;">
+                        @Html.Editor("Product Name", new { @class = "required" })
+
+                    </div>
+                </div>
+                <div class="col-lg-6"></div>
+            </div>
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="editor-label">
+                        @Html.Label("Description", new { @class = "required" })
+                    </div>
+                    <div class="editor-field" style="margin-bottom:5px;">
+                        @Html.TextArea("Description", new { @class = "whatever-class required", @cols = 4, @rows = 8 })
+
+
+                    </div>
+                </div>
+                <div class="col-lg-6"></div>
+            </div>
+            <div class="col-lg-12">
+
+
+
+                <div class="col-lg-6">
+                    <div class="editor-label">
+                        @Html.Label("Price", new { @class = "required" })
+                    </div>
+                    <div class="editor-field" style="margin-bottom:5px;">
+                        @Html.Editor("Price", new { @class = "required" })
+
+                    </div>
+                    @*@Html.HiddenFor(model=>model.Updatedon + DateTime.Now.ToString() *@
+                </div>
+                <div class="col-lg-6"></div>
+            </div>
+            <br />
+            <div class="col-lg-12">
+
+
+                <div class="col-lg-6">
+                    <div class="editor-label" style="margin-bottom:5px;">
+                        @Html.Label("Availability Restrictions")
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+
+                <div class="col-lg-6">
+                    <input type="checkbox" value="" />Restrict Purchases to Houston Area Customers Only
+                </div>
+                <div class="col-lg-6"></div>
+            </div>
+            @*}*@
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="col-lg-6">
+            <p>
+
+            @*@Html.ActionLink("Create", "Create", "Products", new { @class = "btn" })*@
+                        <input type="submit" value="AddProduct" class="btn" />
+                        @Html.ActionLink("Cancel", "ProductServices", "Home")
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+

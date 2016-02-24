@@ -1,0 +1,193 @@
+﻿@model BGBC.Web.Models.TenantInfo
+
+@{
+    ViewBag.Title = "EditTenant";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <h1>Test Property1-Edit Tenants</h1>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <h5><span style="color:red">&#42;</span>indicates a required field</h5>
+    <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out this form.</h5>
+    <br />
+        @Html.Label("Property Manager Name") 
+        <h6>Test Owner  </h6>
+        <br/>
+        @Html.Label("Property Address")
+        <h6>123 Testing ST.</h6>
+        <h6>Unit 101</h6>
+        <h6>Teatingville,TN 37201</h6>
+        <br/>
+        <div class="Row">
+            <div class="form-group">
+                    @Html.LabelFor(p => p.FirstName, htmlAttributes: new { @class = "required" })
+                    @Html.EditorFor(p => p.FirstName, new { htmlAttributes = new { @class = "form-control required" } })
+                    @Html.ValidationMessageFor(p => p.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.LastName, htmlAttributes: new { @class = "required" })
+            @Html.EditorFor(p => p.LastName, new { htmlAttributes = new { @class = "form-control required" } })
+            @Html.ValidationMessageFor(p => p.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.Email, htmlAttributes: new { @class = "required" })
+            @Html.EditorFor(p => p.Email, new { htmlAttributes = new { @class = "form-control required" } })
+            @Html.ValidationMessageFor(p => p.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ConfirmEmail, htmlAttributes: new { @class = "required" })
+            @Html.EditorFor(p => p.ConfirmEmail, new { htmlAttributes = new { @class = "form-control required" } })
+            @Html.ValidationMessageFor(p => p.ConfirmEmail, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.AltEmail, htmlAttributes: new { @class = "" })
+            @Html.EditorFor(p => p.AltEmail, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(p => p.AltEmail, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ConfirmAltEmail, htmlAttributes: new { @class = " " })
+            @Html.EditorFor(p => p.ConfirmAltEmail, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(p => p.ConfirmAltEmail, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.BillingAddressSame, htmlAttributes: new { @class = " " })
+            @Html.CheckBoxFor(p => p.ProfileInfo.BillingAddressSame, new Dictionary<String, object> { { "class", "control-label" },{ "onclick", "SameAddress.call(this) " }, { "data-on-text", "complete" }, { "data-off-text", "incomplete" } })<b> Same As Property Address</b>
+            @Html.ValidationMessageFor(p => p.ProfileInfo.BillingAddressSame, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row billing-address-fields">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.BillingAddress, htmlAttributes: new { @class = "required" })
+            @Html.EditorFor(p => p.ProfileInfo.BillingAddress, new { htmlAttributes = new { @class = "form-control required" } })
+            @Html.ValidationMessageFor(p => p.ProfileInfo.BillingAddress, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row  billing-address-fields">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.BillingAddress_2, htmlAttributes: new { @class = "" })
+            @Html.EditorFor(p => p.ProfileInfo.BillingAddress_2, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(p => p.ProfileInfo.BillingAddress_2, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row billing-address-fields">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.BillingCty, htmlAttributes: new { @class = "required" })
+            @Html.EditorFor(p => p.ProfileInfo.BillingCty, new { htmlAttributes = new { @class = "form-control required" } })
+            @Html.ValidationMessageFor(p => p.ProfileInfo.BillingCty, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row billing-address-fields">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.BillingState, htmlAttributes: new { @class = "required " })
+            @Html.DropDownListFor(p => p.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select State--", new { @class = "" })
+            @Html.ValidationMessageFor(p => p.ProfileInfo.BillingState, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row billing-address-fields">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.BillingZip, htmlAttributes: new { @class = "required" })
+            @Html.EditorFor(p => p.ProfileInfo.BillingZip, new { htmlAttributes = new { @class = "form-control required" } })
+            @Html.ValidationMessageFor(p => p.ProfileInfo.BillingZip, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.HomePhone, htmlAttributes: new { @class = "required" })
+            @Html.EditorFor(p => p.ProfileInfo.HomePhone, new { htmlAttributes = new { @class = "form-control required phoneno-mask" } })
+            @Html.ValidationMessageFor(p => p.ProfileInfo.HomePhone, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.WorkPhone, htmlAttributes: new { @class = "" })
+            @Html.EditorFor(p => p.ProfileInfo.WorkPhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+            @Html.ValidationMessageFor(p => p.ProfileInfo.WorkPhone, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="Row">
+        <div class="form-group">
+            @Html.LabelFor(p => p.ProfileInfo.MobilePhone, htmlAttributes: new { @class = " " })
+            @Html.EditorFor(p => p.ProfileInfo.MobilePhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+            @Html.ValidationMessageFor(p => p.ProfileInfo.MobilePhone, "", new { @class = "text-danger" })
+        </div>
+    </div>
+       
+            <dl  style="font-weight:bold">
+                       @Html.DisplayNameFor(p => p.RentAmount) <span style="color:blue"> &#134; </span> 
+                <dd><br/>
+                       @Html.DisplayFor(p => p.RentAmount)$500.00
+                </dd>
+                  <dt> 
+                        @Html.DisplayNameFor(p => p.FinalDueDate) <span style="color:blue">&#134;</span> 
+                  </dt> 
+                <dd><br/>
+                        @Html.DisplayFor(p => p.FinalDueDate)0000-00-00
+                </dd>
+                <dt> 
+                        @Html.DisplayNameFor(p => p.Deposit) <span style="color:blue">&#134;</span> 
+                 </dt> 
+                <dd><br/>
+                        @Html.DisplayFor(p => p.Deposit)$0.00
+                </dd>
+                <dt> 
+                        @Html.DisplayNameFor(p => p.DepostDueDate) <span style="color:blue">&#134;</span> 
+                </dt> 
+                <dd><br/>
+                        @Html.DisplayFor(p => p.DepostDueDate)2016-01-20
+                </dd> 
+                <dt> 
+                        @Html.DisplayNameFor(p => p.PetDepositDue) <span style="color:blue">&#134;</span> 
+                </dt> 
+                <dd><br/>
+                        @Html.DisplayFor(p => p.PetDepositDue)
+                </dd>
+                <dt> 
+                        @Html.DisplayNameFor(p => p.PetDeposit) <span style="color:blue">&#134;</span> 
+                </dt> 
+                <dd><br/>
+                        @Html.DisplayFor(p => p.PetDeposit)$0.00
+                </dd>
+            </dl>
+       
+        <br/>
+    <div class="form-group"> 
+            <input type="submit" value="Save Changes" class="btn btn-default" />
+            @Html.ActionLink("Cancel", null, null, null, new { href = Request.UrlReferrer })         
+        </div> 
+        }
+    </div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            SameAddress();
+        });
+        function SameAddress() {
+            if ($('#ProfileInfo_BillingAddressSame').prop('checked')) {
+                $('.billing-address-fields').addClass('hidden');
+                jQuery('.billing-address-fields').each(function () {
+                    $(this).prop("data-val", false);
+                });
+            } else {
+                $('.billing-address-fields').removeClass('hidden');
+            }
+        }
+    </script>
+}

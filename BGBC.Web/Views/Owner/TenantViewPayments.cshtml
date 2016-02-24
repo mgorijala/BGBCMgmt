@@ -1,0 +1,77 @@
+﻿
+
+ @model IEnumerable<BGBC.Model.vRentPayment>
+
+@{
+    ViewBag.Title = "ManagePayments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 col-sm-6 no-padd">
+            <h1>Tenant Payments History</h1>
+        </div>
+        <div class="col-md-6 col-sm-6 no-padd header-btn">
+            @Html.ActionLink("Back", "", "", htmlAttributes: new { @class = "btn-button btn-primary", @href = Request.UrlReferrer })
+            @*@Html.ActionLink("Back", "MyProperties", "Owner", null, new { @class = "btn-button btn-primary" })*@
+
+        </div>
+    </div>
+    
+    <h4>@ViewBag.Name</h4>
+    <h5>
+        @ViewBag.Address
+    </h5>
+    <h5>@ViewBag.State</h5>
+    <h5>@ViewBag.City</h5>
+    <h5>@ViewBag.Zip</h5>
+    <br />
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    Date/Time
+                </th>
+                <th>
+                    Conformation #
+                </th>
+                @*<th class="text-left">
+                    Tenant Name
+                </th>*@
+                <th>
+                    Description
+                </th>
+                <th>
+                    Payment Status
+                </th>
+                <th>
+                    Payment Amount
+                </th>
+                <th>
+                    Comment
+                </th>
+            </tr>
+
+            @foreach (var prop in Model)
+                {
+                <tr>
+                <td>
+                    @Html.DisplayFor(p => prop.TransDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(p => prop.TransID)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(p => prop.TenantFirstName)  @Html.DisplayFor(p => prop.TenantLastName)
+                </td>*@
+                <td> @Html.DisplayFor(p => prop.Description)</td>
+                <td>@Html.DisplayFor(p => prop.StatusText)</td>
+                <td>@Html.DisplayFor(p => prop.Amount)</td>
+                <td>@Html.DisplayFor(p => prop.Comments)</td>
+            </tr>
+            }
+
+        </table>
+    </div>
+</div>

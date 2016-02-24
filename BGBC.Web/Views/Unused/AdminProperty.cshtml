@@ -1,0 +1,50 @@
+﻿@model BGBC.Model.User
+@{
+    ViewBag.Title = "PropertyAdmin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-lg-6">
+            <h1>All Property Owners</h1>
+        </div>
+        <div class="col-lg-6" style="padding-top:30px;text-align:right">
+            @Html.ActionLink("Back to Dashboard", "Index", "Admin", new { @class = "button", @id = "referralBtn" })
+            @*<a id="referralBtn" class="button" href="/tenant-referral">Back to Dashboard</a>*@
+        </div>
+        <table class="table  table-hover ">
+            <thead>
+                <tr>
+                    <th class="text-left" style="width:758px">
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th class="text-left" style="width:1600px">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th></th>
+        </table>
+        @*@foreach (var item in Model)
+            {*@
+        <table class="table  table-hover ">
+            <thead>
+                <tr>
+                    <th class="text-left" style="padding-bottom:70px">
+                        Test Owner
+                    </th>
+                    <th class="text-left" style="padding-bottom:70px;padding-left:190px">
+                        <a href="#">owner@test.com</a>
+                    </th>
+                    <td>
+                        <div class="pull-right" style="width:237px">
+                            @Html.ActionLink("View Properties", "ViewPropety", "Property", new { @class = "button btn-sm btn-block", @id = "referralBtn" })
+                            @Html.ActionLink("Edit Tenants", "Edit", "Property", new { @class = "button btn-sm btn-block", @id = "referralBtn" })
+                            @Html.ActionLink("View Tenant Payments", "ViewTenantPayments", "Home", new { @class = "button btn-sm btn-block ", @id = "referralBtn" })
+                        </div>
+                    </td>
+        </table>
+        @*}*@
+    }
+</div>

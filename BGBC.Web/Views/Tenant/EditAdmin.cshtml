@@ -1,0 +1,225 @@
+﻿@model BGBC.Web.Models.TenantInfo
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+<div class="back">
+    @using (Html.BeginForm("ConfirmEditAdmin", "Tenant"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(p => p.PropertyID)
+        @Html.HiddenFor(p => p.UserID)
+        @Html.HiddenFor(p => p.TenantID)
+        @Html.HiddenFor(p => p.ProfileInfo.ProfileID)
+        @Html.HiddenFor(p => p.Address)
+        @Html.HiddenFor(p => p.Address2)
+        @Html.HiddenFor(p => p.City)
+        @Html.HiddenFor(p => p.State)
+        @Html.HiddenFor(p => p.Zip)
+
+        <h1>Test Property1-Edit Tenants</h1>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        @Html.Label("Property Manager Name")
+        <h6>Test Owner  </h6>
+        <br />
+
+        @Html.Label("Property Address")
+        <h6>@Model.Address</h6>
+        <h6>@Model.Address2</h6>
+        <h6>@Model.City,@Model.State @Model.Zip</h6>
+        <br />
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.FirstName, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.FirstName, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.FirstName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.LastName, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.LastName, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.Email, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.Email, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.ConfirmEmail, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.ConfirmEmail, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.ConfirmEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.BillingAddressSame, htmlAttributes: new { @class = "control-label " })
+                @Html.CheckBoxFor(p => p.ProfileInfo.BillingAddressSame, new Dictionary<String, object> { { "class", "control-label" }, { "onclick", "billingAddressSame.call(this)" }, { "data-on-text", "complete" }, { "data-off-text", "incomplete" } })<b> Same As Property Address</b>
+            </div>
+        </div>
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.BillingAddress, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.ProfileInfo.BillingAddress, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
+                @Html.ValidationMessageFor(p => p.ProfileInfo.BillingAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.BillingAddress_2, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(p => p.ProfileInfo.BillingAddress_2, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
+                @Html.ValidationMessageFor(p => p.ProfileInfo.BillingAddress_2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.BillingCty, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.ProfileInfo.BillingCty, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
+                @Html.ValidationMessageFor(p => p.ProfileInfo.BillingCty, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.BillingState, htmlAttributes: new { @class = "control-label required" })
+                @Html.DropDownListFor(p => p.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "" })
+                @Html.ValidationMessageFor(p => p.ProfileInfo.BillingState, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row billing-address-fields">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.BillingZip, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.ProfileInfo.BillingZip, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
+                @Html.ValidationMessageFor(p => p.ProfileInfo.BillingZip, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.HomePhone, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.ProfileInfo.HomePhone, new { htmlAttributes = new { @class = "form-control required phoneno-mask" } })
+                @Html.ValidationMessageFor(p => p.ProfileInfo.HomePhone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.WorkPhone, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(p => p.ProfileInfo.WorkPhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                @Html.ValidationMessageFor(p => p.ProfileInfo.WorkPhone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.ProfileInfo.MobilePhone, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(p => p.ProfileInfo.MobilePhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                @Html.ValidationMessageFor(p => p.ProfileInfo.MobilePhone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.RentAmount, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.RentAmount, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.RentAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.FinalDueDate, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.FinalDueDate, new { htmlAttributes = new { @class = "form-control required" } })
+                @Html.ValidationMessageFor(p => p.FinalDueDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.Deposit, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(p => p.Deposit, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Deposit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.DepostDueDate, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(p => p.DepostDueDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.DepostDueDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.PetDepositDue, htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(p => p.PetDepositDue, new List<SelectListItem> { new SelectListItem { Text = "Yes", Value = "true" }, new SelectListItem { Text = "No", Value = "false" } }, new Dictionary<String, object> { { "class", "control-label" }, { "onchange", "petDepositDueClick.call(this)" } })
+                @Html.ValidationMessageFor(p => p.PetDepositDue, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row pet-deposit-due">
+            <div class="form-group">
+                @Html.LabelFor(p => p.PetDeposit, htmlAttributes: new { @class = "control-label requred" })
+                @Html.EditorFor(p => p.PetDeposit, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.PetDeposit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+
+            <input type="submit" value="Save" class="btn btn-default" />
+            @Html.ActionLink("Cancel", "AllPropertyTenants", "Admin", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" }) 
+        </div>
+
+
+    }
+
+</div>
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            billingAddressSame();
+            petDepositDueClick();
+        });
+        function billingAddressSame() {
+            if ($('#ProfileInfo_BillingAddressSame').prop('checked')) {
+                $('.billing-address-fields').addClass('hidden');
+                jQuery('.billing-address-field').each(function () {
+                    $(this).prop("data-val", false);
+                });
+            } else {
+                $('.billing-address-fields').removeClass('hidden');
+            }
+        }
+        function petDepositDueClick() {
+            if ($('#PetDepositDue').prop('value') == "false") {
+                $('.pet-deposit-due').addClass('hidden');
+                $('#PetDeposit').attr("data-val", false);
+            } else if (!this.checked) {
+                $('.pet-deposit-due').removeClass('hidden');
+                $('#PetDeposit').attr("data-val", true);
+            }
+        }
+
+        $(function () {
+            $('#FinalDueDate').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'MM yy',
+                beforeShow: function (el, dp) {
+                    $('#ui-datepicker-div').addClass('hide-calendar');
+                },
+                onClose: function (dateText, inst) {
+                    $('#ui-datepicker-div').removeClass('hide-calendar');
+                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+                }
+            });
+        });
+    </script>
+}

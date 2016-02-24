@@ -1,0 +1,32 @@
+﻿@model BGBC.Model.User
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    <h1>Admin Dashboard</h1>
+    <br />
+    <div class="form-group">
+        @Html.ActionLink("Complete My Profile / Edit Password", "Profile", "Customer", null, new { @class = "btn-button btn-primary" })
+    </div>
+    <div class="form-group">
+        <input type="button" value="Order History" class="btn btn-primary small"  onclick="location.href='@Url.Action("OrderHistory", "Reports", new { id = Model.UserID })'" />
+    </div>
+    @*<select id="dd_customerreport" onchange="tenantreportsonchange(this);" class="form-control hidden" style="width:180px">
+        <option value="" selected="selected">Select Report</option>
+        <option value="payment_product" data-url="@Url.Action("OrderHistory", "Reports")">Order History</option>
+    </select>*@
+</div>
+@*<script type="text/javascript">
+    function showReportOption() {
+        $('#dd_customerreport').removeClass("hidden");
+    }
+    function tenantreportsonchange(e) {
+        if ($(e).find('option:selected').data('url') != undefined && $(e).find('option:selected').data('url') != "") {
+            location.href = $(e).find('option:selected').data('url');
+        }
+    }
+</script>*@
+
+

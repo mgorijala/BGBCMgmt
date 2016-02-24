@@ -1,0 +1,196 @@
+﻿@model BGBC.Web.Models.UserProfile
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="back">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 no-padd">
+            <h1>Edit Profile</h1>
+        </div>
+        <div class="col-md-6 no-padd header-btn">
+            @Html.ActionLink("Back to Dashboard", "Index", "Customer", null, new { @class = "btn-button btn-primary" })
+        </div>
+    </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        if (TempData["SucessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SucessMessage"]</div>
+        }
+        <fieldset>
+            <legend>Basic Information</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.FirstName, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(tuple => tuple.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(tuple => tuple.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.LastName, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(tuple => tuple.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(tuple => tuple.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.Email, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(tuple => tuple.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(tuple => tuple.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.ConfirmEmail, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(tuple => tuple.ConfirmEmail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(tuple => tuple.ConfirmEmail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.NewPassword, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(tuple => tuple.NewPassword, new { htmlAttributes = new { @class = "form-control", @data_val = "off" } })
+                        @Html.ValidationMessageFor(tuple => tuple.NewPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(tuple => tuple.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @data_val = "off" } })
+                        @Html.ValidationMessageFor(tuple => tuple.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(tuple => tuple.CurrentPassword, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(tuple => tuple.CurrentPassword, new { htmlAttributes = new { @class = "form-control", @data_val = "off" } })
+                        @Html.ValidationMessageFor(tuple => tuple.CurrentPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">Note: You Must Enter Your Current Password when changing your Email or Password</div>
+            </div>
+        </fieldset>
+    <fieldset>
+        <legend>Contact Information</legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.AltEmail, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(tuple => tuple.AltEmail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(tuple => tuple.AltEmail, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ConfirmAltEmail, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(tuple => tuple.ConfirmAltEmail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(tuple => tuple.ConfirmAltEmail, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ProfileInfo.HomePhone, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(tuple => tuple.ProfileInfo.HomePhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                    @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.HomePhone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ProfileInfo.WorkPhone, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(tuple => tuple.ProfileInfo.WorkPhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                    @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.WorkPhone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ProfileInfo.MobilePhone, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(tuple => tuple.ProfileInfo.MobilePhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                    @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.MobilePhone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            </div>
+</fieldset>
+    <fieldset>
+        <legend>Payment Information</legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ProfileInfo.BillingAddress, htmlAttributes: new { @class = "control-label required" })
+                    @Html.EditorFor(tuple => tuple.ProfileInfo.BillingAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.BillingAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ProfileInfo.BillingAddress_2, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(tuple => tuple.ProfileInfo.BillingAddress_2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.BillingAddress_2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ProfileInfo.BillingCty, htmlAttributes: new { @class = "control-label required" })
+                    @Html.EditorFor(tuple => tuple.ProfileInfo.BillingCty, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.BillingCty, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ProfileInfo.BillingState, htmlAttributes: new { @class = "control-label required" })
+                    @Html.DropDownListFor(tuple => tuple.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })
+                  @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.BillingState, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(tuple => tuple.ProfileInfo.BillingZip, htmlAttributes: new { @class = "control-label required" })
+                    @Html.EditorFor(tuple => tuple.ProfileInfo.BillingZip, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.BillingZip, "", new { @class = "text-danger" })
+                </div>
+                </div>
+            </div>
+
+    </fieldset>
+
+        <div>
+            @Html.LabelFor(m => m.Createdon, new { style = "display:inline;" }):
+            @Html.DisplayFor(m => m.Createdon)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Updatedon, new { style = "display:inline;" }):
+            @Html.DisplayFor(m => m.Updatedon)
+        </div>
+        <br />
+        <div class="form-group" style="margin-left:0px">
+            <input type="submit" value="Save" class="btn">
+            @Html.ActionLink("Cancel", null, null, null, new { href = Request.UrlReferrer })
+        </div>
+
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

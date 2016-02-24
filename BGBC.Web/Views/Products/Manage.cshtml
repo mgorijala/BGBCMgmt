@@ -1,0 +1,91 @@
+﻿@model IEnumerable<BGBC.Model.Product>
+
+@{
+    ViewBag.Title = "Manage Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-9 col-sm-6 no-padd">
+            <h1>Manage Products &amp; Services</h1>
+        </div>
+        <div class="col-md-3 col-sm-6 no-padd header-btn">
+            @Html.ActionLink("Back to Dashboard", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-12 no-padd">
+        @if (TempData["SucessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SucessMessage"]</div>
+        }
+    </div>
+   
+            <div class="clearfix">&nbsp;</div>
+            <div class="col-md-12">
+                @Html.ActionLink("Add New Product", "Add", "Products", null, new { @class = "btn btn-warning" })
+            </div>
+
+            <div class="clearfix">&nbsp;</div>
+            <div class="clearfix">&nbsp;</div>
+            <div class="table-responsive">
+                <table class="table  table-hover ">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Price)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.isLocal)
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td>
+                                    @if (item.isLocal.ToString() == "True")
+                                    {
+                                        <span>Houston, TX</span>
+                                    }
+                                    else
+                                    {
+                                        <span>National</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="pull-right">
+
+                                        @Html.ActionLink("Edit Product", "Edit", "Products", new { id=item.ProductID}, new { @class = "btn-button btn-primary" })
+                                        @Html.ActionLink("View Product Orders", "ViewOrders", "Products", new { id = item.ProductID }, new { @class = "btn-button btn-primary" })
+                                        @Html.ActionLink("Remove Product", "Delete", "Products", new { id = item.ProductID }, new { @class = "btn-button btn-danger" })
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+ 
+</div>

@@ -1,0 +1,113 @@
+﻿@model BGBC.Model.Property
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("EditConfirm", "Property"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.PropertyID)
+    @Html.HiddenFor(model => model.Createdon)
+    @Html.HiddenFor(model => model.RentDueDay)
+    @Html.HiddenFor(model => model.GracePeriod)
+    @Html.HiddenFor(model => model.Penalty)
+    @Html.HiddenFor(model => model.DailyPenalty)
+    @Html.HiddenFor(model => model.UserID)
+    <div class="back">
+        <h1>Edit Property</h1>
+
+        <label><span style="color:red">&#42;</span>  indicates a required field</label>
+        <label><span style="color:blue">&dagger;</span>  indicates information that can only be updated by BGBC Management. To request a change, please fill out <a>this form.</a></label>
+        <br />
+
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Nickname, htmlAttributes: new { @class = "control-label col-md-0" })
+                @Html.EditorFor(model => model.Nickname, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nickname, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address2, htmlAttributes: new { @class = "control-label col-md-0" })
+                @Html.EditorFor(model => model.Address2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label required" })
+                    @Html.DropDownListFor(model => model.State, (IEnumerable<SelectListItem>)ViewBag.States, "--Select State--")
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Zip, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Zip, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <dl>
+                <dt>
+                    @Html.DisplayName("Rent Due Monthly On(Please Select which day of the month the rent is due)") <span style="color:blue">&dagger;</span>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model=>model.RentDueDay)
+                </dd>
+                 
+                <dt>
+                    @Html.DisplayName("GracePeriod(Number of days before late fees are assessed )") <span style="color:blue">&dagger;</span>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model=>model.GracePeriod)
+                </dd>
+                <dt>
+                    @Html.DisplayName("Late Penalty Charge ") <span style="color:blue">&dagger;</span>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model=>model.Penalty)
+                </dd>
+                <dt>
+                    @Html.DisplayName("Daily Late Penalty Charge(Additional Fee Charged Each Day After Initial Late Penalty Charge) ") <span style="color:blue">&dagger;</span>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model=>model.DailyPenalty)
+                </dd>
+            </dl>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <input type="submit" value="Save Changes" class="btn-button btn-default" />
+              @*<input type="button" value="Back" class="btn-button btn btn-primary pull-right" onclick="location.href='@Request.UrlReferrer'" />*@
+                @Html.ActionLink("Cancel", "MyProperties", "Owner", null, new { @class = "btn-button btn-default" })
+            </div>
+        </div>
+        </div>
+        }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

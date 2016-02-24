@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "EditProperty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    <br />
+    <h2 style="color:navy;margin-left:11px "><b>Test Property 1-Edit Tenant</b></h2>
+    <br />
+
+    <h5 style="margin-left:11px"> <span style="color:red">*</span>Indiacates a required field</h5>
+    <h5 style=" margin-left:11px"><span style="color:blue">&#134;</span> information that  can be updated by  BGBC Management.To request a change,Please fill out <span style="color:blue">this form</span></h5><br />
+    @*<h6 style=" margin-left:11px"><b>Property Manager Name</b></h6><br />
+        <p style=" margin-left:11px">Test Admin</p>
+        <h6 style=" margin-left:11px"><b>Property Address </b></h6>
+        <p style=" margin-left:11px">123 Testing St.</p>
+        <p style=" margin-left:11px">Unit 101</p>
+        <p style=" margin-left:11px">TestingVille,TN 37201</p>*@
+
+    
+
+        <div class="editor-label">
+            @Html.Label("Property Name", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Property Name", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Property Nickname", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Property Nickname", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Address", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Address", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("Address2", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Address2", new { @class = "required" })
+        </div>
+        <div class="editor-label">
+            @Html.Label("City", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor("City", new { @class = "required" })
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("State", new { @class = "required" })
+        </div>
+        @Html.DropDownList("Select State", new List<SelectListItem> {
+                new SelectListItem{Text="Nellore", Value="USA"},
+                new SelectListItem{Text="Hyderabad", Value="Australia"}
+                }, "Select a State")
+
+
+        <div class="editor-label">
+            @Html.Label("Zip", new { @class = "required" })
+        </div>
+        <div class="editor-field">
+            @Html.Editor(" Zip", new { @class = "required" })
+        </div><br />
+        <p>Please note that some of these fields will require you to contact BGBC Admin Directly.These include,but are not limited to:rent amount,etc</p><br />
+        <p>Rent Due Monthly on...(Please select which day of the month the rent is due)</p>
+
+        @Html.DropDownList("Select Month", new List<SelectListItem> {
+                new SelectListItem{Text="", Value=""},
+                new SelectListItem{Text="", Value=""}
+                }, "Select day")
+        <p>Grace Period(Number of Days before Late Fees are Assessed)</p>
+
+        @Html.DropDownList("select Day", new List<SelectListItem> {
+                new SelectListItem{Text="", Value=""},
+                new SelectListItem{Text="", Value=""}
+                }, "Select day")
+
+
+        <div class="editor-label">
+            @Html.Label("Late Penalty Charge")
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Late Penalty Charge")
+        </div>
+        <div class="editor-label">
+            @Html.Label("Daily LatePenalty Charge(Additional Fee Charged Each Day After initial Late Penalty Charge)")
+        </div>
+        <div class="editor-field">
+            @Html.Editor("Daily LatePenalty Charge(Additional Fee Charged Each Day After initial Late Penalty Charge)", new { @class = "required" })
+        </div><br />
+
+
+        <p>
+            <input type="submit" value="Save Changes" />
+            <input type="submit" value="Cancel" />
+
+            @*@Html.ActionLink("Cancle", "Property", "Property", new { @class = "btn-primary btn-block btn-sm" })*@
+        </p>
+
+    </div>

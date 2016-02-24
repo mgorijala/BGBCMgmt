@@ -1,0 +1,102 @@
+﻿@model IEnumerable<BGBC.Model.vRentPayment>
+@{
+    ViewBag.Title = "PropertyPaymentsHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+<div class="back">
+    <div class="col-md-12 no-padd">
+
+        <div class="col-md-6 col-sm-6 no-padd">
+            <h1>Property Payment History</h1>
+        </div>
+        <div class="col-md-6 col-sm-6 no-padd header-btn">
+            @if (Request.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Back", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
+                }
+                else if (User.IsInRole("Owner"))
+                {
+                    @Html.ActionLink("Back", "Index", "Owner", null, new { @class = "btn-button btn-primary pull-right" })
+
+                }
+                else if (User.IsInRole("Tenant"))
+                {
+                    @Html.ActionLink("Back", "Index", "Tenant", null, new { @class = "btn-button btn-primary pull-right" })
+
+                }
+                else if (User.IsInRole("Customer"))
+                {
+                    @Html.ActionLink("Back", "Index", "Customer", null, new { @class = "btn-button btn-primary pull-right" })
+
+                }
+            }
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+        <div class="col-md-12 no-padd">
+            <h5>@ViewBag.Address</h5>
+            <h5>@ViewBag.Address2</h5>
+            <h5>@ViewBag.City</h5>
+            <h5>@ViewBag.State</h5>
+            <h5>@ViewBag.Zip</h5>
+            </div>
+        
+            <div class="clearfix">&nbsp;</div>
+          
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Date/Time
+                                </th>
+                                <th>
+                                    Confirmation #
+                                </th>
+                                <th>
+                                    Tenant Name
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Payment Amount
+                                </th>
+                                <th>
+                                    Comment
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model )
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(p => item.TransDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(p => item.TransID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(p => item.TenantFirstName) @Html.DisplayFor(p => item.TenantLastName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(p => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(p => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(p => item.Comments)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+       
+        </div>
+   

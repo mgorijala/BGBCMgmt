@@ -1,0 +1,61 @@
+﻿@model IEnumerable<BGBC.Model.vRentPayment>
+
+@{
+    ViewBag.Title = "TenantReferal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-9 col-sm-6 no-padd">
+            <h1>@ViewBag.Name payment history </h1> <br />
+        </div>
+        <div class="col-md-3 col-sm-6 no-padd header-btn">
+            <input type="submit" value="Back to Properties" class="btn-button btn-primary pull-right" onclick="location.href='@Request.UrlReferrer'" />
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Payment ID
+                            </th>
+                            
+                            <th>
+                                Desc.
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                            <th>
+                                Comments
+                            </th>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TransDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ID)
+                                </td>
+                                
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Comments)
+                                </td>
+                            </tr>
+        }
+                    </table>
+                </div>
+            </div>

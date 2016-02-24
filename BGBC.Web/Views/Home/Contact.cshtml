@@ -1,0 +1,96 @@
+﻿@model BGBC.Web.Models.Contact
+@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="back">
+    <h1>Contact Us</h1>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+    if (TempData["SucessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SucessMessage"]</div>
+    }
+    <br/>
+        <p>If you are a client of BGBC and have an immediate issue, click @Html.ActionLink("here", "Login", "Home") to login and send a message. If you are not yet a client of BGBC and have questions, please click @Html.ActionLink("here", "Contact", "Home") to contact our office. We appreciate your interest in BGBC Management.</p>
+   
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.AccountName, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AccountName, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group ">
+                @Html.LabelFor(p => p.Name, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group ">
+                @Html.LabelFor(p => p.EMail, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.EMail, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.EMail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group ">
+                @Html.LabelFor(p => p.Phone, htmlAttributes: new { @class = "control-label required" })
+                @Html.EditorFor(p => p.Phone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
+                @Html.ValidationMessageFor(p => p.Phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="Row">
+            <div class="form-group ">
+                @Html.LabelFor(p => p.MessageText, htmlAttributes: new { @class = "control-label" })
+                @Html.TextAreaFor(p => p.MessageText,  new { @class = "form-control", @cols = 10, @rows = 10 })
+                @Html.ValidationMessageFor(p => p.MessageText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <script type="text/javascript">
+            var RecaptchaOptions = { "curl_timeout": 1 };
+        </script>
+        <script src='https://www.google.com/recaptcha/api.js?render=onload'></script>
+        <div class="g-recaptcha" data-sitekey="6LeElAETAAAAADOYRYxAue_AIlGMbM89oaJQnBGf"></div>
+        <noscript>
+            <div style="width: 302px; height: 352px;">
+                <div style="width: 302px; height: 352px; position: relative;">
+                    <div style="width: 302px; height: 352px; position: absolute;">
+                        <iframe src="https://www.google.com/recaptcha/api/fallback?k=6LeElAETAAAAADOYRYxAue_AIlGMbM89oaJQnBGf"
+                                frameborder="0" scrolling="no"
+                                style="width: 302px; height:352px; border-style: none;"></iframe>
+                    </div>
+                    <div style="width: 250px; height: 80px; position: absolute; border-style: none;
+                              bottom: 21px; left: 25px; margin: 0px; padding: 0px; right: 25px;">
+                        <textarea id="g-recaptcha-response" name="g-recaptcha-response"
+                                  class="g-recaptcha-response"
+                                  style="width: 250px; height: 80px; border: 1px solid #c1c1c1;
+                                     margin: 0px; padding: 0px; resize: none;" value=""></textarea>
+                    </div>
+                </div>
+            </div>
+        </noscript>
+        <br/>
+        <div class="form-group">
+            <div class="">
+                <input type="submit" value="Submit" class="btn btn-default" />
+
+            </div>
+        </div>
+        @*</form>*@
+    }
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
+</div>

@@ -1,0 +1,81 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="back">
+    <h1>Admin Dashboard</h1>
+    <br />
+    <div class="form-group">
+        @Html.ActionLink("Property Owners, Properties ,Tenants & Payments", "ManageProperty", "Admin", null, new { @class = "btn-button btn-primary" })
+
+    </div>
+    <div class="form-group">
+        @Html.ActionLink("Manage Products & Services", "Manage", "Products", null, new { @class = "btn-button btn-primary" })
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2 col-sm-2 col-xs-2 no-padd">
+            
+                <input type="button" value="Reports" class="btn btn-button btn-primary " onclick="showReportOption()" />
+            </div>
+       
+        <div class="col-md-4 col-sm-4  col-xs-12">
+            <select id="dd_adminreports" onchange="adminreportsonchange(this);" class="form-control dashboard-select hidden" style="width:200px">
+                <option value="" selected="selected">Select Report</option>
+                <option value="product_orders_all" data-url="@Url.Action("AllProductsOrders", "Reports")">All Product Orders</option>
+                <option value="product_orders">Orders Per Product</option>
+                <option value="webforms">Webform Submissions</option>
+                <option value="payment_activity_all" data-url="@Url.Action("PaymentHistory", "Reports")">Payment History</option>
+                <option value="all_payouts" data-url="@Url.Action("PayoutPreferences", "Reports")">Payout Preferences</option>
+            </select>
+        </div>
+        <div class="col-md-4 col-sm-4  col-xs-12">
+            <select id="dd_webforms" onchange="webformssonchange(this);" class="form-control dashboard-select hidden" style="width:200px">
+                <option value="" selected="">Select a Form</option>
+                <option value="referral" data-url="@Url.Action("TenantReferal", "Reports")">Tenant Referral Form</option>
+                <option value="contact" data-url="@Url.Action("Contact", "Reports")">Contact Us Form</option>
+                <option value="realtor" data-url="@Url.Action("ContactRealtor", "Reports")">Contact A Realtor Form</option>
+            </select>
+            @Html.DropDownList("products", (IEnumerable<SelectListItem>)ViewBag.AllProducts, "Select", new { @class = "form-control hidden", @id = "dd_products", @style = "width:200px", @onchange = "productsonchange(this);" })
+        </div>
+    </div>
+ </div>
+
+
+        <script type="text/javascript">
+            function showReportOption() {
+                $('#dd_adminreports').removeClass("hidden");
+            }
+
+            function adminreportsonchange(e) {
+                if ($(e).find('option:selected').val() != undefined && $(e).find('option:selected').val() != '') {
+                    $('#dd_webforms').addClass("hidden");
+                    $('#dd_products').addClass("hidden");
+                    if (e.value == "webforms") {
+                        $('#dd_webforms').removeClass("hidden");
+                    }
+                    else if (e.value == "product_orders") {
+                        $('#dd_products').removeClass("hidden");
+                    }
+                    else {
+                        location.href = $(e).find('option:selected').data('url');
+                    }
+                }
+            }
+
+            function productsonchange(e) {
+                if ($(e).find('option:selected').val() != undefined) {
+                    location.href = $(e).find('option:selected').val();
+                }
+            }
+
+            function webformssonchange(e) {
+                if ($(e).find('option:selected').val() != undefined) {
+                    location.href = $(e).find('option:selected').data('url');
+                }
+            }
+        </script>
+
+
+

@@ -1,0 +1,152 @@
+.box{
+    background: white;
+    margin: 0 0 30px 0;
+    overflow: hidden;
+    width: 100%;
+    clear: both;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 3;
+	    padding-bottom: 15px;
+}
+.logo
+{
+    color: #ececec;
+    font-size: 24px;
+    margin: 0px 0px 30px 0px;
+    padding: 0px;
+    
+    font-weight: normal;
+}
+form{margin-bottom: 50px}
+.padd{padding: 0px 0px;}
+
+.padd{padding: 0px 100px;}
+.back{background: #FFF !important;padding: 20px !important; min-height:550px}
+.no-padd{padding: 0px !important}
+.background{  background: url("images/bg-content.jpg") #ececec;}
+@media only screen and (max-width:700px) {
+    footer .footer-menu li {
+        display: block !important;
+        border-left: none;
+    }
+    .padd{padding:10px !important}
+}
+@media only screen and (max-width:780px) {
+   .menu li {
+          display: block !important;
+           border-right: none !important;
+   }
+   footer .footer-menu li{border-left:0px !important}
+   #logo{margin-top: 0px !important}
+   .menu ul{    
+       position: inherit !important;
+    display: none;
+    margin-left: -1px;
+    left: -1px;
+    padding-bottom: 10px;
+    width: 100%;
+    border-radius: 0 0 8px 8px;
+    background: #0b6295 !important;}
+  
+}
+.arrow-list li {
+    background-position:0% 44%;
+}
+  .table-responsive{margin-top:15px}
+  .rc-anchor-normal{width: 70% !important;}
+  .rc-anchor-normal-footer{display: none !important}
+@media only screen and (max-width:1030px) {
+
+
+}
+@media only screen and (max-width:1200px) {
+.padd{padding-right: 20px;padding-left: 20px}
+}
+@media only screen and (max-width:1200px) {
+.padd1{padding-right: 0px;padding-left: 0px}
+}
+div table tr td{
+    text-align:left;
+}
+.navbar-toggle{margin-top:35px !important}
+.navbar-toggle .icon-bar {background:#fff;}
+@media only screen and (max-width:380px) {
+    .user-nav li.btn {width:100%;margin:5px 0px !important}
+    .arrow-list li {
+    background-position:0% 10% !important;
+}
+    .small{font-size:9px;}
+  .menu, .menu ul{margin:10px}  
+.navbar-toggle{margin-right:0px !important}
+.btn{font-size:12px;}
+.back{padding:10px !important}
+.padd{padding:0px !important}
+.margin-img{margin-top:0px !important;}
+
+}
+   .btn-button{        -webkit-font-smoothing: antialiased;
+    background-color: #477dca ;
+    border-radius: .1875em;
+    color: #fff!important;
+    display: inline-block;
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 1;
+    padding: .75em 1em;
+    text-decoration: none !important;margin-bottom:10px;
+    text-align:center !important;
+    cursor:pointer;
+   } 
+   .btn-button:hover{    background-color: #2c5999 !important;
+    color: #fff !important;}
+
+   .table tr td,th{text-align:center !important}
+   h1{font-size:29px !important}
+   a{text-decoration:none !important}
+    .checkoutconform div{min-height:27px}
+       .checkoutconform div:first-child {font-weight:600;}
+    
+
+   a{text-decoration:none !important}
+   .header-btn{margin-top:30px ;text-align:right;margin-bottom:10px;}
+   .home.content .box:last-of-type {
+    margin: 0;
+    z-index: 0; 
+}
+   .table-responsive>.table>tbody>tr>td, .table-responsive>.table>tbody>tr>th, .table-responsive>.table>tfoot>tr>td, .table-responsive>.table>tfoot>tr>th, .table-responsive>.table>thead>tr>td, .table-responsive>.table>thead>tr>th {
+    white-space: normal !important;
+}
+   .table-responsive .btn-button, .btn-danger{display:block !important;}
+   .table-responsive>.table>tbody>tr>td:last-child {min-width:150px !important;}
+   .margin-img{margin-top:-6px;}
+   .btn-danger {
+    color: #fff;
+    background-color: #d9534f !important;
+    border-color: #d43f3a !important;
+}
+   .btn-danger:hover {
+    color: #fff;
+    background-color: #c9302c !important;
+    border-color: #ac2925 !important;
+}
+   .table tbody tr{    border-bottom: 1px solid #ddd;border-top: 1px solid #ddd;}
+.text-right {
+text-align:right !important;
+}
+.cust-table tbody tr:last-child{border:none !important }
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+#comment{margin-top:20px;}
+
+@media only screen and (max-width:600px){
+    p{line-height:20px;}
+     .header-btn{margin-top:0px !important}
+}
+.dashboard-select{margin-right:10px;margin-bottom:20px}
+.date-drop {
+width:70px !important;
+float:left;
+}

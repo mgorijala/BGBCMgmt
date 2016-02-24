@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewBag.Title = "EditProfileOwner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="row">
+        <div class="col-lg-6">
+            <h1>Edit Profile</h1>
+        </div>
+        <div class="col-lg-6">
+            <a id="referralBtn" class="button" href="tenant-referral.html" style="margin:25px;float:right;">Back to My Dashboard </a>
+        </div>
+    </div>
+    <div>
+        <fieldset>
+            <legend>Basic Information</legend>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("First Name", new { @class = "required" })                
+                        @Html.Editor("First Name")
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Last Name", new { @class = "required" })                    
+                        @Html.Editor("Last Name")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Email", new { @class = "required" })
+                        @Html.Editor("Email")
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Confirm Email", new { @class = "required" })
+                        @Html.Editor("Confirm Email")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("New Password")
+                        @Html.Editor("New Password")
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Confirm New Password")
+                        @Html.Editor("Confirm New Password")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Current Password")
+                        @Html.Editor("Current Password")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>Note: you must enter your Current Password when Changing your E-mail or Password</label>
+                </div>
+            </div>
+</fieldset>
+    </div>
+    <div>
+        <fieldset>
+            <legend>Contact Information</legend>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Alternate Email Address")
+                        @Html.Editor("Email")
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Confirm Alternate Email Address")
+                        @Html.Editor("Email")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Address")
+                        @Html.Editor("Address")
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Address2")
+                        @Html.Editor("Address2")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("City")
+                        @Html.Editor("City")
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("State")
+                        @Html.DropDownList("State", new List<SelectListItem> {
+                        new SelectListItem{Text="Abc", Value="Abc"},
+                        new SelectListItem{Text="xyz", Value="xyz"}
+                        }, "Select a State")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Zip")
+                        @Html.Editor("Zip")
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Phone Number")
+                        @Html.Editor("Phone Number")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Fax Number")
+                        @Html.Editor("Fax Number ")
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        @Html.Label("Payout Method")
+                        <input type="radio" name="group1" value="PayPal Email" checked> PayPal Email<br>
+                        <input type="radio" name="group1" value="ACH Direct Deposit"> ACH Direct Deposit<br>
+                        <input type="radio" name="group1" value="Mail Check"> Mail Check<br>
+                    </div>   
+                    <div class="form-group">
+                        @Html.Label("PayPal Email")
+                        @Html.Editor("PayPal Email")
+                    </div>
+                </div>
+            </div>
+</fieldset>
+    </div>
+    <label>Created at:</label>
+    <label>Last Modified Date:</label>
+    <br/>
+    <div>
+        <input type="submit" value="Save" />
+        @Html.ActionLink("Cancel", "Index", "Home")
+    </div>
+</div>
+
+

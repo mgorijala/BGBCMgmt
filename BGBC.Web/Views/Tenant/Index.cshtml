@@ -1,0 +1,64 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="back">  
+
+    <h1>My Dashboard</h1>  
+    <br />
+    <div class="form-group">
+        @Html.ActionLink("Complete My Profile / Edit Password", "Profile", "Tenant", null, new { @class = "btn-button btn-primary" })
+    </div>
+    <div class="form-group">
+        @Html.ActionLink("My Account", "MyAccount", "Tenant", null, new { @class = "btn-button btn-primary" })
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 col-sm-2 col-xs-2 no-padd">
+            <input type="button" value="Reports" class="btn btn-button btn-primary" onclick="showReportOption()" />
+</div>
+        <div class="col-md-4 col-sm-4  col-xs-12">
+            <select id="dd_tenantreport" onchange="tenantreportsonchange(this);" class="form-control dashboard-select hidden" style="width:180px">
+                <option value="" selected="selected">Select Report</option>
+                <option value="payment_activity" data-url="@Url.Action("TenantPaymentHistory", "Reports")">Payment Activity</option>
+                <option value="payment_product" data-url="@Url.Action("OrderHistory", "Reports")">Order History</option>
+            </select>
+            </div>
+        <div class="clearfix"></div>
+        </div>
+@using (Html.BeginForm("Index","Tenant"))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group"> 
+        <a class="btn-button btn-primary" onclick="textbox();">Send email to property manager for maintenance or urgent matter</a>      
+       <div class="hidden" id="comment">
+           <textarea rows="10" cols="50"></textarea>
+           @Html.ActionLink("Submit", "Index", "Tenant", null, new { @class = "btn-button btn-primary" })
+       </div>
+
+   </div>
+}
+    </div>
+<script type="text/javascript">
+    function textbox() {
+        $('#comment').removeClass("hidden");
+    }
+</script>
+
+
+
+<script type="text/javascript">
+    function showReportOption() {
+        $('#dd_tenantreport').removeClass("hidden");
+    }
+
+    function tenantreportsonchange(e) {
+        if ($(e).find('option:selected').data('url') != undefined) {
+            location.href = $(e).find('option:selected').data('url');
+        }
+    }
+</script>

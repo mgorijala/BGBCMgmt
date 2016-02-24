@@ -1,0 +1,88 @@
+﻿@model IEnumerable<BGBC.Model.Property>
+@{
+    ViewBag.Title = "MyProperties";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-6 col-sm-6 no-padd">
+            <h1>My Properties</h1>
+
+
+        </div>
+        <div class="col-md-6 col-sm-6 no-padd header-btn">
+            @Html.ActionLink("Back to Dashboard", "Index", "Owner", null, new { @class = "btn-button btn-primary" })
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12 no-padd">
+        @if (TempData["SucessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SucessMessage"]</div>
+        }
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    @Html.ActionLink("Add Property", "Add", "Property", null, new { @class = "btn btn-warning" })
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Address
+                    </th>
+                    <th>
+                        Tenants
+                    </th>
+                    <th>
+                        Rent
+                    </th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)<br />@Html.DisplayFor(modelItem => item.Address2)<br />@Html.DisplayFor(modelItem => item.City) @Html.DisplayFor(modelItem => item.State) @Html.DisplayFor(modelItem => item.Zip)
+                        </td>
+                        <td>
+                            <div>
+                                @if (item.Tenants.FirstOrDefault() == null)
+                            {
+                            @Html.ActionLink("Add Tenant", "Add", "Tenant", new { id = item.PropertyID }, null)
+                            }
+                            else
+                            {
+                            <div class="row">
+                                <a onclick="location.href='@Url.Action("Edit", "Tenant", new { id = item.PropertyID })'" style="cursor:pointer">
+                                    @Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)
+                                </a>
+                            </div>
+                            }
+                            </div>
+                        </td>
+                        <td>
+                            @if (item.Tenants.FirstOrDefault() != null)
+                        {@Html.DisplayFor(modelItem => item.Tenants.FirstOrDefault().RentAmount)}
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                @Html.ActionLink("Manage Tenants", "PropertyTenants", "Owner", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
+                                @Html.ActionLink("View Payments", "ViewPayments", "Owner", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
+                                @Html.ActionLink("Edit Property", "Edit", "Property", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
+                                @Html.ActionLink("Delete Property", "Delete", "Property", new { id = item.PropertyID }, new { @class = "btn-button btn-danger" })
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
