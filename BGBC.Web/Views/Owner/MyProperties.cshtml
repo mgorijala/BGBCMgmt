@@ -55,22 +55,30 @@
                         <td>
                             <div>
                                 @if (item.Tenants.FirstOrDefault() == null)
-                            {
-                            @Html.ActionLink("Add Tenant", "Add", "Tenant", new { id = item.PropertyID }, null)
-                            }
-                            else
-                            {
-                            <div class="row">
-                                <a onclick="location.href='@Url.Action("Edit", "Tenant", new { id = item.Tenants.FirstOrDefault().TenantID })'" style="cursor:pointer">
-                                    @Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)
-                                </a>
-                            </div>
-                            }
+                                {
+                                    @Html.ActionLink("Add Tenant", "Add", "Tenant", new { id = item.PropertyID }, null)
+                                }
+                                else
+                                {
+                                    foreach (var tenant in item.Tenants)
+                                    {
+                                        <a onclick="location.href='@Url.Action("Edit", "Tenant", new { id = tenant.User.UserID })'" style="cursor:point style=" cursor:pointer">
+                                            @Html.DisplayFor(modelItem => tenant.User.FirstName) @Html.DisplayFor(modelItem => tenant.User.LastName)
+                                        </a>
+                                        <br />
+                                    }
+                                }
                             </div>
                         </td>
                         <td>
                             @if (item.Tenants.FirstOrDefault() != null)
-                        {@Html.DisplayFor(modelItem => item.Tenants.FirstOrDefault().RentAmount)}
+                            {
+                                foreach (var tenant in item.Tenants)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Tenants.FirstOrDefault().RentAmount)
+                                    <br />
+                                }
+                            }
                         </td>
                         <td>
                             <div class="pull-right">

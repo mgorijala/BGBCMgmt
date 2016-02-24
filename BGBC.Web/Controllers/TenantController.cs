@@ -279,7 +279,7 @@ namespace BGBC.Web.Controllers
                 }
                 catch (Exception)
                 {
-                    
+
                 }
                 TempData["data"] = payments;
                 return View("TenantPaymentconfirm", payments);
@@ -338,21 +338,21 @@ namespace BGBC.Web.Controllers
                         {
                             if (response.transactionResponse.errors == null)
                             {
-                            try
-                            {
-                                string rentid = string.Join(",", rentidsarry);
-                                Payment pay = BGBCFunctions.RentPayment(((BGBC.Core.CustomPrincipal)(User)).UserId, invoiceNumber,
-                                    response.transactionResponse.accountNumber, response.transactionResponse.accountType, response.transactionResponse.transId,
-                                    response.transactionResponse.messages[0].code, response.transactionResponse.messages[0].description, Request.UserHostAddress, payments.OrderTotal, address, payments.Comments, rentid);
-
-                                IRepository<RentPayment, int> rentPay = new RentPaymentRepository();
-                                for (int i = 0; i < payments.TenantRent.Count; i++)
+                                try
                                 {
-                                    if (payments.TenantRent[i].ID == 0)
+                                    string rentid = string.Join(",", rentidsarry);
+                                    Payment pay = BGBCFunctions.RentPayment(((BGBC.Core.CustomPrincipal)(User)).UserId, invoiceNumber,
+                                        response.transactionResponse.accountNumber, response.transactionResponse.accountType, response.transactionResponse.transId,
+                                        response.transactionResponse.messages[0].code, response.transactionResponse.messages[0].description, Request.UserHostAddress, payments.OrderTotal, address, payments.Comments, rentid);
+
+                                    IRepository<RentPayment, int> rentPay = new RentPaymentRepository();
+                                    for (int i = 0; i < payments.TenantRent.Count; i++)
                                     {
-                                        rentPay.Add(new RentPayment { PropertyID = payments.TenantRent[i].PropertyID, Description = payments.TenantRent[i].Charge, Amount = payments.TenantRent[i].AmountDue, PaymentID = pay.PaymentID });
+                                        if (payments.TenantRent[i].ID == 0)
+                                        {
+                                            rentPay.Add(new RentPayment { PropertyID = payments.TenantRent[i].PropertyID, Description = payments.TenantRent[i].Charge, Amount = payments.TenantRent[i].AmountDue, PaymentID = pay.PaymentID });
+                                        }
                                     }
-                                }
 
                                     if (payments.SaveCard)
                                     {
@@ -388,11 +388,11 @@ namespace BGBC.Web.Controllers
                                     }
 
                                     TempData.Remove("data");
-                                return RedirectToAction("MyAccount", "Tenant");
+                                    return RedirectToAction("MyAccount", "Tenant");
+                                }
+                                catch (Exception ex) { ModelState.AddModelError("", "Transaction Error : " + ex.Message); }
+                                System.Diagnostics.Trace.TraceInformation("Success, Auth Code : " + response.transactionResponse.authCode);
                             }
-                            catch (Exception ex) { ModelState.AddModelError("", "Transaction Error : " + ex.Message); }
-                            System.Diagnostics.Trace.TraceInformation("Success, Auth Code : " + response.transactionResponse.authCode);
-                        }
                             else
                             { ModelState.AddModelError("", "Transaction Error : " + response.transactionResponse.errors[0].errorCode + " " + response.transactionResponse.errors[0].errorText); }
                         }
@@ -423,6 +423,8 @@ namespace BGBC.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+
         public ActionResult Delete(int id)
         {
             if (id == null)
@@ -470,6 +472,8 @@ namespace BGBC.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
+
         public ActionResult DeletePost(int id)
         {
 
@@ -580,6 +584,8 @@ namespace BGBC.Web.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
+
         public ActionResult Add(TenantInfo tenantInfo)
         {
             try
@@ -723,6 +729,8 @@ namespace BGBC.Web.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [Authorize]
+
         public ActionResult EditPost(TenantInfo tenantInfo)
         {
             if (tenantInfo == null)
@@ -866,6 +874,8 @@ namespace BGBC.Web.Controllers
 
         [HttpPost, ActionName("EditAdmin")]
         [ValidateAntiForgeryToken]
+        [Authorize]
+
         public ActionResult EditAdmin(TenantInfo tenantInfo)
         {
             if (tenantInfo == null)
@@ -1133,6 +1143,7 @@ namespace BGBC.Web.Controllers
             return View(allPropertiesAndTenant);
         }
 
+        [Authorize]
         public ActionResult ViewTenantsPayments(int id)
         {
             List<vRentPayment> rentpay = new List<vRentPayment>();
@@ -1157,6 +1168,9 @@ namespace BGBC.Web.Controllers
             }
             return View(new List<vRentPayment>());
         }
+
+        [Authorize]
+
         public ActionResult ViewPayments(int Id)
         {
             User tuser = _userRepository.Get(Id);

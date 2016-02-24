@@ -12,83 +12,70 @@
         </div>
         <div class="col-md-6 col-sm-6 no-padd header-btn">
 
-            @Html.ActionLink("Back", "MyProperties", "Owner",null, new { @class = "btn-button btn-primary pull-right" })
+            @Html.ActionLink("Back", "MyProperties", "Owner", null, new { @class = "btn-button btn-primary pull-right" })
         </div>
     </div>
     <div class="clearfix">&nbsp;</div>
-    @*@foreach(var prop in Model)
-    {*@
-       
-            <div class="col-md-12 no-padd">
+    <div class="col-md-12 no-padd">
+        <h4>@ViewBag.Name</h4>
+        <h5>@ViewBag.Address</h5>
+        <h5>@ViewBag.Address2</h5>
+        <h5>@ViewBag.State</h5>
+        <h5>@ViewBag.City</h5>
+        <h5>@ViewBag.Zip</h5>
+    </div>
+    <br />
+    <div class="clearfix">&nbsp;</div>
 
-                @*<h1>@Html.DisplayFor(p => prop.Pname)</h1>
-                <h5>@Html.DisplayFor(p => prop.Address)</h5>
-                <h5>@Html.DisplayFor(p => prop.Address2)</h5>
-                <h5>@Html.DisplayFor(p => prop.state)</h5>
-                <h5>@Html.DisplayFor(p => prop.Zip)</h5><br />*@
-                <h4>@ViewBag.Name</h4>
-                <h5>@ViewBag.Address</h5>
-                <h5>@ViewBag.Address2</h5>
-                <h5>@ViewBag.State</h5>
-                <h5>@ViewBag.City</h5>
-                <h5>@ViewBag.Zip</h5>
-                </div>
-               
-                <br />
-                <div class="clearfix">&nbsp;</div>
-               
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr class="text-left">
-                                    <th class="text-left">
-                                        Date/Time
-                                    </th>
-                                    <th class="text-left">
-                                        Conformation #
-                                    </th>
-                                    <th class="text-left">
-                                        Tenant Name
-                                    </th>
-                                    <th class="text-left">
-                                        Description
-                                    </th>
-                                    <th class="text-left">
-                                        Payment Amount
-                                    </th>
-                                    <th class="text-left">
-                                        Comment
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach(var prop in Model)
-                            {
-                                for (int i = 0; i < prop.tenantRentPay.Count; i++)
-                        {
-                           int value= prop.tenantRentPay[i].RentPayment.Count;
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr class="text-left">
+                    <th class="text-left">
+                        Date/Time
+                    </th>
+                    <th class="text-left">
+                        Conformation #
+                    </th>
+                    <th class="text-left">
+                        Tenant Name
+                    </th>
+                    <th class="text-left">
+                        Description
+                    </th>
+                    <th class="text-left">
+                        Payment Amount
+                    </th>
+                    <th class="text-left">
+                        Comment
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var prop in Model)
+                {
+                    for (int i = 0; i < prop.tenantRentPay.Count; i++)
+                    {
+                        int value = prop.tenantRentPay[i].RentPayment.Count;
                         for (int j = 0; j < value; j++)
                         {
                             <tr>
                                 <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TransDate)</td>
                                 <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TransID)</td>
                                 <td>
-                                    <a onclick="location.href='@Url.Action("TenantViewPayments", "Owner", new { id = @ViewBag.PropertyID })'" style="cursor:pointer">
-                                    @Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TenantFirstName)
-                                @Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TenantLastName)
+                                    <a onclick="location.href='@Url.Action("TenantViewPayments", "Owner", new { id = prop.tenantRentPay[i].RentPayment[j].TenantUserID })'" style="cursor:pointer">
+                                        @Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TenantFirstName)
+                                        @Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TenantLastName)
                                     </a>
-                            </td>
+                                </td>
                                 <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].Description)</td>
                                 <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].Amount)</td>
                                 <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].Comments)</td>
                             </tr>
                         }
-                       }
-                       }
-                            </tbody>
-                        </table>
-                    </div>
-              
-            
-    @*}*@
+                    }
+                }
+            </tbody>
+        </table>
     </div>
+</div>

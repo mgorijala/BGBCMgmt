@@ -203,17 +203,17 @@ namespace BGBC.Web.Controllers
             List<Property> property = _pro.GetRef(((BGBC.Core.CustomPrincipal)(User)).UserId);
             foreach (var p in property)
             {
-                BGBC.Web.Models.AllPropertiesAndTenant pp = new Models.AllPropertiesAndTenant();
-                pp.Pname = p.Name;
-                pp.tenantRentPay = new List<Models.TenantRentPay>();
+                BGBC.Web.Models.AllPropertiesAndTenant allProps = new Models.AllPropertiesAndTenant();
+                allProps.Pname = p.Name;
+                allProps.tenantRentPay = new List<Models.TenantRentPay>();
                 foreach (var t in p.Tenants)
                 {
-                    BGBC.Web.Models.TenantRentPay ttttttttt = new BGBC.Web.Models.TenantRentPay();
-                    ttttttttt.tname = t.User.FirstName;
-                    ttttttttt.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).OrderByDescending(d => d.TransDate).Take(5).ToList();
-                    pp.tenantRentPay.Add(ttttttttt);
+                    BGBC.Web.Models.TenantRentPay tRentPay = new BGBC.Web.Models.TenantRentPay();
+                    tRentPay.tname = t.User.FirstName + " " + t.User.LastName;
+                    tRentPay.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).OrderByDescending(d => d.TransDate).Take(5).ToList();
+                    allProps.tenantRentPay.Add(tRentPay);
                 }
-                allPropertiesAndTenant.Add(pp);
+                allPropertiesAndTenant.Add(allProps);
             }
 
             return View(allPropertiesAndTenant);
