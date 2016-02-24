@@ -405,6 +405,7 @@
     <Content Include="Views\Products\ConfirmEdit.cshtml" />
     <Content Include="Views\Tenant\ViewPayments.cshtml" />
     <Content Include="Views\Home\AccessDenied.cshtml" />
+    <Content Include="Views\Reports\ProductInvoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

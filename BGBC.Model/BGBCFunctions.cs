@@ -40,5 +40,9 @@ namespace BGBC.Model
         {
             return context.SP_TenantOutstanding(ownerID).ToList();
         }
+        public static IQueryable<ProductOrder> ProductOrderIds()
+        {
+            return from s in context.ProductOrders select s;
+        }
     }
 }

@@ -75,9 +75,11 @@
     <Compile Include="JobStatu.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Metadata\ProductOrderMetadata.cs" />
     <Compile Include="Order.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="OrderRepository.cs" />
     <Compile Include="PasswordReset.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>

@@ -26,5 +26,6 @@ namespace BGBC.Model
         public string Description { get; set; }
         public Nullable<decimal> Price { get; set; }
         public string Comments { get; set; }
+        public int OrderID { get; set; }
     }
 }

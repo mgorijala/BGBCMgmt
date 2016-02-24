@@ -18,6 +18,7 @@ namespace BGBC.Web.Controllers
         private IRepository<Product, int?> _product;
         IUserRepository _userRepository;
         IRepository<Property, int> _propertyRepo;
+        IRepository<Order, int> _order;
 
         public ReportsController()
         {
@@ -28,7 +29,7 @@ namespace BGBC.Web.Controllers
             _product = new ProductRepository();
             _userRepository = new UserRepository();
             _propertyRepo = new PropertyRepository();
-
+            _order = new OrderRepository();
         }
 
         public ActionResult Contact()
@@ -49,18 +50,10 @@ namespace BGBC.Web.Controllers
         }
         public ActionResult AllProductsOrders(int? id, string sortOrder, string currentFilter, string searchString, int? page, string PageSize)
         {
-            List<vProductOrder> products = new List<vProductOrder>();
-            int pageSize = int.Parse(PageSize == null ? "3" : PageSize), pageNumber = (page ?? 1);
+            int currentPageSize = int.Parse(PageSize == null ? "10" : PageSize), pageNumber = (page ?? 1);
             try
             {
-                if (id == null)
-                {
-                    products = BGBCFunctions.ProductOrders().ToList();
-                }
-                else
-                {
-                    products = BGBCFunctions.ProductOrders().Where(x => x.ProductID == id).ToList();
-                }
+                var products = (id == null ? BGBCFunctions.ProductOrders() : BGBCFunctions.ProductOrders().Where(x => x.ProductID == id));
 
                 ViewBag.CurrentSort = sortOrder;
                 ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
@@ -68,8 +61,8 @@ namespace BGBC.Web.Controllers
                 ViewBag.CustomerSortParm = sortOrder == "Customer" ? "Customer_desc" : "Customer";
                 ViewBag.TypeSortParm = sortOrder == "Type" ? "Type_desc" : "Type";
                 ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
-
-                ViewBag.PageSize = pageSize;
+                if (PageSize != null)
+                    ViewBag.currentPageSize = currentPageSize;
 
 
                 if (searchString != null)
@@ -82,55 +75,55 @@ namespace BGBC.Web.Controllers
                 }
 
                 ViewBag.CurrentFilter = searchString;
-
+                ViewBag.page = pageNumber;
                 if (!string.IsNullOrEmpty(searchString))
                 {
                     products = products.Where(x => x.CustomerFName.Contains(searchString) || x.CustomerLName.Contains(searchString)
-                        || x.Name.Contains(searchString) || x.TransId.Contains(searchString)).ToList();
+                        || x.Name.Contains(searchString) || x.TransId.Contains(searchString));
 
                 }
 
                 switch (sortOrder)
                 {
                     case "date_desc":
-                        products = products.OrderByDescending(x => x.TransDate).ToList();
+                        products = products.OrderByDescending(x => x.TransDate);
                         break;
                     case "OrderID":
-                        products = products.OrderBy(x => x.TransId).ToList();
+                        products = products.OrderBy(x => x.TransId);
                         break;
                     case "OrderID_desc":
-                        products = products.OrderByDescending(x => x.TransId).ToList();
+                        products = products.OrderByDescending(x => x.TransId);
                         break;
                     case "Customer":
-                        products = products.OrderBy(x => x.CustomerFName).ToList();
+                        products = products.OrderBy(x => x.CustomerFName);
                         break;
                     case "Customer_desc":
-                        products = products.OrderByDescending(x => x.CustomerFName).ToList();
+                        products = products.OrderByDescending(x => x.CustomerFName);
                         break;
                     case "Type":
-                        products = products.OrderBy(x => x.UserType).ToList();
+                        products = products.OrderBy(x => x.UserType);
                         break;
                     case "Type_desc":
-                        products = products.OrderByDescending(x => x.UserType).ToList();
+                        products = products.OrderByDescending(x => x.UserType);
                         break;
                     case "Price":
-                        products = products.OrderBy(x => x.Price).ToList();
+                        products = products.OrderBy(x => x.Price);
                         break;
                     case "Price_desc":
-                        products = products.OrderByDescending(x => x.Price).ToList();
+                        products = products.OrderByDescending(x => x.Price);
                         break;
                     default:  // Date ascending 
-                        products = products.OrderByDescending(x => x.TransDate).ToList();
+                        products = products.OrderBy(x => x.TransDate);
                         break;
                 }
 
-
+                return View(products.ToPagedList(pageNumber, currentPageSize));
             }
             catch (Exception ex)
             {
                 log.Error(ex.Message);
             }
-            return View(products.ToPagedList(pageNumber, pageSize));
+            return View();
 
         }
         public ActionResult PaymentHistory()
@@ -232,6 +225,28 @@ namespace BGBC.Web.Controllers
                 log.Error(ex.Message);
             }
             return View(payment);
+        }
+
+        [Authorize]
+        public ActionResult ProductInvoice(int id)
+        {
+
+            IEnumerable<ProductOrder> productOrderList = new List<ProductOrder>();
+            try
+            {
+                Order order = _order.Get(id);
+                ViewBag.TransactionNo = order.TransId;
+                ViewBag.Date = order.TransDate;
+                ViewBag.BillAddress = order.BillAddress;
+                ViewBag.Customer = order.User.FirstName + " " + order.User.LastName;
+                productOrderList = BGBCFunctions.ProductOrderIds().Where(x => x.OrderID == id).ToList();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
+
+            return View(productOrderList);
         }
 
     }

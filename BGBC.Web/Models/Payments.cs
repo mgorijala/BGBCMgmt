@@ -8,7 +8,7 @@ namespace BGBC.Web.Models
 {
     public class Payments
     {
-        public int PropertyID { get; set; }   
+        public int PropertyID { get; set; }
         [Required]
         [RegularExpression(@"^[a-zA-Z]+[ a-zA-Z-_]*$", ErrorMessage = "Use only alpha characters")]
         [Display(Name = "First Name")]
@@ -63,6 +63,31 @@ namespace BGBC.Web.Models
         [Display(Name = "Card Number")]
         [DataType(DataType.CreditCard)]
         public string CardNo { get; set; }
+
+        public string CardNoMask
+        {
+            get
+            {
+                if (this.CardNo.Length > 4)
+                {
+                    return string.Concat("".PadLeft(this.CardNo.Length - 4, 'X'), this.CardNo.Substring(this.CardNo.Length - 4));
+                }
+                else return this.CardNo;
+            }
+        }
+
+        [Display(Name = "Card Expiration")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM}")]
+        [DataType(DataType.Date)]
+        public DateTime CardDate
+        {
+            get
+            {
+                var year = "-20" + "" + CardExpYear;
+                var CardDate = (CardExpMon + "" + year);
+                return Convert.ToDateTime(CardDate);
+            }
+        }
 
         [Display(Name = "Card Expiry Month")]
         public string CardExpMon { get; set; }

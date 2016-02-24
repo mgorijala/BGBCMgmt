@@ -177,27 +177,19 @@
                 @Html.DisplayNameFor(model => model.CardNo)
             </div>
             <div class="col-sm-9">
-                @Html.DisplayFor(model => model.CardNo)
+                @Html.DisplayFor(model => model.CardNoMask)
             </div>
         </div>
 
             <div class="row checkoutconform">
                 <div class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.CardExpMon)
+                    @Html.DisplayNameFor(model => model.CardDate)
                 </div>
                 <div class="col-sm-9">
-                    @Html.DisplayFor(model => model.CardExpMon)
+                    @Html.DisplayFor(model => model.CardDate)
                 </div>
             </div>
-
-            <div class="row checkoutconform">
-                <div class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.CardExpYear)
-                </div>
-                <div class="col-sm-9">
-                    @Html.DisplayFor(model => model.CardExpYear)
-                </div>
-            </div>}
+        }
         <div class="row checkoutconform">
             <div class="col-sm-3">
                 @Html.DisplayNameFor(model => model.SaveCard)
@@ -243,7 +235,10 @@
                             @Html.DisplayFor(p => Model.OrderList[i].Price)
                         </td>
                         <td>
-                            @Html.DisplayFor(p => Model.OrderList[i].Quantity)
+                            @if (Model.OrderList[i].rowtype == "product")
+                            {
+                                @Html.DisplayFor(p => Model.OrderList[i].Quantity)
+                            }
                         </td>
                         <td>
                             @Html.DisplayFor(p => Model.OrderList[i].Subtotal)

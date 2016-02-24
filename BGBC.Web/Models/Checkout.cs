@@ -108,6 +108,29 @@ namespace BGBC.Web.Models
         [MaxLength(16)]
         public string CardNo { get; set; }
 
+        public string CardNoMask
+        {
+            get
+            {
+                if (this.CardNo.Length > 4)
+                {
+                    return string.Concat("".PadLeft(this.CardNo.Length - 4, 'X'), this.CardNo.Substring(this.CardNo.Length - 4));
+                }
+                else return this.CardNo;
+            }
+        }
+        [Display(Name = "Card Expiration")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM}")]
+        [DataType(DataType.Date)]
+        public DateTime CardDate
+        {
+            get
+            {
+                var year = "-20" + "" + CardExpYear;
+                var CardDate = (CardExpMon + "" + year);
+                return Convert.ToDateTime(CardDate);
+            }
+        }
         public string CardExpMon { get; set; }
 
         public string CardExpYear { get; set; }

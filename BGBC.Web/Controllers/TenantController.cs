@@ -75,7 +75,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                log.Error(ex.Message);
             }
 
             return View(myaccount);
@@ -178,7 +178,7 @@ namespace BGBC.Web.Controllers
                         if (ccinfo.PaymentType == 1)
                         {
                             payments.PaymentMethod = "Credit Card"; payments.CardNo = Cryptography.Decrypt(ccinfo.CCNO); payments.CardExpMon = Cryptography.Decrypt(ccinfo.ExpMon);
-                            payments.CardExpYear = Cryptography.Decrypt(ccinfo.ExpYear); payments.CVV = Cryptography.Decrypt(ccinfo.CVV);
+                            payments.CardExpYear = Cryptography.Decrypt(ccinfo.ExpYear);
                         }
                         else { payments.PaymentMethod = "eCheck"; payments.BankRoutingNumber = Cryptography.Decrypt(ccinfo.RoutingNo); payments.BankAccountNumber = Cryptography.Decrypt(ccinfo.AccountNo); payments.BankAccountType = ccinfo.AccountType; }
                         payments.SaveCard = true;
@@ -240,28 +240,31 @@ namespace BGBC.Web.Controllers
                 if (string.IsNullOrEmpty(payments.CardNo)) ModelState.AddModelError("CardNo", "The Card No field is required.");
                 if (string.IsNullOrEmpty(payments.CVV)) ModelState.AddModelError("CVV", "The Card CVV field is required.");
 
-                if (payments.CardNo.Trim().Length > 0)
+                if (!string.IsNullOrEmpty(payments.CardNo))
                 {
-                    if (CreditCardUtility.IsValidNumber(payments.CardNo))
+                    if (payments.CardNo.Trim().Length > 0)
                     {
-                        if (!string.IsNullOrEmpty(payments.CVV))
+                        if (CreditCardUtility.IsValidNumber(payments.CardNo))
                         {
-                            CreditCardTypeType? cardType = CreditCardUtility.GetCardTypeFromNumber(payments.CardNo);
-                            if (cardType == null)
+                            if (!string.IsNullOrEmpty(payments.CVV))
                             {
-                                ModelState.AddModelError("CardNo", "Please enter a valid card number");
-                            }
-                            else
-                            {
-                                payments.CardType = (CreditCardTypeType)cardType;
-                                if (cardType == CreditCardTypeType.Amex && payments.CVV.Trim().Length != 4) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
-                                else if (cardType != CreditCardTypeType.Amex && payments.CVV.Trim().Length != 3) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                CreditCardTypeType? cardType = CreditCardUtility.GetCardTypeFromNumber(payments.CardNo);
+                                if (cardType == null)
+                                {
+                                    ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                                }
+                                else
+                                {
+                                    payments.CardType = (CreditCardTypeType)cardType;
+                                    if (cardType == CreditCardTypeType.Amex && payments.CVV.Trim().Length != 4) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                    else if (cardType != CreditCardTypeType.Amex && payments.CVV.Trim().Length != 3) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                        else
+                        {
+                            ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                        }
                     }
                 }
             }
@@ -277,9 +280,9 @@ namespace BGBC.Web.Controllers
                     payments.BillingState = property.State;
                     payments.BillingZip = property.Zip;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    log.Error(ex.Message);
                 }
                 TempData["data"] = payments;
                 return View("TenantPaymentconfirm", payments);
@@ -365,21 +368,21 @@ namespace BGBC.Web.Controllers
                                             }
                                             else
                                             {
-                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 1, CCNO = Cryptography.Encrypt(payments.CardNo), ExpMon = Cryptography.Encrypt(payments.CardExpMon), ExpYear = Cryptography.Encrypt(payments.CardExpYear), CVV = Cryptography.Encrypt(payments.CVV) });
+                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 1, CCNO = Cryptography.Encrypt(payments.CardNo), ExpMon = Cryptography.Encrypt(payments.CardExpMon), ExpYear = Cryptography.Encrypt(payments.CardExpYear) });
                                             }
                                         }
                                         else
                                         {
                                             if (payments.PaymentMethod == "eCheck")
                                             {
-                                                ccinfo.CCNO = string.Empty; ccinfo.ExpMon = string.Empty; ccinfo.ExpYear = string.Empty; ccinfo.CVV = string.Empty;
+                                                ccinfo.CCNO = string.Empty; ccinfo.ExpMon = string.Empty; ccinfo.ExpYear = string.Empty;
                                                 ccinfo.PaymentType = 2; ccinfo.AccountType = payments.BankAccountType;
                                                 ccinfo.RoutingNo = Cryptography.Encrypt(payments.BankRoutingNumber); ccinfo.AccountNo = Cryptography.Encrypt(payments.BankAccountNumber);
                                             }
                                             else
                                             {
                                                 ccinfo.CCNO = Cryptography.Encrypt(payments.CardNo); ccinfo.ExpMon = Cryptography.Encrypt(payments.CardExpMon);
-                                                ccinfo.ExpYear = Cryptography.Encrypt(payments.CardExpYear); ccinfo.CVV = Cryptography.Encrypt(payments.CVV);
+                                                ccinfo.ExpYear = Cryptography.Encrypt(payments.CardExpYear);
                                                 ccinfo.PaymentType = 1; ccinfo.AccountType = string.Empty;
                                                 ccinfo.RoutingNo = string.Empty; ccinfo.AccountNo = string.Empty;
                                             }
@@ -663,9 +666,9 @@ namespace BGBC.Web.Controllers
 
                 TenantInfo tenantInfo = new TenantInfo();
                 tenantInfo.UserID = user.UserID;
-                tenantInfo.ProfileInfo = user.Profiles.Where(x => x.UserID == id).Single();
-                Tenant tenant = user.Tenants.Where(x => x.UserID == id).Single();
-                tenantInfo.TenantID = tenant.TenantID;
+                tenantInfo.ProfileInfo = user.Profiles.Where(x => x.UserID == id).SingleOrDefault();
+                Tenant tenant = user.Tenants.Where(x => x.UserID == id).SingleOrDefault();
+                tenantInfo.TenantID = user.UserID;
                 if (tenant == null)
                 {
                     return HttpNotFound();
@@ -991,11 +994,11 @@ namespace BGBC.Web.Controllers
 
                 if (!userprofile.ProfileInfo.BillingAddressSame)
                 {
-                    BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.BillingAddress, false, "Address", "ProfileInfo.BillingAddress");
+                    BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.BillingAddress, true, "Address", "ProfileInfo.BillingAddress");
                     BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.BillingAddress_2, false, "Address 2", "ProfileInfo.BillingAddress_2");
-                    BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.BillingCty, false, "City", "ProfileInfo.BillingCty");
-                    BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.BillingState, false, "State", "ProfileInfo.BillingState");
-                    BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.ProfileInfo.BillingZip, false, "Zip", "ProfileInfo.BillingZip");
+                    BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.BillingCty, true, "City", "ProfileInfo.BillingCty");
+                    BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.BillingState, true, "State", "ProfileInfo.BillingState");
+                    BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.ProfileInfo.BillingZip, true, "Zip", "ProfileInfo.BillingZip");
                 }
 
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref1.Name, true, "Address", "Ref1.Name");
@@ -1005,7 +1008,8 @@ namespace BGBC.Web.Controllers
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref1.Address2, false, "Address 2", "Ref1.Address2");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref1.City, true, "City", "Ref1.City");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref1.State, true, "State", "Ref1.State");
-                BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.Ref1.Zip, false, "Zip", "Ref1.Zip");
+                BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.Ref1.Zip, true, "Zip", "Ref1.Zip");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref1.Relationship, true, "Relationship", "Ref1.Relationship");
 
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.Name, true, "Address", "Ref2.Name");
                 if (string.IsNullOrEmpty(userprofile.Ref2.Phone)) ModelState.AddModelError("Ref2.Phone", "The Phone field is required");
@@ -1014,7 +1018,8 @@ namespace BGBC.Web.Controllers
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref2.Address2, false, "Address 2", "Ref2.Address2");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.City, true, "City", "Ref2.City");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.State, true, "State", "Ref2.State");
-                BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.Ref2.Zip, false, "Zip", "Ref2.Zip");
+                BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.Ref2.Zip, true, "Zip", "Ref2.Zip");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.Relationship, true, "Relationship", "Ref2.Relationship");
 
                 //if (userprofile.PaymentMethod == "eCheck")
                 //{

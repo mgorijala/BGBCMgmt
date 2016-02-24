@@ -137,7 +137,7 @@ namespace BGBC.Web.Controllers
                         if (ccinfo.PaymentType == 1)
                         {
                             checkout.PaymentMethod = "Credit Card"; checkout.CardNo = Cryptography.Decrypt(ccinfo.CCNO); checkout.CardExpMon = Cryptography.Decrypt(ccinfo.ExpMon);
-                            checkout.CardExpYear = Cryptography.Decrypt(ccinfo.ExpYear); checkout.CVV = Cryptography.Decrypt(ccinfo.CVV);
+                            checkout.CardExpYear = Cryptography.Decrypt(ccinfo.ExpYear);
                         }
                         else { checkout.PaymentMethod = "eCheck"; checkout.BankRoutingNumber = Cryptography.Decrypt(ccinfo.RoutingNo); checkout.BankAccountNumber = Cryptography.Decrypt(ccinfo.AccountNo); checkout.BankAccountType = ccinfo.AccountType; }
                         checkout.SaveCard = true;
@@ -214,29 +214,32 @@ namespace BGBC.Web.Controllers
             {
                 if (string.IsNullOrEmpty(checkout.CardNo)) ModelState.AddModelError("CardNo", "The Card No field is required.");
                 if (string.IsNullOrEmpty(checkout.CVV)) ModelState.AddModelError("CVV", "The Card CVV field is required.");
-
-                if (checkout.CardNo.Trim().Length > 0)
+                
+                if (!string.IsNullOrEmpty(checkout.CardNo))
                 {
-                    if (CreditCardUtility.IsValidNumber(checkout.CardNo))
+                    if (checkout.CardNo.Trim().Length > 0)
                     {
-                        if (!string.IsNullOrEmpty(checkout.CVV))
+                        if (CreditCardUtility.IsValidNumber(checkout.CardNo))
                         {
-                            CreditCardTypeType? cardType = CreditCardUtility.GetCardTypeFromNumber(checkout.CardNo);
-                            if (cardType == null)
+                            if (!string.IsNullOrEmpty(checkout.CVV))
                             {
-                                ModelState.AddModelError("CardNo", "Please enter a valid card number");
-                            }
-                            else
-                            {
-                                checkout.CardType = (CreditCardTypeType)cardType;
-                                if (cardType == CreditCardTypeType.Amex && checkout.CVV.Trim().Length != 4) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
-                                else if (cardType != CreditCardTypeType.Amex && checkout.CVV.Trim().Length != 3) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                CreditCardTypeType? cardType = CreditCardUtility.GetCardTypeFromNumber(checkout.CardNo);
+                                if (cardType == null)
+                                {
+                                    ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                                }
+                                else
+                                {
+                                    checkout.CardType = (CreditCardTypeType)cardType;
+                                    if (cardType == CreditCardTypeType.Amex && checkout.CVV.Trim().Length != 4) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                    else if (cardType != CreditCardTypeType.Amex && checkout.CVV.Trim().Length != 3) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                        else
+                        {
+                            ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                        }
                     }
                 }
             }
@@ -351,52 +354,52 @@ namespace BGBC.Web.Controllers
                     {
                         if (response.transactionResponse != null)
                         {
-                            if (response.transactionResponse.errors  == null)
+                            if (response.transactionResponse.errors == null)
                             {
-                            try
-                            {
-                                int userid = 0;
-                                if (!Request.IsAuthenticated)
+                                try
                                 {
-                                    User selUser = new User { FirstName = checkout.FirstName, LastName = checkout.LastName, Password = BGBC.Core.Security.Cryptography.Encrypt(checkout.ChoosePassword), UserType = 3, Email = checkout.Email };
-                                    selUser.Profiles.Add(new Profile
+                                    int userid = 0;
+                                    if (!Request.IsAuthenticated)
                                     {
-                                        BillingAddress = checkout.BillingAddress,
-                                        BillingAddress_2 = checkout.BillingAddress_2,
-                                        BillingCty = checkout.BillingCty,
-                                        BillingState = checkout.BillingState,
-                                        MobilePhone = checkout.Phone
-                                    });
+                                        User selUser = new User { FirstName = checkout.FirstName, LastName = checkout.LastName, Password = BGBC.Core.Security.Cryptography.Encrypt(checkout.ChoosePassword), UserType = 3, Email = checkout.Email };
+                                        selUser.Profiles.Add(new Profile
+                                        {
+                                            BillingAddress = checkout.BillingAddress,
+                                            BillingAddress_2 = checkout.BillingAddress_2,
+                                            BillingCty = checkout.BillingCty,
+                                            BillingState = checkout.BillingState,
+                                            MobilePhone = checkout.Phone
+                                        });
 
-                                    selUser = _userRepository.Add(selUser);
-                                    CustomPrincipalSerializeModel serializeModel = new CustomPrincipalSerializeModel();
-                                    serializeModel.UserId = selUser.UserID;
-                                    serializeModel.FirstName = selUser.FirstName;
-                                    serializeModel.LastName = selUser.LastName;
-                                    serializeModel.roles = new string[] { "Customer" };
+                                        selUser = _userRepository.Add(selUser);
+                                        CustomPrincipalSerializeModel serializeModel = new CustomPrincipalSerializeModel();
+                                        serializeModel.UserId = selUser.UserID;
+                                        serializeModel.FirstName = selUser.FirstName;
+                                        serializeModel.LastName = selUser.LastName;
+                                        serializeModel.roles = new string[] { "Customer" };
 
-                                    string userData = Newtonsoft.Json.JsonConvert.SerializeObject(serializeModel);
-                                    System.Web.Security.FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(1, selUser.FirstName, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
+                                        string userData = Newtonsoft.Json.JsonConvert.SerializeObject(serializeModel);
+                                        System.Web.Security.FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(1, selUser.FirstName, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
 
-                                    string encTicket = FormsAuthentication.Encrypt(authTicket);
-                                    HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
-                                    Response.Cookies.Add(faCookie);
-                                    userid = selUser.UserID;
-                                }
-                                else
-                                {
-                                    userid = ((BGBC.Core.CustomPrincipal)(User)).UserId;
-                                }
-                                Order order = BGBCFunctions.ProductTrans(userid, checkout.Email, checkout.ChoosePassword, invoiceNumber,
-                                    response.transactionResponse.accountNumber, response.transactionResponse.accountType, response.transactionResponse.transId,
-                                    response.transactionResponse.messages[0].code, response.transactionResponse.messages[0].description, Request.UserHostAddress, address, checkout.Comments,
-                                    checkout.ProductIds);
+                                        string encTicket = FormsAuthentication.Encrypt(authTicket);
+                                        HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
+                                        Response.Cookies.Add(faCookie);
+                                        userid = selUser.UserID;
+                                    }
+                                    else
+                                    {
+                                        userid = ((BGBC.Core.CustomPrincipal)(User)).UserId;
+                                    }
+                                    Order order = BGBCFunctions.ProductTrans(userid, checkout.Email, checkout.ChoosePassword, invoiceNumber,
+                                        response.transactionResponse.accountNumber, response.transactionResponse.accountType, response.transactionResponse.transId,
+                                        response.transactionResponse.messages[0].code, response.transactionResponse.messages[0].description, Request.UserHostAddress, address, checkout.Comments,
+                                        checkout.ProductIds);
 
-                                IRepository<ProductOrder, int> productOrder = new ProductOrderRepository();
-                                foreach (var item in checkout.OrderList.Where(x => x.ProductID == 0))
-                                {
-                                    productOrder.Add(new ProductOrder { OrderID = order.OrderID, Name = item.Item, Price = item.Price });
-                                }
+                                    IRepository<ProductOrder, int> productOrder = new ProductOrderRepository();
+                                    foreach (var item in checkout.OrderList.Where(x => x.ProductID == 0))
+                                    {
+                                        productOrder.Add(new ProductOrder { OrderID = order.OrderID, Name = item.Item, Price = item.Price });
+                                    }
 
                                     //Save Payment details
                                     if (checkout.SaveCard)
@@ -410,35 +413,35 @@ namespace BGBC.Web.Controllers
                                             }
                                             else
                                             {
-                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 1, CCNO = Cryptography.Encrypt(checkout.CardNo), ExpMon = Cryptography.Encrypt(checkout.CardExpMon), ExpYear = Cryptography.Encrypt(checkout.CardExpYear), CVV = Cryptography.Encrypt(checkout.CVV) });
+                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 1, CCNO = Cryptography.Encrypt(checkout.CardNo), ExpMon = Cryptography.Encrypt(checkout.CardExpMon), ExpYear = Cryptography.Encrypt(checkout.CardExpYear) });
                                             }
                                         }
                                         else
                                         {
                                             if (checkout.PaymentMethod == "eCheck")
                                             {
-                                                ccinfo.CCNO = string.Empty; ccinfo.ExpMon = string.Empty; ccinfo.ExpYear = string.Empty; ccinfo.CVV = string.Empty;
+                                                ccinfo.CCNO = string.Empty; ccinfo.ExpMon = string.Empty; ccinfo.ExpYear = string.Empty;
                                                 ccinfo.PaymentType = 2; ccinfo.AccountType = checkout.BankAccountType;
                                                 ccinfo.RoutingNo = Cryptography.Encrypt(checkout.BankRoutingNumber); ccinfo.AccountNo = Cryptography.Encrypt(checkout.BankAccountNumber);
                                             }
                                             else
                                             {
                                                 ccinfo.CCNO = Cryptography.Encrypt(checkout.CardNo); ccinfo.ExpMon = Cryptography.Encrypt(checkout.CardExpMon);
-                                                ccinfo.ExpYear = Cryptography.Encrypt(checkout.CardExpYear); ccinfo.CVV = Cryptography.Encrypt(checkout.CVV);
+                                                ccinfo.ExpYear = Cryptography.Encrypt(checkout.CardExpYear);
                                                 ccinfo.PaymentType = 1; ccinfo.AccountType = string.Empty;
                                                 ccinfo.RoutingNo = string.Empty; ccinfo.AccountNo = string.Empty;
                                             }
                                         }
                                     }
 
-                                HttpCookie authCookie = Request.Cookies[".BGBCProducts"];
-                                authCookie.Value = string.Empty;
-                                Response.SetCookie(authCookie);
+                                    HttpCookie authCookie = Request.Cookies[".BGBCProducts"];
+                                    authCookie.Value = string.Empty;
+                                    Response.SetCookie(authCookie);
                                     TempData.Remove("cartdata");
-                                return RedirectToAction("OrderHistory", "Reports");
-                            }
-                            catch (Exception ex) { log.Error(ex.Message); ModelState.AddModelError("", "Transaction Error : " + ex.Message); }
-                            System.Diagnostics.Trace.TraceInformation("Success, Auth Code : " + response.transactionResponse.authCode);
+                                    return RedirectToAction("OrderHistory", "Reports");
+                                }
+                                catch (Exception ex) { log.Error(ex.Message); ModelState.AddModelError("", "Transaction Error : " + ex.Message); }
+                                System.Diagnostics.Trace.TraceInformation("Success, Auth Code : " + response.transactionResponse.authCode);
                             }
                             else
                             { ModelState.AddModelError("", "Transaction Error : " + response.transactionResponse.errors[0].errorCode + " " + response.transactionResponse.errors[0].errorText); }

@@ -36,9 +36,14 @@
     <div class="form-group"> 
         <a class="btn-button btn-primary" onclick="textbox();">Send email to property manager for maintenance or urgent matter</a>      
        <div class="hidden" id="comment">
+           <div class="row">
            <textarea rows="10" cols="50"></textarea>
+           </div>
+             <br/>
+           <div class="row">
            @Html.ActionLink("Submit", "Index", "Tenant", null, new { @class = "btn-button btn-primary" })
        </div>
+           </div>
 
    </div>
 }

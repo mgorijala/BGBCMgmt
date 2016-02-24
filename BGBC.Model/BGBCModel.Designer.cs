@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\BGBC\App1\BGBCMgmt\trunk\BGBC.Model\BGBCModel.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\BGBC\App1\BGBCMgmtGit\BGBC.Model\BGBCModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

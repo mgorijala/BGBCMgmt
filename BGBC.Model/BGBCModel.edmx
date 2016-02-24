@@ -273,6 +273,7 @@ warning 6002: The table/view 'BGBC.dbo.vProductOrders' does not have a primary k
         <EntityType Name="vProductOrders">
           <Key>
             <PropertyRef Name="ProductOrderID" />
+            <PropertyRef Name="OrderID" />
             <PropertyRef Name="ProductID" />
             <PropertyRef Name="UserID" />
             <PropertyRef Name="TransId" />
@@ -280,6 +281,7 @@ warning 6002: The table/view 'BGBC.dbo.vProductOrders' does not have a primary k
             <PropertyRef Name="UserType" />
           </Key>
           <Property Name="ProductOrderID" Type="int" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
           <Property Name="ProductID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="TransId" Type="varchar" MaxLength="50" Nullable="false" />
@@ -543,6 +545,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySet Name="vProductOrders" EntityType="Self.vProductOrders" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vProductOrders].[ProductOrderID] AS [ProductOrderID], 
+    [vProductOrders].[OrderID] AS [OrderID], 
     [vProductOrders].[ProductID] AS [ProductID], 
     [vProductOrders].[UserID] AS [UserID], 
     [vProductOrders].[TransId] AS [TransId], 
@@ -726,7 +729,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             <Parameter Name="v_Products" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_RentCalcSchedule">
-            <Parameter Name="DT_SELDATE" Mode="In" Type="DateTime" />
+          <Parameter Name="DT_SELDATE" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_RentPayment" EntitySet="Payments" ReturnType="Collection(BGBCModel.Payment)">
             <Parameter Name="i_UserID" Mode="In" Type="Int32" />
@@ -743,7 +746,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             <Parameter Name="v_RentDueids" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_TenantOutstanding" ReturnType="Collection(BGBCModel.TenantOutstanding)">
-            <Parameter Name="i_PropertyID" Mode="In" Type="Int32" />
+          <Parameter Name="i_PropertyID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="ContactForm">
@@ -1045,6 +1048,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             <PropertyRef Name="TransId" />
             <PropertyRef Name="TransDate" />
             <PropertyRef Name="UserType" />
+            <PropertyRef Name="OrderID" />
           </Key>
           <Property Name="ProductOrderID" Type="Int32" Nullable="false" />
           <Property Name="ProductID" Type="Int32" Nullable="false" />
@@ -1058,6 +1062,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Price" Type="Decimal" Precision="15" Scale="2" />
           <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="vRentPayment">
           <Key>
@@ -1549,6 +1554,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySetMapping Name="vProductOrders">
             <EntityTypeMapping TypeName="BGBCModel.vProductOrder">
               <MappingFragment StoreEntitySet="vProductOrders">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Description" ColumnName="Description" />

@@ -60,4 +60,10 @@ namespace BGBC.Model
     {
 
     }
+
+    [MetadataType(typeof(ProductOrderMetadata))]
+    public partial class ProductOrder
+    {
+
+    }
 }

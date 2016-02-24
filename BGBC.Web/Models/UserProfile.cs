@@ -124,6 +124,7 @@ namespace BGBC.Web.Models
         public Nullable<decimal> RentAmount { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:MMM-yyyy}")]
         [Display(Name = "Tenant Rent-Final Month Due")]
         public Nullable<System.DateTime> FinalDueDate { get; set; }
 
