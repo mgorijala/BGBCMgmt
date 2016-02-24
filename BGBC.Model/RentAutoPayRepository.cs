@@ -7,49 +7,49 @@ using System.Threading.Tasks;
 
 namespace BGBC.Model
 {
-    public class UserCCRepository : IRepository<UserCC, int>
+    public class RentAutoPayRepository : IRepository<RentAutoPay, int>
     {
+
         BGBCEntities context = new BGBCEntities();
 
-        public IQueryable<UserCC> Get()
+        public IQueryable<RentAutoPay> Get()
         {
             throw new NotImplementedException();
         }
 
-        public List<UserCC> GetRef(int id)
+        public List<RentAutoPay> GetRef(int id)
         {
             throw new NotImplementedException();
         }
 
-        public UserCC Get(int id)
+        public RentAutoPay Get(int id)
         {
-            return context.UserCCs.Where(x => x.UserID == id).FirstOrDefault();
+            return context.RentAutoPays.Where(x => x.UserID == id).FirstOrDefault();
         }
 
-        public UserCC Add(UserCC entity)
+        public RentAutoPay Add(RentAutoPay entity)
         {
             entity.Createdon = DateTime.Now;
-            context.UserCCs.Add(entity);
+            context.RentAutoPays.Add(entity);
             context.SaveChanges();
             return entity;
         }
 
-        public void Remove(UserCC entity)
+        public void Remove(RentAutoPay entity)
         {
             try
             {
-                context.UserCCs.Remove(entity);
+                context.RentAutoPays.Remove(entity);
                 context.Entry(entity).State = EntityState.Deleted;
                 context.SaveChanges();
             }
             catch (Exception ex)
             {
 
-
             }
         }
 
-        public void Update(UserCC entity)
+        public void Update(RentAutoPay entity)
         {
             entity.Updatedon = DateTime.Now;
             context.Entry(entity).State = EntityState.Modified;

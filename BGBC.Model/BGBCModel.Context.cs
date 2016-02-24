@@ -46,6 +46,7 @@ namespace BGBC.Model
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<vProductOrder> vProductOrders { get; set; }
         public virtual DbSet<vRentPayment> vRentPayments { get; set; }
+        public virtual DbSet<RentAutoPay> RentAutoPays { get; set; }
     
         public virtual ObjectResult<Nullable<int>> SP_NextInvoiceNo()
         {

@@ -24,6 +24,7 @@ namespace BGBC.Model
             this.Tenants = new HashSet<Tenant>();
             this.UserCCs = new HashSet<UserCC>();
             this.UserReferences = new HashSet<UserReference>();
+            this.RentAutoPays = new HashSet<RentAutoPay>();
         }
     
         public int UserID { get; set; }
@@ -44,5 +45,6 @@ namespace BGBC.Model
         public virtual ICollection<Tenant> Tenants { get; set; }
         public virtual ICollection<UserCC> UserCCs { get; set; }
         public virtual ICollection<UserReference> UserReferences { get; set; }
+        public virtual ICollection<RentAutoPay> RentAutoPays { get; set; }
     }
 }

@@ -38,6 +38,8 @@
         <AssociationConnector Association="BGBCModel.FK_Tenants_Users" />
         <AssociationConnector Association="BGBCModel.FK_UserCC_User" />
         <AssociationConnector Association="BGBCModel.FK_UserReferences_Users" />
+        <EntityTypeShape EntityType="BGBCModel.RentAutoPay" Width="1.5" PointX="3" PointY="35.375" />
+        <AssociationConnector Association="BGBCModel.FK_RentAutoPay_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

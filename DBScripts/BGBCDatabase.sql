@@ -328,6 +328,29 @@ CREATE TABLE UserCC(
 )
 GO
 
+IF OBJECT_ID('RentAutoPay', 'U') IS NOT NULL
+  DROP TABLE RentAutoPay; 
+GO
+
+CREATE TABLE RentAutoPay(
+	RentAutoPayID int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	UserID int,
+	PaymentType smallint,
+	CCNO varchar(512) NULL,
+	ExpMon varchar(512),
+	ExpYear varchar(512),
+	CVV varchar(512),
+	AccountType varchar(512),
+	RoutingNo varchar(512),
+	AccountNo varchar(512),
+	Rent decimal(15, 2) not NULL,
+	Charges decimal(15, 2) not NULL,
+	TotalAmt decimal(15, 2) not NULL,
+	Createdon datetime NULL,
+	Updatedon datetime NULL
+)
+GO
+
 ALTER TABLE Properties  WITH CHECK ADD  CONSTRAINT FK_Properties_Users FOREIGN KEY(UserID) REFERENCES Users (UserID)
 GO
 
@@ -368,6 +391,9 @@ ALTER TABLE RentDue  WITH CHECK ADD  CONSTRAINT FK_RentDue_Property FOREIGN KEY(
 GO
 
 ALTER TABLE UserCC  WITH CHECK ADD  CONSTRAINT FK_UserCC_User FOREIGN KEY(UserID) REFERENCES Users (UserID)
+GO
+
+ALTER TABLE RentAutoPay  WITH CHECK ADD  CONSTRAINT FK_RentAutoPay_User FOREIGN KEY(UserID) REFERENCES Users (UserID)
 GO
 
 INSERT INTO InvoiceNo values(1, GETDATE());

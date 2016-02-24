@@ -24,6 +24,8 @@ namespace BGBC.Web.Controllers
         IRepository<RentDue, int?> _rentDueRepo;
         IRepository<PasswordReset, int?> passwordresetRepo;
         IRepository<UserCC, int> _userCCRep;
+        IRepository<RentAutoPay, int> _rentAutoPayRep;
+
         public TenantController()
         {
             _tenantRepo = new TenantRepository();
@@ -34,6 +36,7 @@ namespace BGBC.Web.Controllers
             _rentDueRepo = new RentDueRepository();
             passwordresetRepo = new PasswordResetRepository();
             _userCCRep = new UserCCRepository();
+            _rentAutoPayRep = new RentAutoPayRepository();
         }
 
         [CustomAuthorize(Roles = "Tenant")]
@@ -388,6 +391,11 @@ namespace BGBC.Web.Controllers
                                             }
                                             _userCCRep.Update(ccinfo);
                                         }
+                                    }
+                                    else
+                                    {
+                                        UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                                        if (ccinfo != null) _userCCRep.Remove(ccinfo);
                                     }
 
                                     TempData.Remove("data");
@@ -978,6 +986,45 @@ namespace BGBC.Web.Controllers
             {
                 tenantprofile = new TenantProfile { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, ConfirmEmail = user.Email, Createdon = user.Createdon, Updatedon = user.Updatedon, AltEmail = profile.AltEmail, ConfirmAltEmail = profile.AltEmail, ProfileInfo = profile, Ref1 = (_ref.Count > 0 ? _ref[0] : new UserReference()), Ref2 = (_ref.Count > 1 ? _ref[1] : new UserReference()) };
             }
+
+            RentAutoPay rentpay = _rentAutoPayRep.Get(user.UserID);
+            if (rentpay == null)
+            {
+                tenantprofile.PaymentMethod = "eCheck";
+                Tenant tent = user.Tenants.FirstOrDefault();
+                if (tent != null)
+                {
+                    tenantprofile.MonthlyRent = (decimal)tent.RentAmount;
+                    tenantprofile.ServiceFee = Math.Round(((decimal)tent.RentAmount * (10.75m / 100.00m)), 2);
+                    tenantprofile.TotalCharges = tenantprofile.MonthlyRent + tenantprofile.ServiceFee;
+                }
+
+                UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                if (ccinfo != null)
+                {
+                    if (ccinfo.PaymentType == 1)
+                    {
+                        tenantprofile.PaymentMethod = "Credit Card"; tenantprofile.CardNo = Cryptography.Decrypt(ccinfo.CCNO); tenantprofile.CardExpMon = Cryptography.Decrypt(ccinfo.ExpMon);
+                        tenantprofile.CardExpYear = Cryptography.Decrypt(ccinfo.ExpYear);
+                    }
+                    else { tenantprofile.PaymentMethod = "eCheck"; tenantprofile.BankRoutingNumber = Cryptography.Decrypt(ccinfo.RoutingNo); tenantprofile.BankAccountNumber = Cryptography.Decrypt(ccinfo.AccountNo); tenantprofile.BankAccountType = ccinfo.AccountType; }
+                }
+            }
+            else
+            {
+                tenantprofile.ChargeAccount = true;
+                tenantprofile.MonthlyRent = rentpay.Rent;
+                tenantprofile.ServiceFee = rentpay.Charges;
+                tenantprofile.TotalCharges = rentpay.TotalAmt;
+
+                if (rentpay.PaymentType == 1)
+                {
+                    tenantprofile.PaymentMethod = "Credit Card"; tenantprofile.CardNo = Cryptography.Decrypt(rentpay.CCNO); tenantprofile.CardExpMon = Cryptography.Decrypt(rentpay.ExpMon);
+                    tenantprofile.CardExpYear = Cryptography.Decrypt(rentpay.ExpYear); tenantprofile.CVV = Cryptography.Decrypt(rentpay.CVV);
+                }
+                else { tenantprofile.PaymentMethod = "eCheck"; tenantprofile.BankRoutingNumber = Cryptography.Decrypt(rentpay.RoutingNo); tenantprofile.BankAccountNumber = Cryptography.Decrypt(rentpay.AccountNo); tenantprofile.BankAccountType = rentpay.AccountType; }
+
+            }
             PopulateDropDown();
             return View(tenantprofile);
         }
@@ -1021,57 +1068,59 @@ namespace BGBC.Web.Controllers
                 BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.Ref2.Zip, true, "Zip", "Ref2.Zip");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.Relationship, true, "Relationship", "Ref2.Relationship");
 
-                //if (userprofile.PaymentMethod == "eCheck")
-                //{
-                //    if (!string.IsNullOrEmpty(userprofile.BankRoutingNumber))
-                //    {
-                //        if (userprofile.BankRoutingNumber.Trim().Length != 9)
-                //            ModelState.AddModelError("BankRoutingNumber", "Please enter a valid routing number");
-                //    }
-                //    else
-                //    {
-                //        ModelState.AddModelError("BankRoutingNumber", "Please enter a valid routing number");
-                //    }
-                //    if (!string.IsNullOrEmpty(userprofile.BankAccountNumber))
-                //    {
-                //        if (userprofile.BankAccountNumber.Trim().Length != 7)
-                //            ModelState.AddModelError("BankAccountNumber", "Please enter a valid account number");
-                //    }
-                //    else
-                //    {
-                //        ModelState.AddModelError("BankAccountNumber", "Please enter a valid account number");
-                //    }
-                //}
-                //else
-                //{
-                //    if (string.IsNullOrEmpty(userprofile.CardNo)) ModelState.AddModelError("CardNo", "The Card No field is required.");
-                //    if (string.IsNullOrEmpty(userprofile.CVV)) ModelState.AddModelError("CVV", "The Card CVV field is required.");
-
-                //    if (userprofile.CardNo.Trim().Length > 0)
-                //    {
-                //        if (CreditCardUtility.IsValidNumber(userprofile.CardNo))
-                //        {
-                //            if (!string.IsNullOrEmpty(userprofile.CVV))
-                //            {
-                //                CreditCardTypeType? cardType = CreditCardUtility.GetCardTypeFromNumber(userprofile.CardNo);
-                //                if (cardType == null)
-                //                {
-                //                    ModelState.AddModelError("CardNo", "Please enter a valid card number");
-                //                }
-                //                else
-                //                {
-                //                    userprofile.CardType = (CreditCardTypeType)cardType;
-                //                    if (cardType == CreditCardTypeType.Amex && userprofile.CVV.Trim().Length != 4) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
-                //                    else if (cardType != CreditCardTypeType.Amex && userprofile.CVV.Trim().Length != 3) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
-                //                }
-                //            }
-                //        }
-                //        else
-                //        {
-                //            ModelState.AddModelError("CardNo", "Please enter a valid card number");
-                //        }
-                //    }
-                //}
+                if (userprofile.PaymentMethod == "eCheck")
+                {
+                    if (!string.IsNullOrEmpty(userprofile.BankRoutingNumber))
+                    {
+                        if (userprofile.BankRoutingNumber.Trim().Length != 9)
+                            ModelState.AddModelError("BankRoutingNumber", "Please enter a valid routing number");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("BankRoutingNumber", "Please enter a valid routing number");
+                    }
+                    if (!string.IsNullOrEmpty(userprofile.BankAccountNumber))
+                    {
+                        if (userprofile.BankAccountNumber.Trim().Length != 7)
+                            ModelState.AddModelError("BankAccountNumber", "Please enter a valid account number");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("BankAccountNumber", "Please enter a valid account number");
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(userprofile.CardNo)) ModelState.AddModelError("CardNo", "The Card No field is required.");
+                    if (string.IsNullOrEmpty(userprofile.CVV)) ModelState.AddModelError("CVV", "The Card CVV field is required.");
+                    if (!string.IsNullOrEmpty(userprofile.CardNo))
+                    {
+                        if (userprofile.CardNo.Trim().Length > 0)
+                        {
+                            if (CreditCardUtility.IsValidNumber(userprofile.CardNo))
+                            {
+                                if (!string.IsNullOrEmpty(userprofile.CVV))
+                                {
+                                    CreditCardTypeType? cardType = CreditCardUtility.GetCardTypeFromNumber(userprofile.CardNo);
+                                    if (cardType == null)
+                                    {
+                                        ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                                    }
+                                    else
+                                    {
+                                        userprofile.CardType = (CreditCardTypeType)cardType;
+                                        if (cardType == CreditCardTypeType.Amex && userprofile.CVV.Trim().Length != 4) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                        else if (cardType != CreditCardTypeType.Amex && userprofile.CVV.Trim().Length != 3) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                            }
+                        }
+                    }
+                }
 
                 if (ModelState.IsValid)
                 {
@@ -1101,8 +1150,50 @@ namespace BGBC.Web.Controllers
                     _profileRepo.Update(userprofile.ProfileInfo);
                     if (userprofile.Ref1.UserReferenceID == 0) _userRefRepo.Add(userprofile.Ref1); else _userRefRepo.Update(userprofile.Ref1);
                     if (userprofile.Ref2.UserReferenceID == 0) _userRefRepo.Add(userprofile.Ref2); else _userRefRepo.Update(userprofile.Ref2);
-                    TempData["SucessMessage"] = "Profile is updated successfull";
-                    return RedirectToAction("Profile", "Tenant");
+
+
+                    if (userprofile.ChargeAccount)
+                    {
+                        RentAutoPay rentpay = _rentAutoPayRep.Get(selUser.UserID);
+                        if (rentpay == null)
+                        {
+                            if (userprofile.PaymentMethod == "eCheck")
+                            {
+                                _rentAutoPayRep.Add(new RentAutoPay { UserID = selUser.UserID, PaymentType = 2, AccountType = userprofile.BankAccountType, RoutingNo = Cryptography.Encrypt(userprofile.BankRoutingNumber), AccountNo = Cryptography.Encrypt(userprofile.BankAccountNumber), Rent = userprofile.MonthlyRent, Charges = userprofile.ServiceFee, TotalAmt = userprofile.TotalCharges });
+                            }
+                            else
+                            {
+                                _rentAutoPayRep.Add(new RentAutoPay { UserID = selUser.UserID, PaymentType = 1, CCNO = Cryptography.Encrypt(userprofile.CardNo), ExpMon = Cryptography.Encrypt(userprofile.CardExpMon), ExpYear = Cryptography.Encrypt(userprofile.CardExpYear), CVV = Cryptography.Encrypt(userprofile.CVV), Rent = userprofile.MonthlyRent, Charges = userprofile.ServiceFee, TotalAmt = userprofile.TotalCharges });
+                            }
+                        }
+                        else
+                        {
+                            if (userprofile.PaymentMethod == "eCheck")
+                            {
+                                rentpay.CCNO = string.Empty; rentpay.ExpMon = string.Empty; rentpay.ExpYear = string.Empty;
+                                rentpay.PaymentType = 2; rentpay.AccountType = userprofile.BankAccountType;
+                                rentpay.RoutingNo = Cryptography.Encrypt(userprofile.BankRoutingNumber); rentpay.AccountNo = Cryptography.Encrypt(userprofile.BankAccountNumber);
+                            }
+                            else
+                            {
+                                rentpay.CCNO = Cryptography.Encrypt(userprofile.CardNo); rentpay.ExpMon = Cryptography.Encrypt(userprofile.CardExpMon);
+                                rentpay.ExpYear = Cryptography.Encrypt(userprofile.CardExpYear); rentpay.CVV = Cryptography.Encrypt(userprofile.CVV);
+                                rentpay.PaymentType = 1; rentpay.AccountType = string.Empty;
+                                rentpay.RoutingNo = string.Empty; rentpay.AccountNo = string.Empty;
+                            }
+                            rentpay.Rent = userprofile.MonthlyRent;
+                            rentpay.Charges = userprofile.ServiceFee;
+                            rentpay.TotalAmt = userprofile.TotalCharges;
+                        }
+                    }
+                    else
+                    {
+                        RentAutoPay rentpay = _rentAutoPayRep.Get(selUser.UserID);
+                        if (rentpay != null) _rentAutoPayRep.Remove(rentpay);
+                    }
+                    ViewBag.SucessMessage = "Profile is updated successfull";
+                    PopulateDropDown();
+                    return View();
                 }
             }
             catch (Exception ex)

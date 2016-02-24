@@ -433,6 +433,11 @@ namespace BGBC.Web.Controllers
                                             }
                                         }
                                     }
+                                    else
+                                    {
+                                        UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                                        if (ccinfo != null) _userCCRep.Remove(ccinfo);
+                                    }
 
                                     HttpCookie authCookie = Request.Cookies[".BGBCProducts"];
                                     authCookie.Value = string.Empty;

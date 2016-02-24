@@ -62,58 +62,57 @@ namespace BGBC.Web.Models
         public Nullable<System.DateTime> Updatedon { get; set; }
 
         public Profile ProfileInfo { get; set; }
-
-        //Mohan
-        //[Display(Name = "Payment Method")]
-        //public string PaymentMethod { get; set; }
-
-        //[Display(Name = "Card Number")]
-        //[DataType(DataType.CreditCard)]
-        //[MaxLength(16)]
-        //public string CardNo { get; set; }
-
-        //public string CardExpMon { get; set; }
-
-        //public string CardExpYear { get; set; }
-
-        //public BGBC.Core.CreditCardTypeType CardType { get; set; }
-
-        //[MaxLength(4)]
-        //[DataType(DataType.Password)]
-        //public string CVV { get; set; }
-
-        //[Display(Name = "Bank Account Number")]
-        //public string BankAccountNumber { get; set; }
-
-        //[Display(Name = "Bank Account Type")]
-        //public string BankAccountType { get; set; }
-
-        //[Display(Name = "Bank Routing Number")]
-        //public string BankRoutingNumber { get; set; }
-
-        //[Display(Name = "Automatically charge My account each month when my rent is due.")]
-        //public bool ChargeAccount { get; set; }
-
-        //[Display(Name = "Save Card")]
-        //public bool savecard { get; set; }
-
-        //[DataType(DataType.Currency)]
-        //[Display(Name = "Monthly Rent :")]
-        //public Decimal MonthlyRent { get; set; }
-
-        //[DataType(DataType.Currency)]
-        //[Display(Name = "Service Fee(10.75%) : ")]
-        //public Decimal ServiceFee { get; set; }
-
-        //[DataType(DataType.Currency)]
-        //[Display(Name = "Total Monthly charge :")]
-        //public Decimal TotalCharges { get; set; }
     }
 
     public class TenantProfile : UserProfile
     {
         public UserReference Ref1 { get; set; }
         public UserReference Ref2 { get; set; }
+
+        [Display(Name = "Payment Method")]
+        public string PaymentMethod { get; set; }
+
+        [Display(Name = "Card Number")]
+        [DataType(DataType.CreditCard)]
+        [MaxLength(16)]
+        public string CardNo { get; set; }
+
+        public string CardExpMon { get; set; }
+
+        public string CardExpYear { get; set; }
+
+        public BGBC.Core.CreditCardTypeType CardType { get; set; }
+
+        [MaxLength(4)]
+        [DataType(DataType.Password)]
+        public string CVV { get; set; }
+
+        [Display(Name = "Bank Account Number")]
+        public string BankAccountNumber { get; set; }
+
+        [Display(Name = "Bank Account Type")]
+        public string BankAccountType { get; set; }
+
+        [Display(Name = "Bank Routing Number")]
+        public string BankRoutingNumber { get; set; }
+
+        [Display(Name = "Automatically charge My account each month when my rent is due.")]
+        public bool ChargeAccount { get; set; }
+
+        [Display(Name = "Save Card")]
+        public bool savecard { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Display(Name = "Monthly Rent :")]
+        public Decimal MonthlyRent { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Display(Name = "Service Fee(10.75%) : ")]
+        public Decimal ServiceFee { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Display(Name = "Total Monthly charge :")]
+        public Decimal TotalCharges { get; set; }
     }
 
     public class TenantInfo : UserProfile
