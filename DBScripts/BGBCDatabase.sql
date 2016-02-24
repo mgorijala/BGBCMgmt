@@ -458,6 +458,7 @@ GO
 
 CREATE VIEW vProductOrders AS
 SELECT PO.ProductOrderID,
+	   O.OrderID,
 	   P.ProductID,
 	   U.UserID,
 	   O.TransId,

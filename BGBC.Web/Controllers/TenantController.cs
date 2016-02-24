@@ -9,11 +9,13 @@ using BGBC.Web.Models;
 using System.Net;
 using BGBC.Model.Metadata;
 using System.Text.RegularExpressions;
+using BGBC.Core.Security;
 
 namespace BGBC.Web.Controllers
 {
     public class TenantController : Controller
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(TenantController));
         private IRepository<Tenant, int> _tenantRepo;
         IUserRepository _userRepository;
         IRepository<Profile, int> _profileRepo;
@@ -21,6 +23,7 @@ namespace BGBC.Web.Controllers
         IRepository<Property, int> _propertyRepo;
         IRepository<RentDue, int?> _rentDueRepo;
         IRepository<PasswordReset, int?> passwordresetRepo;
+        IRepository<UserCC, int> _userCCRep;
         public TenantController()
         {
             _tenantRepo = new TenantRepository();
@@ -30,6 +33,7 @@ namespace BGBC.Web.Controllers
             _propertyRepo = new PropertyRepository();
             _rentDueRepo = new RentDueRepository();
             passwordresetRepo = new PasswordResetRepository();
+            _userCCRep = new UserCCRepository();
         }
 
         [CustomAuthorize(Roles = "Tenant")]
@@ -94,6 +98,7 @@ namespace BGBC.Web.Controllers
                     return View();
                 }
                 TempData["rentdue"] = rentdue;
+                TempData.Remove("data");
                 return RedirectToAction("TenantPayment");
             }
             ModelState.AddModelError("", "Must select at least one charge to make a payment.");
@@ -114,6 +119,7 @@ namespace BGBC.Web.Controllers
             try
             {
                 List<Rentdue> rentdue = (TempData["rentdue"] != null ? (List<Rentdue>)TempData["rentdue"] : new List<Rentdue>());
+                TempData.Remove("rentdue");
                 if (TempData["data"] != null)
                 {
                     payments = (Models.Payments)TempData["data"];
@@ -165,12 +171,26 @@ namespace BGBC.Web.Controllers
                         payments.TenantRent.Add(new Models.Rentdue { ID = 0, DueDate = DateTime.Today, Charge = "Payment Processing and Convenience Fee (8%)", AmountDue = fee, PropertyID = property.PropertyID });
                         payments.OrderTotal = payments.OrderTotal + fee;
                     }
+
+                    UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                    if (ccinfo != null)
+                    {
+                        if (ccinfo.PaymentType == 1)
+                        {
+                            payments.PaymentMethod = "Credit Card"; payments.CardNo = Cryptography.Decrypt(ccinfo.CCNO); payments.CardExpMon = Cryptography.Decrypt(ccinfo.ExpMon);
+                            payments.CardExpYear = Cryptography.Decrypt(ccinfo.ExpYear); payments.CVV = Cryptography.Decrypt(ccinfo.CVV);
+                        }
+                        else { payments.PaymentMethod = "eCheck"; payments.BankRoutingNumber = Cryptography.Decrypt(ccinfo.RoutingNo); payments.BankAccountNumber = Cryptography.Decrypt(ccinfo.AccountNo); payments.BankAccountType = ccinfo.AccountType; }
+                        payments.SaveCard = true;
+                    }
+
+
                     TempData["data"] = payments;
                 }
             }
             catch (Exception ex)
             {
-
+                log.Error(ex.Message);
             }
             PopulateDropDown();
             return View(payments);
@@ -191,6 +211,11 @@ namespace BGBC.Web.Controllers
 
             if (payments.PaymentMethod == "eCheck")
             {
+                if (string.IsNullOrEmpty(payments.BankAccountType))
+                {
+                    ModelState.AddModelError("BankAccountType", "The Bank Account Type field is required.");
+                }
+
                 if (!string.IsNullOrEmpty(payments.BankRoutingNumber))
                 {
                     if (payments.BankRoutingNumber.Trim().Length != 9)
@@ -278,8 +303,6 @@ namespace BGBC.Web.Controllers
                     rentidsarry[i] = payments.TenantRent[i].ID;
                 }
 
-
-
                 int invoiceNumber = BGBCFunctions.GetInoiveNo();
                 AuthorizeNet.Api.Controllers.createTransactionController controller;
                 var billAddress = new AuthorizeNet.Api.Contracts.V1.customerAddressType { firstName = payments.FirstName, lastName = payments.LastName, address = payments.BillingAddress + ", " + (string.IsNullOrEmpty(payments.BillingAddress_2) ? "" : payments.BillingAddress_2), city = payments.BillingCty, state = payments.BillingState, zip = payments.BillingZip, email = payments.Email, phoneNumber = payments.Phone, country = "USA" };
@@ -313,6 +336,8 @@ namespace BGBC.Web.Controllers
                     {
                         if (response.transactionResponse != null)
                         {
+                            if (response.transactionResponse.errors == null)
+                            {
                             try
                             {
                                 string rentid = string.Join(",", rentidsarry);
@@ -329,10 +354,47 @@ namespace BGBC.Web.Controllers
                                     }
                                 }
 
+                                    if (payments.SaveCard)
+                                    {
+                                        UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                                        if (ccinfo == null) //There is no details in database
+                                        {
+                                            if (payments.PaymentMethod == "eCheck")
+                                            {
+                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 2, AccountType = payments.BankAccountType, RoutingNo = Cryptography.Encrypt(payments.BankRoutingNumber), AccountNo = Cryptography.Encrypt(payments.BankAccountNumber) });
+                                            }
+                                            else
+                                            {
+                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 1, CCNO = Cryptography.Encrypt(payments.CardNo), ExpMon = Cryptography.Encrypt(payments.CardExpMon), ExpYear = Cryptography.Encrypt(payments.CardExpYear), CVV = Cryptography.Encrypt(payments.CVV) });
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (payments.PaymentMethod == "eCheck")
+                                            {
+                                                ccinfo.CCNO = string.Empty; ccinfo.ExpMon = string.Empty; ccinfo.ExpYear = string.Empty; ccinfo.CVV = string.Empty;
+                                                ccinfo.PaymentType = 2; ccinfo.AccountType = payments.BankAccountType;
+                                                ccinfo.RoutingNo = Cryptography.Encrypt(payments.BankRoutingNumber); ccinfo.AccountNo = Cryptography.Encrypt(payments.BankAccountNumber);
+                                            }
+                                            else
+                                            {
+                                                ccinfo.CCNO = Cryptography.Encrypt(payments.CardNo); ccinfo.ExpMon = Cryptography.Encrypt(payments.CardExpMon);
+                                                ccinfo.ExpYear = Cryptography.Encrypt(payments.CardExpYear); ccinfo.CVV = Cryptography.Encrypt(payments.CVV);
+                                                ccinfo.PaymentType = 1; ccinfo.AccountType = string.Empty;
+                                                ccinfo.RoutingNo = string.Empty; ccinfo.AccountNo = string.Empty;
+                                            }
+                                            _userCCRep.Update(ccinfo);
+                                        }
+                                    }
+
+                                    TempData.Remove("data");
                                 return RedirectToAction("MyAccount", "Tenant");
                             }
                             catch (Exception ex) { ModelState.AddModelError("", "Transaction Error : " + ex.Message); }
                             System.Diagnostics.Trace.TraceInformation("Success, Auth Code : " + response.transactionResponse.authCode);
+                        }
+                            else
+                            { ModelState.AddModelError("", "Transaction Error : " + response.transactionResponse.errors[0].errorCode + " " + response.transactionResponse.errors[0].errorText); }
                         }
                     }
                     else
@@ -353,6 +415,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Transaction Error, unable to complete the transaction.");
             }
             PopulateDropDown();
@@ -426,6 +489,7 @@ namespace BGBC.Web.Controllers
 
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
@@ -443,21 +507,23 @@ namespace BGBC.Web.Controllers
 
             if (TempData["tenantdata"] == null)
             {
-
                 TenantInfo tenant = new TenantInfo();
                 tenant.ProfileInfo = new Model.Profile();
                 tenant.PetDepositDue = false;
                 tenant.ProfileInfo.BillingAddressSame = true;
 
                 Property property = _propertyRepo.Get((int)id);
-                tenant.PropertyID = property.PropertyID;
-                tenant.PropertyName = property.Name;
-                tenant.Address = property.Address;
-                tenant.Address2 = property.Address2;
-                tenant.City = property.City;
-                tenant.State = property.State;
-                tenant.Zip = property.Zip;
-                tenant.OwnerName = string.Format("{0} {1}", property.User.FirstName, property.User.LastName);
+                if (property != null)
+                {
+                    tenant.PropertyID = property.PropertyID;
+                    tenant.PropertyName = property.Name;
+                    tenant.Address = property.Address;
+                    tenant.Address2 = property.Address2;
+                    tenant.City = property.City;
+                    tenant.State = property.State;
+                    tenant.Zip = property.Zip;
+                    tenant.OwnerName = string.Format("{0} {1}", property.User.FirstName, property.User.LastName);
+                }
                 return View(tenant);
             }
             else { return View("Add", (TenantInfo)TempData["tenantdata"]); }
@@ -471,16 +537,18 @@ namespace BGBC.Web.Controllers
             string messages = string.Join("; ", ModelState.Values
                                         .SelectMany(x => x.Errors)
                                         .Select(x => x.ErrorMessage));
-
-            BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress, false, "Billing Address", "ProfileInfo.BillingAddress");
-            BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress_2, false, "Billing Address 2", "ProfileInfo.BillingAddress");
-            BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, tenantInfo.ProfileInfo.BillingCty, false, "Billing City", "ProfileInfo.BillingCty");
-            BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, tenantInfo.ProfileInfo.BillingState, false, "Billing State", "ProfileInfo.BillingState");
-            BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, tenantInfo.ProfileInfo.BillingZip, false, "Billing Zip", "ProfileInfo.BillingZip");
+            if (!tenantInfo.ProfileInfo.BillingAddressSame)
+            {
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress, true, "Billing Address", "ProfileInfo.BillingAddress");
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress_2, false, "Billing Address 2", "ProfileInfo.BillingAddress_2");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, tenantInfo.ProfileInfo.BillingCty, true, "Billing City", "ProfileInfo.BillingCty");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, tenantInfo.ProfileInfo.BillingState, true, "Billing State", "ProfileInfo.BillingState");
+                BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, tenantInfo.ProfileInfo.BillingZip, true, "Billing Zip", "ProfileInfo.BillingZip");
+            }
 
             if (tenantInfo.ProfileInfo.HomePhone == null) ModelState.AddModelError("ProfileInfo.HomePhone", "The Home Phone field is required.");
             if (tenantInfo.FinalDueDate == null) ModelState.AddModelError("FinalDueDate", "The Final Due Date field is required.");
-            if (tenantInfo.PetDepositDue) { if (string.IsNullOrEmpty(tenantInfo.PetDepositDue.ToString())) ModelState.AddModelError("PetDeposit", "The Pet Deposit field is required."); }
+            if (tenantInfo.PetDepositDue) { if (string.IsNullOrEmpty(tenantInfo.PetDeposit.ToString())) ModelState.AddModelError("PetDeposit", "The Pet Deposit field is required."); }
 
             PopulateDropDown();
             ModelState["PropertyID"].Errors.Clear();
@@ -523,7 +591,7 @@ namespace BGBC.Web.Controllers
                 user.FirstName = tenantInfo.FirstName;
                 user.LastName = tenantInfo.LastName;
                 user.Email = tenantInfo.Email;
-                user.Password = BGBC.Core.Security.Cryptography.Encrypt(tenantInfo.FirstName);
+                user.Password = BGBC.Core.Security.Cryptography.Encrypt(BGBC.Core.Security.Cryptography.RandomString(8));
                 user.UserType = 2;
 
                 user.Profiles.Add(tenantInfo.ProfileInfo);
@@ -564,6 +632,7 @@ namespace BGBC.Web.Controllers
 
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
             PopulateDropDown();
@@ -694,6 +763,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
             PopulateDropDown();
@@ -764,6 +834,15 @@ namespace BGBC.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ConfirmEditAdmin(TenantInfo tenantInfo)
         {
+            if (!tenantInfo.ProfileInfo.BillingAddressSame)
+            {
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress, true, "Billing Address", "ProfileInfo.BillingAddress");
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress_2, false, "Billing Address 2", "ProfileInfo.BillingAddress_2");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, tenantInfo.ProfileInfo.BillingCty, true, "Billing City", "ProfileInfo.BillingCty");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, tenantInfo.ProfileInfo.BillingState, true, "Billing State", "ProfileInfo.BillingState");
+                BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, tenantInfo.ProfileInfo.BillingZip, true, "Billing Zip", "ProfileInfo.BillingZip");
+            }
+            if (tenantInfo.PetDepositDue) { if (string.IsNullOrEmpty(tenantInfo.PetDeposit.ToString())) ModelState.AddModelError("PetDeposit", "The Pet Deposit field is required."); }
             Property _property = _propertyRepo.Get((int)tenantInfo.PropertyID);
             ViewBag.UserID = _property.UserID;
             PopulateDropDown();
@@ -836,6 +915,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
             PopulateDropDown();
@@ -981,17 +1061,6 @@ namespace BGBC.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     User selUser = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
-
-                    if (userprofile.ProfileInfo.BillingAddressSame)
-                    {
-                        Property property = _propertyRepo.Get((int)selUser.Tenants.FirstOrDefault().PropertyID);
-                        userprofile.ProfileInfo.BillingAddress = property.Address;
-                        userprofile.ProfileInfo.BillingAddress_2 = property.Address2;
-                        userprofile.ProfileInfo.BillingCty = property.City;
-                        userprofile.ProfileInfo.BillingState = property.State;
-                        userprofile.ProfileInfo.BillingZip = property.Zip;
-                    }
-
                     if (!string.IsNullOrEmpty(userprofile.NewPassword))
                     {
                         if (selUser.Password == BGBC.Core.Security.Cryptography.Encrypt(userprofile.CurrentPassword))
@@ -1023,6 +1092,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
             PopulateDropDown();
@@ -1057,7 +1127,7 @@ namespace BGBC.Web.Controllers
 
             catch (Exception ex)
             {
-
+                log.Error(ex.Message);
             }
 
             return View(allPropertiesAndTenant);
@@ -1083,7 +1153,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                log.Error(ex.Message);
             }
             return View(new List<vRentPayment>());
         }
@@ -1120,7 +1190,7 @@ namespace BGBC.Web.Controllers
             {
                 months.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString().PadLeft(2, '0') });
             }
-            for (int i = DateTime.Now.Year + 2; i < DateTime.Now.Year + 10; i++)
+            for (int i = DateTime.Now.Year; i < DateTime.Now.Year + 10; i++)
             {
                 years.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString().Substring(2, 2) });
             }

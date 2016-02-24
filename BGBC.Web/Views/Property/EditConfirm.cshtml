@@ -96,7 +96,23 @@
             </b>
         </div>
         <div class="col-md-9">
-            @Html.DisplayFor(model => model.RentDueDay)
+            @if (Model.RentDueDay.ToString() == "1")
+            {
+                @Html.DisplayFor(model => model.RentDueDay)<span>st</span>
+            }
+            else if (Model.RentDueDay.ToString() == "2")
+            {
+                @Html.DisplayFor(model => model.RentDueDay)<span>nd</span>
+            }
+            else if (Model.RentDueDay.ToString() == "3")
+            {
+                @Html.DisplayFor(model => model.RentDueDay)<span>rd</span>
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.RentDueDay)<span>th</span>
+            }
+            @*@Html.DisplayFor(model => model.RentDueDay)*@
         </div>
     </div>
 
@@ -118,7 +134,14 @@
             </b>
         </div>
         <div class="col-md-9">
+            @if (Model.Penalty.ToString() == "")
+            {
+                <span>N/A</span>
+            }
+            else
+            {
             @Html.DisplayFor(model => model.Penalty)
+            }
         </div>
     </div>
 
@@ -129,8 +152,14 @@
             </b>
         </div>
         <div class="col-md-9">
-
+            @if (Model.DailyPenalty.ToString() == "")
+        {
+            <span>N/A</span>
+        }
+        else
+        {
             @Html.DisplayFor(model => model.DailyPenalty)
+        }
         </div>
     </div>
     <br/>
@@ -140,9 +169,9 @@
             {
                 @Html.AntiForgeryToken()
                 <div class="form-actions no-color">
-                    <input type="submit" value="Confirm" class="btn-button btn-primary" /> 
-                   @Html.ActionLink("Edit", "Edit", "Property", new { id = Model.PropertyID }, new { @class = "btn-button btn-primary" })
-                @Html.ActionLink("Cancel", null, null, null, new { href = Request.UrlReferrer })
+                    <input type="submit" value="Save Property" class="btn-button btn-primary" /> 
+                   @Html.ActionLink("Edit", "Edit", "Property", null, new { @class = "btn-button btn-primary" })
+                @Html.ActionLink("Cancel", "MyProperties", "Owner", null, new { @class = "btn-button btn-primary" })
                 </div>
             }
         </div>

@@ -11,7 +11,7 @@ namespace BGBC.Web.Controllers
 {
     public class PropertyController : Controller
     {
-
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(PropertyController));
         // GET: Property
         private IRepository<Property, int> _repository;
 
@@ -70,6 +70,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
@@ -134,6 +135,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
@@ -177,6 +179,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
@@ -242,6 +245,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 

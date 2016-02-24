@@ -61,7 +61,7 @@
                             else
                             {
                             <div class="row">
-                                <a onclick="location.href='@Url.Action("Edit", "Tenant", new { id = item.PropertyID })'" style="cursor:pointer">
+                                <a onclick="location.href='@Url.Action("Edit", "Tenant", new { id = item.Tenants.FirstOrDefault().TenantID })'" style="cursor:pointer">
                                     @Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)
                                 </a>
                             </div>

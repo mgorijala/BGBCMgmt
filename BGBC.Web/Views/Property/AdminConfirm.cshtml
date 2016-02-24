@@ -98,7 +98,23 @@
             </b>
         </div>
         <div class="col-md-9">
-            @Html.DisplayFor(model => model.RentDueDay)
+            @if (Model.RentDueDay.ToString() == "1")
+            {
+                @Html.DisplayFor(model => model.RentDueDay)<span>st</span>
+            }
+            else if (Model.RentDueDay.ToString() == "2")
+            {
+                @Html.DisplayFor(model => model.RentDueDay)<span>nd</span>
+            }
+            else if (Model.RentDueDay.ToString() == "3")
+            {
+                @Html.DisplayFor(model => model.RentDueDay)<span>rd</span>
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.RentDueDay)<span>th</span>
+            }
+            @*@Html.DisplayFor(model => model.RentDueDay)*@
         </div>
     </div>
 

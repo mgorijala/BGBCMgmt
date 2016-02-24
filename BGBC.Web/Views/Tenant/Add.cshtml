@@ -7,10 +7,11 @@
 
 <div class="back">
     @using (Html.BeginForm("Confirm", "Tenant"))
-{
+    {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(p => p.PropertyID)
         @Html.HiddenFor(p => p.PropertyName)
+        @Html.HiddenFor(p => p.OwnerName)
         @Html.HiddenFor(p => p.Address)
         @Html.HiddenFor(p => p.Address2)
         @Html.HiddenFor(p => p.City)
@@ -29,7 +30,7 @@
         <h6>@Model.Address</h6>
         <h6>@Model.Address2</h6>
         <h6>@Model.City,@Model.State @Model.Zip</h6>
-   
+
         <br />
         <fieldset>
             <legend>Basic Info</legend>
@@ -215,12 +216,12 @@
             </div>
         </div>
         <br />
-    <div class="form-group">
-        <input type="submit" value="Add Tenant" class="btn btn-button btn-primary"   />
-        @Html.ActionLink("Cancel", "PropertyTenants", "Owner", new { id = @Model.PropertyID }, new { @class = "btn-button btn-primary" })
-        @*@Html.ActionLink("Cancel", "index", "Owner", null, new { href = Request.UrlReferrer }) *@
-    </div>
-}
+        <div class="form-group">
+            <input type="submit" value="Add Tenant" class="btn btn-button btn-primary" />
+            @Html.ActionLink("Cancel", "PropertyTenants", "Owner", new { id = @Model.PropertyID }, new { @class = "btn-button btn-primary" })
+            @*@Html.ActionLink("Cancel", "index", "Owner", null, new { href = Request.UrlReferrer }) *@
+        </div>
+    }
 
 </div>
 @section scripts {

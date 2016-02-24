@@ -82,7 +82,10 @@
 
                 <div class="form-group">
                     <div class="col-md-12 no-padd">
-                        <input type="submit" value="Pay Selected" class="btn btn-warning pull-right" />
+                        @if (Model.TenantRent.Count > 0)
+                        {
+                            <input type="submit" id="btnsubmit" value="Pay Selected" class="btn btn-warning pull-right" />
+                        }
                     </div>
                 </div>
            
@@ -154,3 +157,33 @@
         </div>
  
 </div>
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var count = $('input[type="checkbox"]:checked').length;
+
+            if (count > 0) {
+                if ($(this).is(':checked')) {
+                    $('#btnsubmit').removeAttr('disabled');
+                }
+            } else {
+                $('#btnsubmit').attr('disabled', 'disabled');
+            }
+
+            $('input[type="checkbox"]').change(function () {
+               var count = $('input[type="checkbox"]:checked').length;
+
+               if (count > 0) {
+                   if ($(this).is(':checked')) {
+                       $('#btnsubmit').removeAttr('disabled');
+                   }
+               } else {
+                   $('#btnsubmit').attr('disabled', 'disabled');
+               }
+           });
+       });
+</script>
+
+}
+

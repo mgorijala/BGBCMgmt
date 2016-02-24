@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<div class="back">
 @using (Html.BeginForm("EditConfirm", "Property"))
 {
     @Html.AntiForgeryToken()
@@ -15,7 +15,7 @@
     @Html.HiddenFor(model => model.Penalty)
     @Html.HiddenFor(model => model.DailyPenalty)
     @Html.HiddenFor(model => model.UserID)
-    <div class="back">
+
         <h1>Edit Property</h1>
 
         <label><span style="color:red">&#42;</span>  indicates a required field</label>
@@ -76,7 +76,24 @@
                     @Html.DisplayName("Rent Due Monthly On(Please Select which day of the month the rent is due)") <span style="color:blue">&dagger;</span>
                 </dt>
                 <dd>
-                    @Html.DisplayFor(model=>model.RentDueDay)
+                    @if(Model.RentDueDay.ToString()=="1")
+                    {
+                        @Html.DisplayFor(model => model.RentDueDay)<span>st</span>
+                    }
+                    else if (Model.RentDueDay.ToString() == "2")
+                    {
+                        @Html.DisplayFor(model => model.RentDueDay)<span>nd</span>
+                    }
+                    else if (Model.RentDueDay.ToString() == "3")
+                    {
+                        @Html.DisplayFor(model => model.RentDueDay)<span>rd</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.RentDueDay)<span>th</span>
+                    }
+
+                    @*@Html.DisplayFor(model => model.RentDueDay)*@
                 </dd>
                  
                 <dt>
@@ -89,13 +106,27 @@
                     @Html.DisplayName("Late Penalty Charge ") <span style="color:blue">&dagger;</span>
                 </dt>
                 <dd>
+                    @if (Model.Penalty.ToString() == "")
+                    {
+                        <span>N/A</span>
+                    }
+                    else
+                    {
                     @Html.DisplayFor(model=>model.Penalty)
+                    }
                 </dd>
                 <dt>
                     @Html.DisplayName("Daily Late Penalty Charge(Additional Fee Charged Each Day After Initial Late Penalty Charge) ") <span style="color:blue">&dagger;</span>
                 </dt>
                 <dd>
+                    @if (Model.DailyPenalty.ToString() == "")
+                    {
+                        <span>N/A</span>
+                    }
+                    else
+                    {
                     @Html.DisplayFor(model=>model.DailyPenalty)
+                    }
                 </dd>
             </dl>
         </div>
@@ -106,8 +137,8 @@
                 @Html.ActionLink("Cancel", "MyProperties", "Owner", null, new { @class = "btn-button btn-default" })
             </div>
         </div>
-        </div>
         }
+    </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

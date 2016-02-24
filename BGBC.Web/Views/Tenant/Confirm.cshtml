@@ -18,6 +18,29 @@
     <div class="row">
         <div class="col-md-3">
             <b>
+                @Html.DisplayNameFor(model => model.OwnerName)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.OwnerName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayName("Property Address")
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.Address)  <br />
+            @Html.DisplayFor(model => model.Address2)<br/>
+            @Html.DisplayFor(model => model.City), @Html.DisplayFor(model => model.State) @Html.DisplayFor(model => model.Zip)
+           
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <b>
                 @Html.DisplayNameFor(model => model.FirstName)
             </b>
         </div>
@@ -44,16 +67,6 @@
         </div>
         <div class="col-md-9">
             @Html.DisplayFor(model => model.Email)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.ConfirmEmail)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.ConfirmEmail)
         </div>
     </div>
     <div class="row">
@@ -206,14 +219,35 @@
             </div>
         </div>
     }
-    <div class="clearfix">&nbsp;</div>
+    <br/>
+    <div class="alert alert-info">
+        <div class="alert-link">
+            Please note that you will not be able to change the following fields once you've added this tenant.<br />
+            You will need to contact BGBC Management to change these values.
+        </div><br/>
+        <div style="padding-left:15px">
+            <ul>
+                <li>Tenant Rent Amount</li>
+                <li>Final Month Due</li>
+                <li>Deposit Amount</li>
+                <li>Pet Deposit Due</li>
+                <li>Pet Deposit Amount</li>
+            </ul>
+        </div>
+    </div>
+    <br />
+    <div class="alert alert-info">
+        <div class="alert-link">
+            The tenant will be sent an email with instructions on how to complete their registration.
+        </div>
+        </div>
     <div class="row">
         <div class="col-md-6">
             @using (Html.BeginForm("Add", "Tenant"))
             {
                 @Html.AntiForgeryToken()
                 <div class="form-actions no-color">
-                    <input type="submit" value="Confirm" class="btn-button btn-primary" />
+                        <input type="submit" value="Add Tenant" class="btn-button btn-primary" />
                     @Html.ActionLink("Edit", "Add", "Tenant", null, new { @class = "btn-button btn-primary" })
                     @Html.ActionLink("Cancel", "Add", "Tenant", new { id = Model.UserID }, new { @class = "" })
                 </div>

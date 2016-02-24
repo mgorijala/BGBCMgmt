@@ -104,7 +104,7 @@
             </b>
         </div>
         <div class="col-md-9">
-            @Html.DisplayFor(model => model.GracePeriod)
+            @Html.DisplayFor(model => model.GracePeriod)<span>  days</span>
         </div>
     </div>
     <div class="row">
@@ -114,7 +114,14 @@
             </b>
         </div>
         <div class="col-md-9">
+            @if (Model.Penalty.ToString() == "")
+            {
+                <span>N/A</span>
+            }
+            else
+            {
             @Html.DisplayFor(model => model.Penalty)
+            }
         </div>
     </div>
 
@@ -125,10 +132,30 @@
             </b>
         </div>
         <div class="col-md-9">
+            @if (Model.DailyPenalty.ToString() == "")
+            {
+                <span>N/A</span>
+            }
+            else
+            {
             @Html.DisplayFor(model => model.DailyPenalty)
+            }
         </div>
     </div>
     <div class="clearfix">&nbsp;</div>
+    <div class="alert alert-info">
+        <p class="alert-link">
+            Please note that you will not be able to change the following fields once you've added this tenant.
+            <br />
+            You will need to contact BGBC Management to change these values.
+        </p>
+        <div style="padding-left:15px;padding-bottom:20px;">
+            <li>Rent Due Monthly On</li>
+            <li>Grace Period</li>
+            <li>Late Penalty Charge</li>
+            <li>Daily Late Penalty Charge</li>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6">
             @using (Html.BeginForm("Add", "Property"))

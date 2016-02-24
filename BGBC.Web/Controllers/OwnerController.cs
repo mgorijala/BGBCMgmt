@@ -13,6 +13,7 @@ namespace BGBC.Web.Controllers
 {
     public class OwnerController : Controller
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(OwnerController));
         private IRepository<Property, int> _propertyRepo;
         private IRepository<Tenant, int> _tenantRepo;
         private IRepository<BGBC.Model.Property, int> _pro;
@@ -39,34 +40,34 @@ namespace BGBC.Web.Controllers
 
         [Authorize]
         [CustomAuthorize(Roles = "Owner")]
-        public ActionResult ViewPayments()
+        public ActionResult ViewPayments(int id)
         {
             List<BGBC.Web.Models.AllPropertiesAndTenant> allPropertiesAndTenant = new List<Models.AllPropertiesAndTenant>();
             try
             {
-                List<Property> property = _pro.GetRef(((BGBC.Core.CustomPrincipal)(User)).UserId);
-                foreach (var p in property)
+                Property p = _propertyRepo.Get(id);
+                BGBC.Web.Models.AllPropertiesAndTenant propertiesTenant = new Models.AllPropertiesAndTenant();
+                ViewBag.PropertyID = p.PropertyID;
+                ViewBag.Name = p.Name;
+                ViewBag.Address = p.Address;
+                ViewBag.Address2 = p.Address2;
+                ViewBag.City = p.City;
+                ViewBag.State = p.State;
+                ViewBag.Zip = p.Zip;
+
+                propertiesTenant.tenantRentPay = new List<Models.TenantRentPay>();
+                foreach (var t in p.Tenants)
                 {
-                    BGBC.Web.Models.AllPropertiesAndTenant pp = new Models.AllPropertiesAndTenant();
-                    pp.Pname = p.Name;
-                    pp.Address = p.Address;
-                    pp.Address2 = p.Address2;
-                    pp.state = p.State;
-                    pp.Zip = p.Zip;
-                    pp.tenantRentPay = new List<Models.TenantRentPay>();
-                    foreach (var t in p.Tenants)
-                    {
-                        BGBC.Web.Models.TenantRentPay ttttttttt = new BGBC.Web.Models.TenantRentPay();
-                        ttttttttt.tname = t.User.FirstName;
-                        ttttttttt.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).ToList();
-                        pp.tenantRentPay.Add(ttttttttt);
-                    }
-                    allPropertiesAndTenant.Add(pp);
+                    BGBC.Web.Models.TenantRentPay tenantRentPay = new BGBC.Web.Models.TenantRentPay();
+                    tenantRentPay.tname = t.User.FirstName;
+                    tenantRentPay.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).ToList();
+                    propertiesTenant.tenantRentPay.Add(tenantRentPay);
                 }
+                allPropertiesAndTenant.Add(propertiesTenant);
             }
             catch (Exception ex)
             {
-
+                log.Error(ex.Message);
             }
             return View(allPropertiesAndTenant);
         }
@@ -94,7 +95,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                log.Error(ex.Message);
             }
             return View(new List<vRentPayment>());
         }
@@ -104,6 +105,7 @@ namespace BGBC.Web.Controllers
         [CustomAuthorize(Roles = "Owner")]
         public ActionResult MyProperties()
         {
+            TempData.Remove("propertydata");
             return View(_propertyRepo.GetRef(((BGBC.Core.CustomPrincipal)(User)).UserId));
         }
 
@@ -147,7 +149,7 @@ namespace BGBC.Web.Controllers
             try
             {
                 //Adding Regularexpression 
-                
+
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.BillingAddress, false, "Address", "ProfileInfo.BillingAddress");
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.BillingAddress_2, false, "Address 2", "ProfileInfo.BillingAddress_2");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.BillingCty, false, "City", "ProfileInfo.BillingCty");
@@ -156,19 +158,11 @@ namespace BGBC.Web.Controllers
 
                 if (userprofile.ProfileInfo.PaymentMethod == "PayPal Email")
                 {
-                    if (string.IsNullOrEmpty(userprofile.ProfileInfo.PaypalEmail)) ModelState.AddModelError("ProfileInfo.PaypalEmail", "The Paypal Email field is required");
                     BGBC.Core.ModelDataValidation.Instance.Email(ModelState, userprofile.ProfileInfo.PaypalEmail, true, "PayPal Email", "ProfileInfo.PaypalEmail");
                 }
 
                 if (userprofile.ProfileInfo.PaymentMethod == "Mail Check")
                 {
-                    if (string.IsNullOrEmpty(userprofile.ProfileInfo.PayoutMailAddress)) ModelState.AddModelError("ProfileInfo.PayoutMailAddress", "The Mailling address field is required");
-                    if (string.IsNullOrEmpty(userprofile.ProfileInfo.PayoutMailAddress2)) ModelState.AddModelError("ProfileInfo.PayoutMailAddress2", "The Mailling address 2 field is required");
-                    if (string.IsNullOrEmpty(userprofile.ProfileInfo.PayoutMailCity)) ModelState.AddModelError("ProfileInfo.PayoutMailCity", "The Mailling City field is required");
-                    if (string.IsNullOrEmpty(userprofile.ProfileInfo.PayoutMailState)) ModelState.AddModelError("ProfileInfo.PayoutMailState", "The Mailling State field is required");
-                    if (string.IsNullOrEmpty(userprofile.ProfileInfo.PayoutMailZip)) ModelState.AddModelError("ProfileInfo.PayoutMailZip", "The Mailling Zip field is required");
-
-
                     BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.PayoutMailAddress, false, "Mailing Address", "ProfileInfo.PayoutMailAddress");
                     BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.PayoutMailAddress2, false, "Mailing Address 2", "ProfileInfo.PayoutMailAddress2");
                     BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.PayoutMailCity, false, "Mailing City", "ProfileInfo.PayoutMailCity");
@@ -204,6 +198,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
             PopulateDropDown();

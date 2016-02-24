@@ -80,6 +80,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
@@ -148,6 +149,7 @@ namespace BGBC.Web.Controllers
                 {
                     User user = _userRepository.Find(resetpassword.Email);
                     user.Password = BGBC.Core.Security.Cryptography.Encrypt(resetpassword.Password);
+                    _userRepository.Update(user);
                     TempData["SucessMessage"] = "Your Password Successfully Changed.";
                     passwordresetRepo.Remove(pwd);
                     return RedirectToAction("Login", "Home");
@@ -159,6 +161,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
             ViewBag.ValidEmail = false;
@@ -197,6 +200,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
@@ -372,6 +376,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
@@ -402,6 +407,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 

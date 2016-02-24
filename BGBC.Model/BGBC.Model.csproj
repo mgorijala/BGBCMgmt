@@ -136,6 +136,7 @@
     <Compile Include="UserCC.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserCCRepository.cs" />
     <Compile Include="UserReference.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>

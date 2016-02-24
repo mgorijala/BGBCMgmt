@@ -1,4 +1,5 @@
 ﻿using BGBC.Core;
+using BGBC.Core.Security;
 using BGBC.Model;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,18 @@ namespace BGBC.Web.Controllers
 {
     public class CartController : Controller
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(CartController));
         private IRepository<Product, int?> _repository;
         private IUserRepository _userRepository;
         private IRepository<Profile, int> _profileRepo;
+        IRepository<UserCC, int> _userCCRep;
+
         public CartController()
         {
             _repository = new ProductRepository();
             _userRepository = new UserRepository();
             _profileRepo = new ProfileRepository();
+            _userCCRep = new UserCCRepository();
         }
         public ActionResult Index()
         {
@@ -125,6 +130,18 @@ namespace BGBC.Web.Controllers
                     checkout.BillingState = profile.BillingState;
                     checkout.BillingZip = profile.BillingZip;
                     checkout.Phone = profile.MobilePhone;
+
+                    UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                    if (ccinfo != null)
+                    {
+                        if (ccinfo.PaymentType == 1)
+                        {
+                            checkout.PaymentMethod = "Credit Card"; checkout.CardNo = Cryptography.Decrypt(ccinfo.CCNO); checkout.CardExpMon = Cryptography.Decrypt(ccinfo.ExpMon);
+                            checkout.CardExpYear = Cryptography.Decrypt(ccinfo.ExpYear); checkout.CVV = Cryptography.Decrypt(ccinfo.CVV);
+                        }
+                        else { checkout.PaymentMethod = "eCheck"; checkout.BankRoutingNumber = Cryptography.Decrypt(ccinfo.RoutingNo); checkout.BankAccountNumber = Cryptography.Decrypt(ccinfo.AccountNo); checkout.BankAccountType = ccinfo.AccountType; }
+                        checkout.SaveCard = true;
+                    }
                 }
 
                 Tuple<List<Models.OrderSummary>, decimal, string> ordersummary = getCartProducts();
@@ -134,7 +151,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                log.Error(ex.Message);
             }
             checkoutDropDown();
             return View(checkout);
@@ -169,6 +186,11 @@ namespace BGBC.Web.Controllers
 
             if (checkout.PaymentMethod == "eCheck")
             {
+                if (string.IsNullOrEmpty(checkout.BankAccountType))
+                {
+                    ModelState.AddModelError("BankAccountType", "The Bank Account Type field is required.");
+                }
+
                 if (!string.IsNullOrEmpty(checkout.BankRoutingNumber))
                 {
                     if (checkout.BankRoutingNumber.Trim().Length != 9)
@@ -329,6 +351,8 @@ namespace BGBC.Web.Controllers
                     {
                         if (response.transactionResponse != null)
                         {
+                            if (response.transactionResponse.errors  == null)
+                            {
                             try
                             {
                                 int userid = 0;
@@ -374,14 +398,50 @@ namespace BGBC.Web.Controllers
                                     productOrder.Add(new ProductOrder { OrderID = order.OrderID, Name = item.Item, Price = item.Price });
                                 }
 
+                                    //Save Payment details
+                                    if (checkout.SaveCard)
+                                    {
+                                        UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                                        if (ccinfo == null) //There is no details in database
+                                        {
+                                            if (checkout.PaymentMethod == "eCheck")
+                                            {
+                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 2, AccountType = checkout.BankAccountType, RoutingNo = Cryptography.Encrypt(checkout.BankRoutingNumber), AccountNo = Cryptography.Encrypt(checkout.BankAccountNumber) });
+                                            }
+                                            else
+                                            {
+                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 1, CCNO = Cryptography.Encrypt(checkout.CardNo), ExpMon = Cryptography.Encrypt(checkout.CardExpMon), ExpYear = Cryptography.Encrypt(checkout.CardExpYear), CVV = Cryptography.Encrypt(checkout.CVV) });
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (checkout.PaymentMethod == "eCheck")
+                                            {
+                                                ccinfo.CCNO = string.Empty; ccinfo.ExpMon = string.Empty; ccinfo.ExpYear = string.Empty; ccinfo.CVV = string.Empty;
+                                                ccinfo.PaymentType = 2; ccinfo.AccountType = checkout.BankAccountType;
+                                                ccinfo.RoutingNo = Cryptography.Encrypt(checkout.BankRoutingNumber); ccinfo.AccountNo = Cryptography.Encrypt(checkout.BankAccountNumber);
+                                            }
+                                            else
+                                            {
+                                                ccinfo.CCNO = Cryptography.Encrypt(checkout.CardNo); ccinfo.ExpMon = Cryptography.Encrypt(checkout.CardExpMon);
+                                                ccinfo.ExpYear = Cryptography.Encrypt(checkout.CardExpYear); ccinfo.CVV = Cryptography.Encrypt(checkout.CVV);
+                                                ccinfo.PaymentType = 1; ccinfo.AccountType = string.Empty;
+                                                ccinfo.RoutingNo = string.Empty; ccinfo.AccountNo = string.Empty;
+                                            }
+                                        }
+                                    }
+
                                 HttpCookie authCookie = Request.Cookies[".BGBCProducts"];
                                 authCookie.Value = string.Empty;
                                 Response.SetCookie(authCookie);
-
+                                    TempData.Remove("cartdata");
                                 return RedirectToAction("OrderHistory", "Reports");
                             }
-                            catch (Exception ex) { ModelState.AddModelError("", "Transaction Error : " + ex.Message); }
+                            catch (Exception ex) { log.Error(ex.Message); ModelState.AddModelError("", "Transaction Error : " + ex.Message); }
                             System.Diagnostics.Trace.TraceInformation("Success, Auth Code : " + response.transactionResponse.authCode);
+                            }
+                            else
+                            { ModelState.AddModelError("", "Transaction Error : " + response.transactionResponse.errors[0].errorCode + " " + response.transactionResponse.errors[0].errorText); }
                         }
                     }
                     else
@@ -402,6 +462,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
                 ModelState.AddModelError("", "Transaction Error, unable to complete the transaction.");
             }
             Tuple<List<Models.OrderSummary>, decimal, string> ordersummary = getCartProducts();
