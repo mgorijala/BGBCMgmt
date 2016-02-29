@@ -64,7 +64,7 @@ namespace BGBC.Web.Controllers
                 property = (Property)TempData["propertydata"];
                     property.UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId;
                     _repository.Add(property);
-                    TempData["SucessMessage"] = "Property added successfully.";
+                    TempData["SucessMessage"] = "Property " + property.Name + " added successfully."; 
                     return RedirectToAction("MyProperties","Owner");
               
             }

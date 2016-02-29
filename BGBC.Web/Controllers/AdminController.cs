@@ -49,6 +49,8 @@ namespace BGBC.Web.Controllers
         [CustomAuthorize(Roles = "Admin")]
         public ActionResult OwnerProperties(int id)
         {
+            User user = _userRepository.Get(id);
+            ViewBag.Name = user.FirstName + " " + user.LastName;
             return View(_propertyRepo.Get().Where(x => x.UserID == id));
         }
 
@@ -107,7 +109,7 @@ namespace BGBC.Web.Controllers
         [CustomAuthorize(Roles = "Admin")]
         public ActionResult PropertyTenants(int id)
         {
-                
+
             Property pro = _propertyRepo.Get(id);
             ViewBag.PropertyID = id;
             ViewBag.PropertyName = pro.Name;
@@ -123,8 +125,29 @@ namespace BGBC.Web.Controllers
         [CustomAuthorize(Roles = "Admin")]
         public ActionResult AllPropertyTenants(int id)
         {
-
+            User user = _userRepository.Get(id);
+            ViewBag.Name = user.FirstName + " " + user.LastName;
             return View(_propertyRepo.GetRef(id));
+        }
+
+        [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
+        public ActionResult ViewPropertyPayment(int id)
+        {
+            List<vRentPayment> rentpay = new List<vRentPayment>();
+            try
+            {
+                // User user = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                Property property = _propertyRepo.Get(id);
+                ViewBag.PropertyID = property.PropertyID;
+                ViewBag.Name = property.Name;
+                rentpay = BGBCFunctions.RentPayments().Where(x => x.PropertyID == id).OrderByDescending(o => o.TransDate).ToList();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
+            return View(rentpay);
         }
 
         [Authorize]
@@ -155,7 +178,7 @@ namespace BGBC.Web.Controllers
             List<SelectListItem> produts = new List<SelectListItem>();
             foreach (var item in _producRepo.Get())
             {
-                produts.Add(new SelectListItem() { Text = item.Name, Value = Url.Action("AllProductsOrders", "Reports", new { id = item.ProductID }) });
+                produts.Add(new SelectListItem() { Text = item.Name, Value = Url.Action("AllProductsOrders", "Report", new { id = item.ProductID }) });
             }
 
             ViewBag.AllProducts = produts;

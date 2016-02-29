@@ -9,7 +9,7 @@
         <div class="col-md-6 col-sm-6 no-padd">
             <h1>
                 Recent Tenant Payments for<br />
-                All Properties belonging to Test Owner
+                All Properties belonging to @ViewBag.Name
 
             </h1>
         </div>
@@ -19,7 +19,7 @@
             {
                 if (User.IsInRole("Admin"))
                 {
-                   @Html.ActionLink("Back to All Properties", "OwnerProperties", "Admin",null, htmlAttributes: new { @class = "btn-button btn-primary", @Href = Request.UrlReferrer})
+                   @Html.ActionLink("Back to All Properties", "ManageProperty", "Admin", null, htmlAttributes: new { @class = "btn-button btn-primary"})
                 }
                
                 else 
@@ -41,13 +41,13 @@
           {
            for (int i = 0; i < prop.tenantRentPay.Count; i++)
            {
-               int value = prop.tenantRentPay[i].RentPayment.Count;
+               int rentPaid = prop.tenantRentPay[i].RentPayment.Count;
               
             <div class="col-md-12 no-padd">
                 <div class="col-md-8">     
                    @if (prop.tenantRentPay[i].tname != string.Empty)
                    {
-                    <p>@Html.DisplayFor(p => prop.tenantRentPay[i].tname)</p>
+                     <h2>@Html.ActionLink(prop.tenantRentPay[i].tname, "TenantPaymentHistory", "Report", new { id = prop.tenantRentPay[i].tuserid }, new { @class = "" })</h2>
                    }
                    else
                    {
@@ -56,15 +56,15 @@
                                   
                 </div>
                 <div class="col-md-4 no-padd">
-                    @if (value > 0)
+                    @if (rentPaid > 0)
                     {
-                    @Html.ActionLink("View Full Payment History", "TenantPaymentHistory", "Reports", null, new { @class = "btn-button btn-primary pull-right" })
+                    @Html.ActionLink("View Full Payment History", "TenantPaymentHistory", "Report", new { id = prop.tenantRentPay[i].tuserid }, new { @class = "btn-button btn-primary pull-right" })
                     }
                     
                 </div>
             </div>
     <div class="clearfix">&nbsp;</div>
-               if (value > 0)
+               if (rentPaid > 0)
                {
               
                     <div class="table-responsive">
@@ -89,7 +89,7 @@
                                 </tr>
                             </thead>
                             <tbody>                          
-                                  @for (int j = 0; j < value; j++)
+                                  @for (int j = 0; j < rentPaid; j++)
                                     {
                                     <tr>
                                         <td>@Html.DisplayFor(p => prop.tenantRentPay[i].RentPayment[j].TransDate)</td>

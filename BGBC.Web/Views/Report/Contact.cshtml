@@ -1,0 +1,72 @@
+﻿@model IEnumerable<BGBC.Model.ContactForm>
+
+@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="col-md-12 no-padd">
+        <div class="col-md-9 col-sm-6 no-padd">
+            <h1>Contact Us Form Submissions</h1>
+        </div>
+        <div class="col-md-3 col-sm-6 no-padd header-btn">
+            @Html.ActionLink("Back to Dashboard", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
+        </div>
+    </div>
+    <div>
+        <div class="clearfix">&nbsp;</div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                Date Created
+                            </th>
+                            <th>
+                                User Name
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Contact Email
+                            </th>
+                            <th>
+                                Contact Phone
+                            </th>
+                            <th>
+                                Message
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                    {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Createdon)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AccountName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EMail)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Phone)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MessageText)
+                                </td>
+                            </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        
+    </div>
+</div>

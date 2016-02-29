@@ -60,9 +60,9 @@
                                 }
                                 else
                                 {
-                                    foreach (var tenant in item.Tenants)
+                                    foreach (var tenant in item.Tenants.Where(x=>x.Deletedon == null))
                                     {
-                                        <a onclick="location.href='@Url.Action("Edit", "Tenant", new { id = tenant.User.UserID })'" style="cursor:point style=" cursor:pointer">
+                                        <a onclick="location.href='@Url.Action("Edit", "Tenant", new { id = tenant.User.UserID })'" style=" cursor:pointer">
                                             @Html.DisplayFor(modelItem => tenant.User.FirstName) @Html.DisplayFor(modelItem => tenant.User.LastName)
                                         </a>
                                         <br />
@@ -73,9 +73,9 @@
                         <td>
                             @if (item.Tenants.FirstOrDefault() != null)
                             {
-                                foreach (var tenant in item.Tenants)
+                                foreach (var tenant in item.Tenants.Where(x => x.Deletedon == null))
                                 {
-                                    @Html.DisplayFor(modelItem => item.Tenants.FirstOrDefault().RentAmount)
+                                    @Html.DisplayFor(modelItem => tenant.RentAmount)
                                     <br />
                                 }
                             }

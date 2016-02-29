@@ -276,11 +276,11 @@
             @Html.AntiForgeryToken()
 
             <div class="form-actions no-color">
-                <input type="submit" value="Submit Payment" class="btn btn-button btn-primary" onclick="location.href='@Url.Action("OrderHistory ", "Reports")'" />
+                <input type="submit" value="Submit Payment" class="btn btn-button btn-primary" onclick="location.href='@Url.Action("OrderHistory ", "Report")'" />
                 @Html.ActionLink("Edit", "Checkout", "Cart", null, new { @class = " btn-button btn-primary" })
 
 
-                @*@Html.ActionLink("Submit Payment", "OrderHistory", "Reports", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" })*@
+                @*@Html.ActionLink("Submit Payment", "OrderHistory", "Report", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" })*@
                 @*<input type="button" value="Edit" class="btn btn-button" onclick="location.href='@Url.Action("Checkout", "Cart")'" />*@
 
             </div>

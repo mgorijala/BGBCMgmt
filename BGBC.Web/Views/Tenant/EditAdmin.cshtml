@@ -86,9 +86,9 @@
         </div>
 
         <div class="Row billing-address-fields">
-            <div class="form-group">
+            <div class="form-group col-md-3 no-padd">
                 @Html.LabelFor(p => p.ProfileInfo.BillingState, htmlAttributes: new { @class = "control-label required" })
-                @Html.DropDownListFor(p => p.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "" })
+                @Html.DropDownListFor(p => p.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })
                 @Html.ValidationMessageFor(p => p.ProfileInfo.BillingState, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -154,9 +154,9 @@
         </div>
 
         <div class="Row">
-            <div class="form-group">
+            <div class="form-group col-md-2 no-padd">
                 @Html.LabelFor(p => p.PetDepositDue, htmlAttributes: new { @class = "control-label" })
-                @Html.DropDownListFor(p => p.PetDepositDue, new List<SelectListItem> { new SelectListItem { Text = "Yes", Value = "true" }, new SelectListItem { Text = "No", Value = "false" } }, new Dictionary<String, object> { { "class", "control-label" }, { "onchange", "petDepositDueClick.call(this)" } })
+                @Html.DropDownListFor(p => p.PetDepositDue, new List<SelectListItem> { new SelectListItem { Text = "Yes", Value = "true" }, new SelectListItem { Text = "No", Value = "false" } }, new Dictionary<String, object> { { "class", "control-label form-control" }, { "onchange", "petDepositDueClick.call(this)" } })
                 @Html.ValidationMessageFor(p => p.PetDepositDue, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -171,7 +171,17 @@
         <div class="form-group">
 
             <input type="submit" value="Save" class="btn btn-default" />
+            @*@Html.ActionLink("Cancel", "AllPropertyTenants", "Admin", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" })*@
+
+          @if (@ViewBag.Url == "PropertyTenants")
+          {
+              @Html.ActionLink("Cancel", "PropertyTenants", "Admin", new { id = @ViewBag.PropertyID }, new { @class = "btn-button btn-primary" })
+          }
+          else
+          {
             @Html.ActionLink("Cancel", "AllPropertyTenants", "Admin", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" }) 
+          }
+            
         </div>
 
 

@@ -95,7 +95,7 @@
         <div class="Row billing-address-fields">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.BillingState, htmlAttributes: new { @class = "control-label required" })
-                @Html.DropDownListFor(p => p.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "" })
+                @Html.DropDownListFor(p => p.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })
                 @Html.ValidationMessageFor(p => p.ProfileInfo.BillingState, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -132,13 +132,13 @@
 
         <div class="Row">
             <div class="form-group">
-                @Html.LabelFor(p => p.RentAmount, htmlAttributes: new { @class = "control-label required" })<span style="color:blue"> &#134; </span>
+                @Html.LabelFor(p => p.RentAmount, htmlAttributes: new { @class = "control-label " })<span style="color:blue"> &#134; </span>
                 @Html.DisplayFor(p => p.RentAmount)
             </div>
         </div>
         <div class="Row">
             <div class="form-group">
-                @Html.LabelFor(p => p.FinalDueDate, htmlAttributes: new { @class = "control-label required" })<span style="color:blue"> &#134; </span>
+                @Html.LabelFor(p => p.FinalDueDate, htmlAttributes: new { @class = "control-label" })<span style="color:blue"> &#134; </span>
                 @Html.DisplayFor(p => p.FinalDueDate)
             </div>
         </div>

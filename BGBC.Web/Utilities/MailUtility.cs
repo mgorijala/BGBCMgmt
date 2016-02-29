@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Web;
 
@@ -9,6 +10,7 @@ namespace BGBC.Web.Utilities
 {
     public class MailUtility
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(MailUtility));
         private const int Timeout = 180000;
         private string _toAddress;
         private string _subject;
@@ -25,6 +27,7 @@ namespace BGBC.Web.Utilities
                     mailMessage.Body = _body;
                     mailMessage.IsBodyHtml = true;
                     var smtp = new SmtpClient();
+                    smtp.Credentials = new NetworkCredential();
                     smtp.EnableSsl = false;
                     smtp.Send(mailMessage);
                     return true;
@@ -32,6 +35,7 @@ namespace BGBC.Web.Utilities
             }
             catch (SmtpFailedRecipientException ex)
             {
+                log.Error(ex.Message);
                 return false;
             }
         }
@@ -48,7 +52,7 @@ namespace BGBC.Web.Utilities
         {
             this._toAddress = ToAddress;
             this._subject = "Forgot password";
-            _body = "<html><head><title></title></head><style>td { font-size: 12px; font-family: Arial;}</style><body><table><tr><td><span>Hi, " + Name + "</span><br/><br/></td></tr><tr><td>You requested a password reset. Please visit this link to enter your new password.</td></tr><tr><td><a href='" + ResetUrl + "'>" 
+            _body = "<html><head><title></title></head><style>td { font-size: 12px; font-family: Arial;}</style><body><table><tr><td><span>Hi " + Name + ",</span><br/><br/></td></tr><tr><td>You requested a password reset. Please visit this link to enter your new password.</td></tr><tr><td></td></tr><tr><td><a href='" + ResetUrl + "'>" 
                 + ResetUrl + "</a><br/><br/><br/></td></tr></br><tr><td>Thank you,</td></tr><tr><td>BGBC Customer Service.</td></tr></table></body></html>";
             this.Send();
         }
@@ -57,7 +61,7 @@ namespace BGBC.Web.Utilities
         {
             this._toAddress = ToAddress;
             this._subject = "Tenant User Created";
-            _body = "<html><head><title></title></head><style>td { font-size: 12px; font-family: Arial;}</style><body><table><tr><td><span>Hi, " + Name + "</span><br/><br/></td></tr><tr><td>New login has been created by your property owner. Please visit this link to enter your new password.</td></tr><tr><td><a href='" + ResetUrl + "'>"
+            _body = "<html><head><title></title></head><style>td { font-size: 12px; font-family: Arial;}</style><body><table><tr><td><span>Hi " + Name + ",</span><br/><br/></td></tr><tr><td>New login has been created by your property owner. Please visit this link to enter your new password.</td></tr><tr><td></td></tr><tr><td><a href='" + ResetUrl + "'>"
                 + ResetUrl + "</a><br/><br/><br/></td></tr></br><tr><td>Thank you,</td></tr><tr><td>BGBC Customer Service.</td></tr></table></body></html>";
             IRepository<Email, int?> mailRepo = new EmailRepository();
             mailRepo.Add(new Email { ToAddress = ToAddress, Subject = _subject, Body = _body });

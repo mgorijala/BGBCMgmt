@@ -211,7 +211,8 @@
             <div class="form-actions no-color">
                 <input type="submit" value="Save Tenant" class="btn-button btn btn-primary" />
                 @Html.ActionLink("Edit", "EditAdmin", "Tenant", new { id = Model.UserID }, new { @class = "btn-button btn-primary" })
-                @Html.ActionLink("Cancel", "", "", new { @class = "btn-button btn-primary", @href = Request.UrlReferrer })  
+                @Html.ActionLink("Cancel", null, null, null, new { @class = "btn-button btn-primary",href = Request.UrlReferrer })
+                <h2></h2>
             </div>
         }
     </div>

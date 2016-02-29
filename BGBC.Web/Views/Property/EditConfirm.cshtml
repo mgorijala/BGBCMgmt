@@ -170,7 +170,7 @@
                 @Html.AntiForgeryToken()
                 <div class="form-actions no-color">
                     <input type="submit" value="Save Property" class="btn-button btn-primary" /> 
-                   @Html.ActionLink("Edit", "Edit", "Property", null, new { @class = "btn-button btn-primary" })
+                   @Html.ActionLink("Edit", "Edit", "Property", new {id = Model.PropertyID }, new { @class = "btn-button btn-primary" })
                 @Html.ActionLink("Cancel", "MyProperties", "Owner", null, new { @class = "btn-button btn-primary" })
                 </div>
             }

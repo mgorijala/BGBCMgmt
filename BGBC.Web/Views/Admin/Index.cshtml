@@ -23,19 +23,19 @@
         <div class="col-md-4 col-sm-4  col-xs-12">
             <select id="dd_adminreports" onchange="adminreportsonchange(this);" class="form-control dashboard-select hidden" style="width:200px">
                 <option value="" selected="selected">Select Report</option>
-                <option value="product_orders_all" data-url="@Url.Action("AllProductsOrders", "Reports")">All Product Orders</option>
+                <option value="product_orders_all" data-url="@Url.Action("AllProductsOrders", "Report")">All Product Orders</option>
                 <option value="product_orders">Orders Per Product</option>
                 <option value="webforms">Webform Submissions</option>
-                <option value="payment_activity_all" data-url="@Url.Action("PaymentHistory", "Reports")">Payment History</option>
-                <option value="all_payouts" data-url="@Url.Action("PayoutPreferences", "Reports")">Payout Preferences</option>
+                <option value="payment_activity_all" data-url="@Url.Action("PaymentHistory", "Report")">Payment History</option>
+                <option value="all_payouts" data-url="@Url.Action("PayoutPreferences", "Report")">Payout Preferences</option>
             </select>
         </div>
         <div class="col-md-4 col-sm-4  col-xs-12">
             <select id="dd_webforms" onchange="webformssonchange(this);" class="form-control dashboard-select hidden" style="width:200px">
                 <option value="" selected="">Select a Form</option>
-                <option value="referral" data-url="@Url.Action("TenantReferal", "Reports")">Tenant Referral Form</option>
-                <option value="contact" data-url="@Url.Action("Contact", "Reports")">Contact Us Form</option>
-                <option value="realtor" data-url="@Url.Action("ContactRealtor", "Reports")">Contact A Realtor Form</option>
+                <option value="referral" data-url="@Url.Action("TenantReferal", "Report")">Tenant Referral Form</option>
+                <option value="contact" data-url="@Url.Action("Contact", "Report")">Contact Us Form</option>
+                <option value="realtor" data-url="@Url.Action("ContactRealtor", "Report")">Contact A Realtor Form</option>
             </select>
             @Html.DropDownList("products", (IEnumerable<SelectListItem>)ViewBag.AllProducts, "Select", new { @class = "form-control hidden", @id = "dd_products", @style = "width:200px", @onchange = "productsonchange(this);" })
         </div>

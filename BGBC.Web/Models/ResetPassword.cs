@@ -17,12 +17,12 @@ namespace BGBC.Web.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "NewPassword")]
+        [Display(Name = "New Password")]
         public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "ConfirmNewPassword")]
+        [Display(Name = "Confirm New Password")]
         [Compare("Password", ErrorMessage = "New Password and Confirm Password must match")]
         public string ConfirmPassword { get; set; }
     }

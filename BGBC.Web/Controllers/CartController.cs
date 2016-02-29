@@ -443,7 +443,7 @@ namespace BGBC.Web.Controllers
                                     authCookie.Value = string.Empty;
                                     Response.SetCookie(authCookie);
                                     TempData.Remove("cartdata");
-                                    return RedirectToAction("OrderHistory", "Reports");
+                                    return RedirectToAction("OrderHistory", "Report");
                                 }
                                 catch (Exception ex) { log.Error(ex.Message); ModelState.AddModelError("", "Transaction Error : " + ex.Message); }
                                 System.Diagnostics.Trace.TraceInformation("Success, Auth Code : " + response.transactionResponse.authCode);

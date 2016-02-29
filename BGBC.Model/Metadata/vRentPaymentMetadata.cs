@@ -12,5 +12,8 @@ namespace BGBC.Model.Metadata
 
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}")]
         public System.DateTime TransDate { get; set; }
+
+        [DataType(DataType.Currency)]
+        public decimal Amount { get; set; }
     }
 }

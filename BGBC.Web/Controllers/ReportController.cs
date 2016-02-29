@@ -8,9 +8,9 @@ using PagedList;
 
 namespace BGBC.Web.Controllers
 {
-    public class ReportsController : Controller
+    public class ReportController : Controller
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ReportsController));
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ReportController));
         private IRepository<ContactForm, int> _contactForm;
         private IRepository<TenantReferral, int?> _tenantReferal;
         private IRepository<Tenant, int> _tenantRepo;
@@ -20,7 +20,7 @@ namespace BGBC.Web.Controllers
         IRepository<Property, int> _propertyRepo;
         IRepository<Order, int> _order;
 
-        public ReportsController()
+        public ReportController()
         {
             _contactForm = new ContactRepository();
             _tenantReferal = new TenantRefRepository();
@@ -56,8 +56,8 @@ namespace BGBC.Web.Controllers
                 var products = (id == null ? BGBCFunctions.ProductOrders() : BGBCFunctions.ProductOrders().Where(x => x.ProductID == id));
 
                 ViewBag.CurrentSort = sortOrder;
-                ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
-                ViewBag.OrderSortParm = sortOrder == "OrderID" ? "OrderID_desc" : "OrderID";
+                ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+                ViewBag.TransIDSortParm = sortOrder == "TransID" ? "TransID_desc" : "TransID";
                 ViewBag.CustomerSortParm = sortOrder == "Customer" ? "Customer_desc" : "Customer";
                 ViewBag.TypeSortParm = sortOrder == "Type" ? "Type_desc" : "Type";
                 ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
@@ -88,10 +88,10 @@ namespace BGBC.Web.Controllers
                     case "date_desc":
                         products = products.OrderByDescending(x => x.TransDate);
                         break;
-                    case "OrderID":
+                    case "TransID":
                         products = products.OrderBy(x => x.TransId);
                         break;
-                    case "OrderID_desc":
+                    case "TransID_desc":
                         products = products.OrderByDescending(x => x.TransId);
                         break;
                     case "Customer":
@@ -126,11 +126,93 @@ namespace BGBC.Web.Controllers
             return View();
 
         }
-        public ActionResult PaymentHistory()
+        public ActionResult PaymentHistory(string sortOrder, string currentFilter, string searchString, int? page, string pageSize)
         {
+            int currentPageSize = int.Parse(pageSize == null ? "10" : pageSize), pageNumber = (page ?? 1);
             try
             {
-                return View(BGBCFunctions.RentPayments());
+                var rentPayments = BGBCFunctions.RentPayments();
+                ViewBag.currentSort = sortOrder;
+                ViewBag.dateSortParam = sortOrder=="date" ? "date_desc" : "date";
+                ViewBag.idSortParam = sortOrder == "id" ? "id_desc" : "id";
+                ViewBag.nameSortParam = sortOrder == "name" ? "name_desc" : "name";
+                ViewBag.ownerSortParam = sortOrder == "owner" ? "owner_desc" : "owner";
+                ViewBag.descSortParam = sortOrder == "desc" ? "desc_desc" : "desc";
+                ViewBag.amountSortParam = sortOrder == "amount" ? "amount_desc" : "amount";
+                ViewBag.commentSortParam = sortOrder == "comment" ? "comment_desc" : "comment";
+
+                if (pageSize != null)
+                    ViewBag.currentPageSize = currentPageSize;
+
+
+                if (searchString != null)
+                {
+                    page = 1;
+                }
+                else
+                {
+                    searchString = currentFilter;
+                }
+
+                ViewBag.currentFilter = searchString;
+                ViewBag.page = pageNumber;
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    var SearchValue = searchString.ToString();
+                    rentPayments = rentPayments.Where(x => x.TenantLastName.Contains(searchString) || x.TenantFirstName.Contains(searchString)
+                        || x.OwnerFirstName.Contains(searchString) || x.OwnerLastName.Contains(searchString)
+                        || x.TransID.Contains(searchString));
+                    //  ||  x.Amount.Equals(searchString)||  x.TransDate.Equals(searchString));
+                    //getting issue DbComparisonExpression requires arguments with comparable types
+                }
+                switch (sortOrder)
+                {
+                    case "date_desc":
+                        rentPayments = rentPayments.OrderByDescending(x => x.TransDate);
+                        break;
+                    case "id":
+                        rentPayments = rentPayments.OrderBy(x => x.ID);
+                        break;
+                    case "id_desc":
+                        rentPayments = rentPayments.OrderByDescending(x => x.ID);
+                        break;
+                    case "name":
+                        rentPayments = rentPayments.OrderBy(x => x.TenantFirstName);
+                        break;
+                    case "name_desc":
+                        rentPayments = rentPayments.OrderByDescending(x => x.TenantFirstName);
+                        break;
+
+                    case "owner":
+                        rentPayments = rentPayments.OrderBy(x => x.OwnerFirstName);
+                        break;
+                    case "owner_desc":
+                        rentPayments = rentPayments.OrderByDescending(x => x.OwnerFirstName);
+                        break;
+                    case "desc":
+                        rentPayments = rentPayments.OrderBy(x => x.Description);
+                        break;
+                    case "desc_desc":
+                        rentPayments = rentPayments.OrderByDescending(x => x.Description);
+                        break;
+                    case "amount":
+                        rentPayments = rentPayments.OrderBy(x => x.Amount);
+                        break;
+                    case "amount_desc":
+                        rentPayments = rentPayments.OrderByDescending(x => x.Amount);
+                        break;
+                    case "comment":
+                        rentPayments = rentPayments.OrderBy(x => x.Comments);
+                        break;
+                    case "comment_desc":
+                        rentPayments = rentPayments.OrderByDescending(x => x.Comments);
+                        break;
+                    default:
+                        rentPayments = rentPayments.OrderBy(x => x.TransDate);
+                        break;
+                }
+
+                return View(rentPayments.ToPagedList(pageNumber, currentPageSize));
             }
             catch (Exception ex)
             {
@@ -166,28 +248,22 @@ namespace BGBC.Web.Controllers
         }
         public ActionResult TenantPaymentHistory(int? id)
         {
-            List<BGBC.Web.Models.TenantViewPayment> payment = new List<BGBC.Web.Models.TenantViewPayment>();
+            IEnumerable<vRentPayment> paymentdetails = new List<vRentPayment>();
             try
             {
-                List<vRentPayment> paymentdetails = BGBCFunctions.RentPayments()
+                paymentdetails = BGBCFunctions.RentPayments()
                     .Where(x => x.TenantUserID == (id == null ? ((BGBC.Core.CustomPrincipal)(User)).UserId : id))
                     .OrderByDescending(d => d.TransDate).ToList();
 
-                List<Tenant> tenants = _tenantRepo.Get().Where(x => x.UserID == (id == null ? ((BGBC.Core.CustomPrincipal)(User)).UserId : id)).ToList();
+                Tenant tenants = _tenantRepo.Get().Where(x => x.UserID == (id == null ? ((BGBC.Core.CustomPrincipal)(User)).UserId : id)).FirstOrDefault();
 
-                foreach (Tenant tenant in tenants)
-                {
-                    BGBC.Web.Models.TenantViewPayment pay = new Models.TenantViewPayment();
-                    pay.PropertyName = tenant.Property.Name;
-                    pay.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == (id == null ? ((BGBC.Core.CustomPrincipal)(User)).UserId : id) && x.PropertyID == tenant.PropertyID).OrderByDescending(d => d.TransDate).ToList();
-                    payment.Add(pay);
-                }
+                ViewBag.Propertyname = (tenants != null ? tenants.Property.Name : "");
             }
             catch (Exception ex)
             {
                 log.Error(ex.Message);
             }
-            return View(payment);
+            return View(paymentdetails);
         }
         public ActionResult AllPropertiesAndTenant()
         {

@@ -19,7 +19,7 @@
         <h1>Edit Property</h1>
 
         <label><span style="color:red">&#42;</span>  indicates a required field</label>
-        <label><span style="color:blue">&dagger;</span>  indicates information that can only be updated by BGBC Management. To request a change, please fill out <a>this form.</a></label>
+        <label><span style="color:blue">&dagger;</span>  indicates information that can only be updated by BGBC Management. To request a change, please fill out <a onclick="location.href='@Url.Action("Contact", "Home", null ,null)'" style=" cursor:pointer">this form.</a></label>
         <br />
 
         <div class="row">
@@ -58,9 +58,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group">
+            <div class="form-group col-md-3 no-padd">
                 @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label required" })
-                    @Html.DropDownListFor(model => model.State, (IEnumerable<SelectListItem>)ViewBag.States, "--Select State--")
+                    @Html.DropDownListFor(model => model.State, (IEnumerable<SelectListItem>)ViewBag.States, "--Select State--", new { @class="form-control"})
             </div>
         </div>
         <div class="row">

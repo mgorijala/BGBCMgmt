@@ -25,14 +25,12 @@ form{margin-bottom: 50px}
 .back{background: #FFF !important;padding: 20px !important; min-height:550px}
 .no-padd{padding: 0px !important}
 .background{  background: url("images/bg-content.jpg") #ececec;}
-@media only screen and (max-width:700px) {
+
+@media only screen and (max-width:780px) {
     footer .footer-menu li {
         display: block !important;
         border-left: none;
     }
-    .padd{padding:10px !important}
-}
-@media only screen and (max-width:780px) {
    .menu li {
           display: block !important;
            border-right: none !important;
@@ -150,3 +148,11 @@ text-align:right !important;
 width:70px !important;
 float:left;
 }
+
+
+
+    
+
+    .icon-img{width:17px !important;}
+    .form-margin form{margin-bottom:20px !important}
+    .btn-icon{width:35px;padding: 6px 6px !important;}

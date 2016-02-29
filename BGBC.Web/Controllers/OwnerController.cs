@@ -163,11 +163,11 @@ namespace BGBC.Web.Controllers
 
                 if (userprofile.ProfileInfo.PaymentMethod == "Mail Check")
                 {
-                    BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.PayoutMailAddress, false, "Mailing Address", "ProfileInfo.PayoutMailAddress");
-                    BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.PayoutMailAddress2, false, "Mailing Address 2", "ProfileInfo.PayoutMailAddress2");
-                    BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.PayoutMailCity, false, "Mailing City", "ProfileInfo.PayoutMailCity");
-                    BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.PayoutMailState, false, "Mailing State", "ProfileInfo.PayoutMailState");
-                    BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.ProfileInfo.PayoutMailZip, false, "Mailing Zip", "ProfileInfo.PayoutMailZip");
+                    BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.PayoutMailAddress, true, "Mailing Address", "ProfileInfo.PayoutMailAddress");
+                    BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.ProfileInfo.PayoutMailAddress2, true, "Mailing Address 2", "ProfileInfo.PayoutMailAddress2");
+                    BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.PayoutMailCity, true, "Mailing City", "ProfileInfo.PayoutMailCity");
+                    BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.PayoutMailState, true, "Mailing State", "ProfileInfo.PayoutMailState");
+                    BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.ProfileInfo.PayoutMailZip, true, "Mailing Zip", "ProfileInfo.PayoutMailZip");
                 }
 
                 if (ModelState.IsValid)
@@ -273,11 +273,11 @@ namespace BGBC.Web.Controllers
             List<SelectListItem> tenants = new List<SelectListItem>();
             foreach (var item in _propertyRepo.Get())
             {
-                property.Add(new SelectListItem() { Text = item.Name, Value = Url.Action("PropertyPaymentsHistory", "Reports", new { id = item.PropertyID }) });
+                property.Add(new SelectListItem() { Text = item.Name, Value = Url.Action("PropertyPaymentsHistory", "Report", new { id = item.PropertyID }) });
             }
             foreach (var item in _tenantRepo.Get())
             {
-                tenants.Add(new SelectListItem() { Text = (item.User).FirstName, Value = Url.Action("TenantPaymentHistory", "Reports", new { id = item.UserID }) });
+                tenants.Add(new SelectListItem() { Text = (item.User).FirstName, Value = Url.Action("TenantPaymentHistory", "Report", new { id = item.UserID }) });
 
             }
             ViewBag.AllProperties = property;

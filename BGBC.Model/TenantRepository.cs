@@ -24,6 +24,7 @@ namespace BGBC.Model
 
         public Tenant Add(Tenant entity)
         {
+            entity.Createdon = DateTime.Now;
             context.Tenants.Add(entity);
             context.SaveChanges();
             return entity;

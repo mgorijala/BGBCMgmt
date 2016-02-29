@@ -6,11 +6,17 @@
 <div class="back">
     <div class="col-md-12 no-padd">
         <div class="col-md-9 col-sm-6 no-padd">
-            <h1>@ViewBag.PropertyName</h1>
+            <h1>@ViewBag.PropertyName Tenants</h1>
         </div>
         <div class="col-md-3 col-sm-6 no-padd header-btn">
             @Html.ActionLink("Back to My Properties", "MyProperties", "Owner", null, new { @class = "btn-button btn-primary pull-right" })
         </div>
+    </div>
+    <div class="col-md-12 no-padd">
+        @if (TempData["SucessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SucessMessage"]</div>
+        }
     </div>
     <div class="clearfix">&nbsp;</div>
    
@@ -22,12 +28,7 @@
     
     <br />
     <div class="clearfix">&nbsp;</div>
-    <div class="col-md-12 no-padd">
-        @if (TempData["SucessMessage"] != null)
-        {
-            <div class="alert alert-success">@TempData["SucessMessage"]</div>
-        }
-    </div>
+   
     
         <div class="clearfix">&nbsp;</div>
             <div class="table-responsive ">

@@ -28,7 +28,8 @@
     <h5>@ViewBag.Zip</h5>
     <br />
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-hover">
+            <thead>
             <tr>
                 <th>
                     Date/Time
@@ -52,7 +53,8 @@
                     Comment
                 </th>
             </tr>
-
+            </thead>
+            <tbody>
             @foreach (var prop in Model)
                 {
                 <tr>
@@ -71,7 +73,7 @@
                 <td>@Html.DisplayFor(p => prop.Comments)</td>
             </tr>
             }
-
+            </tbody>
         </table>
     </div>
 </div>

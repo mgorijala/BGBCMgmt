@@ -18,10 +18,12 @@
         </div>
     </div>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        if (TempData["SucessMessage"] != null)
+    <div class="col-md-12 no-padd">
+        @if (TempData["SucessMessage"] != null)
         {
             <div class="alert alert-success">@TempData["SucessMessage"]</div>
         }
+    </div>
         <fieldset>
             <legend>Basic Information</legend>
             <div class="row">
@@ -155,7 +157,7 @@
                     @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.BillingCty, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     @Html.LabelFor(tuple => tuple.ProfileInfo.BillingState, htmlAttributes: new { @class = "control-label required" })
                     @Html.DropDownListFor(tuple => tuple.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })

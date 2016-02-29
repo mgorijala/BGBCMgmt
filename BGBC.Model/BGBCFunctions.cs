@@ -44,5 +44,10 @@ namespace BGBC.Model
         {
             return from s in context.ProductOrders select s;
         }
+
+        public static void RentCalcSchedule(DateTime ExecDate)
+        {
+            context.SP_RentCalcSchedule(ExecDate);
+        }
     }
 }

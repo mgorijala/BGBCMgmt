@@ -114,7 +114,7 @@
                             @Html.ValidationMessageFor(model => model.BillingCty, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
                             @Html.LabelFor(model => model.BillingState, htmlAttributes: new { @class = "control-label required" })
                             @Html.DropDownListFor(model => model.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })
@@ -181,10 +181,10 @@
                             @Html.ValidationMessageFor(model => model.ServiceCty, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
                             @Html.LabelFor(model => model.ServiceState, htmlAttributes: new { @class = "control-label required" })
-                            @Html.DropDownListFor(model => model.ServiceState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.DropDownListFor(model => model.ServiceState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" } )
                             @Html.ValidationMessageFor(model => model.ServiceState, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -234,12 +234,13 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
-                            <div class="date-drop no-padd">
-                                @Html.DropDownListFor(model => model.CardExpMon, (IEnumerable<SelectListItem>)ViewBag.Months, new { htmlAttributes = new { @class = "form-control" } })
+                            <div class="col-md-4 col-xs-4 col-sm-3 no-padd">
+                                @Html.DropDownListFor(model => model.CardExpMon, (IEnumerable<SelectListItem>)ViewBag.Months, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.CardExpMon, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-6 no-padd">
-                                @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years, new { htmlAttributes = new { @class = "form-control" } })
+
+                            <div class="col-md-6 col-xs-6 col-sm-4 col">
+                                @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years,  new { @class = "form-control " } )
                                 @Html.ValidationMessageFor(model => model.CardExpYear, "", new { @class = "text-danger" })
                             </div>
                             <div class="clearfix"></div>
@@ -257,12 +258,13 @@
                     </div>
                 </div>
                 <div class="row eCheck">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         @Html.LabelFor(model => model.BankAccountType, htmlAttributes: new { @class = "control-label required" })
-                        @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label" }, { "onchange", "petDepositDueClick.call(this)" } })
+                        @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label form-control" } })
                         @Html.ValidationMessageFor(model => model.BankAccountType, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                <br/>
                 <div class="row eCheck">
                     <div class="col-lg-6">
                         @Html.LabelFor(model => model.BankRoutingNumber, htmlAttributes: new { @class = "control-label required" })
@@ -270,14 +272,15 @@
                         @Html.ValidationMessageFor(model => model.BankRoutingNumber, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                <br/>
                 <div class="row eCheck">
                     <div class="col-lg-6">
-                        @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label" })
+                        @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label required" })
                         @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
+                <br/>
                 <div class="row savecard">
                     <div class="col-md-1  col-xs-2 col-sm-2" style="width:10px;">
                         <div class="form-group">
@@ -388,7 +391,7 @@
 
     <script type="text/javascript">
         $(function () {
-            if ($(ServiceBillingAddressSame).is(':checked')) {
+            if ($('#ServiceBillingAddressSame').is(':checked')) {
                 $('.service-address-fields').hide();
             }
             else {
@@ -403,10 +406,9 @@
                 }
             });
         });
-    </script>
-    <script type="text/javascript">
+     
         $(function () {
-            if ($(CreditCards).is(':checked')) {
+            if ($("#CreditCards").is(':checked')) {
                 $('.Creditcard').show();
                 $('.savecard').show();
                 $('.eCheck').hide();
@@ -416,7 +418,7 @@
                 $('.savecard').show();
                 $('.eCheck').show();
             }
-            if ($(eChecks).is(':checked')) {
+            if ($("#eChecks").is(':checked')) {
                 $('.Creditcard').hide();
                 $('.eCheck').show();
                 $('.savecard').show();
@@ -428,7 +430,7 @@
             }
 
             $('#CreditCards').change(function () {
-                if ($(CreditCards).is(':checked')) {
+                if ($("#CreditCards").is(':checked')) {
                     $('.Creditcard').show();
                     $('.savecard').show();
                     $('.eCheck').hide();
@@ -440,7 +442,7 @@
                 }
             });
             $('#eChecks').change(function () {
-                if ($(eChecks).is(':checked')) {
+                if ($("#eChecks").is(':checked')) {
                     $('.Creditcard').hide();
                     $('.eCheck').show();
                     $('.savecard').show();

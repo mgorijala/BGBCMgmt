@@ -55,7 +55,7 @@
                             @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
                             @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label required" })
                             @Html.DropDownListFor(model => model.State, (IEnumerable<SelectListItem>)ViewBag.States, "--Select State--", new { @class = "form-control" })
@@ -80,14 +80,18 @@
                         <div class="form-group">
                             <label for="">Rent Due Monthly On...</label>
                             <p style="font-size:small">Please Select which day of the month the rent is due </p>
+                            <div class="col-md-2 no-padd">
                             @Html.DropDownListFor(model => model.RentDueDay, (IEnumerable<SelectListItem>)ViewBag.MonthDays, new { @class = "form-control col-md-6" })
                         </div>
+                    </div>
                     </div>
                     <div class="col-md-6">
                         <div class="editor-label">
                             <label for="">Grace Period</label>
                             <p style="font-size:small">Number of days before late fees are assessed  </p>
+                            <div class="col-md-2 no-padd">
                             @Html.DropDownListFor(model => model.GracePeriod, (IEnumerable<SelectListItem>)ViewBag.MonthDays, new { @class = "form-control col-md-6" })
+                            </div>
                         </div>
                     </div>
                 </div>

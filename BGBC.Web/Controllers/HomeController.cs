@@ -71,7 +71,7 @@ namespace BGBC.Web.Controllers
                     _repository.Add(contactform);
 
                     MailSending mailsend = new MailSending();
-                    mailsend.ContactUs("webmail@appstekcorp.com", contactform.Name, contactform.EMail, contactform.MessageText, contactform.Phone);
+                    //mailsend.ContactUs("webmail@appstekcorp.com", contactform.Name, contactform.EMail, contactform.MessageText, contactform.Phone);
 
                     TempData["SucessMessage"] = "Message Successfully Send.";
                     return RedirectToAction("Contact", "Home");
@@ -115,6 +115,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.Message);
             }
             return View();
         }
@@ -133,7 +134,7 @@ namespace BGBC.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                log.Error(ex.Message);
             }
             return View(reset);
         }
@@ -144,10 +145,10 @@ namespace BGBC.Web.Controllers
         {
             try
             {
-                PasswordReset pwd = passwordresetRepo.Get().Where(x => x.Token == resetpassword.TokenID && x.EmailID == resetpassword.Email).FirstOrDefault();
+                PasswordReset pwd = passwordresetRepo.Get().Where(x => x.Token == resetpassword.TokenID).FirstOrDefault();
                 if (pwd != null)
                 {
-                    User user = _userRepository.Find(resetpassword.Email);
+                    User user = _userRepository.Find(pwd.EmailID);
                     user.Password = BGBC.Core.Security.Cryptography.Encrypt(resetpassword.Password);
                     _userRepository.Update(user);
                     TempData["SucessMessage"] = "Your Password Successfully Changed.";
@@ -156,7 +157,7 @@ namespace BGBC.Web.Controllers
                 }
                 else
                 {
-                    TempData["SucessMessage"] = "Unable to change password,please contact your system administrator.";
+                    TempData["SucessMessage"] = "Link has been expired. Please log new Forgot Password Request.";
                 }
             }
             catch (Exception ex)
@@ -192,7 +193,7 @@ namespace BGBC.Web.Controllers
                     _repository.Add(contactform);
 
                     MailSending mailsend = new MailSending();
-                    mailsend.ContactRealtor("webmail@appstekcorp.com", contactform.Name, contactform.EMail, contactform.MessageText, contactform.Phone);
+                    //mailsend.ContactRealtor("webmail@appstekcorp.com", contactform.Name, contactform.EMail, contactform.MessageText, contactform.Phone);
 
                     TempData["SucessMessage"] = "Successfully Submit.";
                     return RedirectToAction("ListHome", "Home");
@@ -343,7 +344,7 @@ namespace BGBC.Web.Controllers
                         _userRepository.Add(user);
 
                         MailSending mailsend = new MailSending();
-                        mailsend.UserRegister(register.Email, register.FirstName, register.Email, register.Password);
+                        //mailsend.UserRegister(register.Email, register.FirstName, register.Email, register.Password);
 
                         CustomPrincipalSerializeModel serializeModel = new CustomPrincipalSerializeModel();
                         serializeModel.UserId = user.UserID;
@@ -400,7 +401,7 @@ namespace BGBC.Web.Controllers
                 {
                     _tenantRefRepo.Add(tenantReferral);
                     MailSending mailsend = new MailSending();
-                    mailsend.PropertyManagement(tenantReferral.Email);
+                    //mailsend.PropertyManagement(tenantReferral.Email);
                     TempData["SucessMessage"] = "Tenant referred successfully";
                     return View();
                 }

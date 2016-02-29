@@ -4,16 +4,16 @@
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<div class="back">
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="back">
+
         <h1>Login</h1>
         <div class="form-group">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         </div>
-        @if (TempData["SucessMessage"] != null)
+        if (TempData["SucessMessage"] != null)
         {
             <div class="alert alert-success">@TempData["SucessMessage"]</div>
         }
@@ -30,8 +30,8 @@
         <br>
         <input type="submit" value="Log In">
         @Html.ActionLink("Forgot your password?", "ForgotPassword", "Home")
+    }
     </div>
-}
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

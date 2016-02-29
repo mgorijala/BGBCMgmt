@@ -10,6 +10,7 @@ using System.Net;
 using BGBC.Model.Metadata;
 using System.Text.RegularExpressions;
 using BGBC.Core.Security;
+using System.Web.Routing;
 
 namespace BGBC.Web.Controllers
 {
@@ -634,9 +635,7 @@ namespace BGBC.Web.Controllers
                 user.UserReferences.Add(new UserReference());
                 user.UserReferences.Add(new UserReference());
                 user = _userRepository.Add(user);
-
-                TempData["SucessMessage"] = "Tenant Added  successfully.";
-
+                TempData["SucessMessage"] = "Tenant " + tenantInfo.FirstName + " " + tenantInfo.LastName + " Added  successfully.";
                 var token = BGBC.Core.Security.Cryptography.RandomString(32);
                 PasswordReset passwordreset = new PasswordReset();
                 passwordreset.EmailID = user.Email;
@@ -716,6 +715,14 @@ namespace BGBC.Web.Controllers
                         from error in state.Errors
                         select error.ErrorMessage;
 
+            if (!tenantInfo.ProfileInfo.BillingAddressSame)
+            {
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress, true, "Billing Address", "ProfileInfo.BillingAddress");
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress_2, false, "Billing Address 2", "ProfileInfo.BillingAddress_2");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, tenantInfo.ProfileInfo.BillingCty, true, "Billing City", "ProfileInfo.BillingCty");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, tenantInfo.ProfileInfo.BillingState, true, "Billing State", "ProfileInfo.BillingState");
+                BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, tenantInfo.ProfileInfo.BillingZip, true, "Billing Zip", "ProfileInfo.BillingZip");
+            }
             PopulateDropDown();
             ModelState["Zip"].Errors.Clear();
             ModelState["PropertyID"].Errors.Clear();
@@ -837,6 +844,10 @@ namespace BGBC.Web.Controllers
                 tenantInfo.Zip = _property.Zip;
                 ViewBag.UserID = _property.UserID;
                 ViewBag.PropertyID = _property.PropertyID;
+
+                // Get the action name of Url
+                ViewBag.Url = Request.UrlReferrer.Segments[2].ToString().Trim('/');
+
                 return View(tenantInfo);
             }
             else
@@ -1068,55 +1079,59 @@ namespace BGBC.Web.Controllers
                 BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.Ref2.Zip, true, "Zip", "Ref2.Zip");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.Relationship, true, "Relationship", "Ref2.Relationship");
 
-                if (userprofile.PaymentMethod == "eCheck")
+                if (userprofile.ChargeAccount)
                 {
-                    if (!string.IsNullOrEmpty(userprofile.BankRoutingNumber))
+                    if (userprofile.PaymentMethod == "eCheck")
                     {
-                        if (userprofile.BankRoutingNumber.Trim().Length != 9)
-                            ModelState.AddModelError("BankRoutingNumber", "Please enter a valid routing number");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("BankRoutingNumber", "Please enter a valid routing number");
-                    }
-                    if (!string.IsNullOrEmpty(userprofile.BankAccountNumber))
-                    {
-                        if (userprofile.BankAccountNumber.Trim().Length != 7)
-                            ModelState.AddModelError("BankAccountNumber", "Please enter a valid account number");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("BankAccountNumber", "Please enter a valid account number");
-                    }
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(userprofile.CardNo)) ModelState.AddModelError("CardNo", "The Card No field is required.");
-                    if (string.IsNullOrEmpty(userprofile.CVV)) ModelState.AddModelError("CVV", "The Card CVV field is required.");
-                    if (!string.IsNullOrEmpty(userprofile.CardNo))
-                    {
-                        if (userprofile.CardNo.Trim().Length > 0)
+                        if (string.IsNullOrEmpty(userprofile.BankAccountType)) ModelState.AddModelError("BankAccountType", "Please select Bank Account Type");
+                        if (!string.IsNullOrEmpty(userprofile.BankRoutingNumber))
                         {
-                            if (CreditCardUtility.IsValidNumber(userprofile.CardNo))
+                            if (userprofile.BankRoutingNumber.Trim().Length != 9)
+                                ModelState.AddModelError("BankRoutingNumber", "Please enter a valid routing number");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("BankRoutingNumber", "Please enter a valid routing number");
+                        }
+                        if (!string.IsNullOrEmpty(userprofile.BankAccountNumber))
+                        {
+                            if (userprofile.BankAccountNumber.Trim().Length != 7)
+                                ModelState.AddModelError("BankAccountNumber", "Please enter a valid account number");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("BankAccountNumber", "Please enter a valid account number");
+                        }
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(userprofile.CardNo)) ModelState.AddModelError("CardNo", "The Card No field is required.");
+                        if (string.IsNullOrEmpty(userprofile.CVV)) ModelState.AddModelError("CVV", "The Card CVV field is required.");
+                        if (!string.IsNullOrEmpty(userprofile.CardNo))
+                        {
+                            if (userprofile.CardNo.Trim().Length > 0)
                             {
-                                if (!string.IsNullOrEmpty(userprofile.CVV))
+                                if (CreditCardUtility.IsValidNumber(userprofile.CardNo))
                                 {
-                                    CreditCardTypeType? cardType = CreditCardUtility.GetCardTypeFromNumber(userprofile.CardNo);
-                                    if (cardType == null)
+                                    if (!string.IsNullOrEmpty(userprofile.CVV))
                                     {
-                                        ModelState.AddModelError("CardNo", "Please enter a valid card number");
-                                    }
-                                    else
-                                    {
-                                        userprofile.CardType = (CreditCardTypeType)cardType;
-                                        if (cardType == CreditCardTypeType.Amex && userprofile.CVV.Trim().Length != 4) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
-                                        else if (cardType != CreditCardTypeType.Amex && userprofile.CVV.Trim().Length != 3) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                        CreditCardTypeType? cardType = CreditCardUtility.GetCardTypeFromNumber(userprofile.CardNo);
+                                        if (cardType == null)
+                                        {
+                                            ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                                        }
+                                        else
+                                        {
+                                            userprofile.CardType = (CreditCardTypeType)cardType;
+                                            if (cardType == CreditCardTypeType.Amex && userprofile.CVV.Trim().Length != 4) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                            else if (cardType != CreditCardTypeType.Amex && userprofile.CVV.Trim().Length != 3) ModelState.AddModelError("CVV", "Please enter a valid CVV number");
+                                        }
                                     }
                                 }
-                            }
-                            else
-                            {
-                                ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                                else
+                                {
+                                    ModelState.AddModelError("CardNo", "Please enter a valid card number");
+                                }
                             }
                         }
                     }
@@ -1214,6 +1229,7 @@ namespace BGBC.Web.Controllers
             {
                 Property property = _propertyRepo.Get(id);
                 ViewBag.UserId = property.UserID;
+                ViewBag.PropertyID = property.PropertyID;
                 BGBC.Web.Models.AllPropertiesAndTenant pp = new Models.AllPropertiesAndTenant();
                 pp.Pname = property.Name;
                 pp.Address = property.Address;
@@ -1225,7 +1241,7 @@ namespace BGBC.Web.Controllers
                 {
                     BGBC.Web.Models.TenantRentPay ttttttttt = new BGBC.Web.Models.TenantRentPay();
                     ttttttttt.tname = t.User.FirstName;
-                    ttttttttt.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).ToList();
+                    ttttttttt.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).Take(5).ToList();
                     pp.tenantRentPay.Add(ttttttttt);
                 }
                 allPropertiesAndTenant.Add(pp);
@@ -1270,6 +1286,7 @@ namespace BGBC.Web.Controllers
         public ActionResult ViewPayments(int Id)
         {
             User tuser = _userRepository.Get(Id);
+            ViewBag.Name = tuser.FirstName + " " + tuser.LastName;
             List<BGBC.Web.Models.AllPropertiesAndTenant> allPropertiesAndTenant = new List<Models.AllPropertiesAndTenant>();
             List<Property> property = _propertyRepo.GetRef(Id);
             foreach (var p in property)
@@ -1280,8 +1297,9 @@ namespace BGBC.Web.Controllers
                 foreach (var t in p.Tenants)
                 {
                     BGBC.Web.Models.TenantRentPay ttttttttt = new BGBC.Web.Models.TenantRentPay();
-                    ttttttttt.tname = t.User.FirstName;
-                    ttttttttt.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).ToList();
+                    ttttttttt.tuserid = t.UserID;
+                    ttttttttt.tname = t.User.FirstName + " " + t.User.LastName;
+                    ttttttttt.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).Take(5).OrderByDescending(o => o.TransDate).ToList();
                     pp.tenantRentPay.Add(ttttttttt);
                 }
                 allPropertiesAndTenant.Add(pp);

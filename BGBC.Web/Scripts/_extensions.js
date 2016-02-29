@@ -23,9 +23,3 @@
 })(jQuery);
 
 $(".phoneno-mask").mask("(999) 999-9999");
-
-$(document).ready(function () {
-    function preventBack() { window.history.forward(); }
-    setTimeout("preventBack()", 0);
-    window.onunload = function () { null };
-});

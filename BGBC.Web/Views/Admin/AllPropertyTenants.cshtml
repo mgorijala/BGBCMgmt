@@ -8,7 +8,7 @@
 <div class="back">
     <div class=" col-md-12 no-padd">
         <div class="col-md-6 no-padd">
-            <h1>Owner Name</h1>
+            <h1>@ViewBag.Name Tenants</h1>
         </div>
 
         <div class="col-md-6 no-padd header-btn">
@@ -22,10 +22,11 @@
                 <h2>@prop.Name</h2>
             </div>
 
-            var tenants = prop.Tenants.ToList();
+            var tenants = prop.Tenants.Where(x => x.Deletedon == null).ToList();
             <div class="clearfix"></div>
             <div class="table-responsive">
                 <table class="table table-hover">
+                    <thead>
                     <tr>
                         <th>
                             Name
@@ -36,11 +37,15 @@
                         </th>
                         <th>Options</th>
                     </tr>
-                    @for (int i = 0; i < prop.Tenants.Count; i++)
+                    </thead>
+                    <tbody>
+                    @for (int i = 0; i < tenants.Count; i++)
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(p => tenants[i].User.FirstName)
+                                    <a onclick="location.href='@Url.Action("ViewTenantsPayment", "Admin", new { id = tenants[i].User.UserID })'" style=" cursor:pointer">
+                                        @Html.DisplayFor(p => tenants[i].User.FirstName) @Html.DisplayFor(p => tenants[i].User.LastName)
+                                        </a>
                             </td>
                             <td>
                                 @Html.DisplayFor(p => tenants[i].User.Email)
@@ -53,10 +58,8 @@
                             </td>
                         </tr>
                     }
+                    </tbody>
                 </table>
             </div>
-
-
         }
-  
 </div>

@@ -133,6 +133,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Utilities\JobScheduler.cs" />
     <Compile Include="Utilities\MailUtility.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -146,7 +147,6 @@
     <Compile Include="Controllers\OwnerController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\PropertyController.cs" />
-    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\TenantController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -167,30 +167,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Antlr3.Runtime.dll" />
-    <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\BGBC.Web.dll" />
     <Content Include="bin\BGBC.Web.pdb" />
     <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
     <Content Include="bin\Newtonsoft.Json.dll" />
-    <Content Include="bin\Newtonsoft.Json.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="bin\System.Web.Helpers.dll" />
-    <Content Include="bin\System.Web.Helpers.xml" />
     <Content Include="bin\System.Web.Mvc.dll" />
-    <Content Include="bin\System.Web.Mvc.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="bin\System.Web.Optimization.dll" />
-    <Content Include="bin\System.Web.Optimization.xml" />
     <Content Include="bin\System.Web.Razor.dll" />
-    <Content Include="bin\System.Web.Razor.xml" />
     <Content Include="bin\System.Web.WebPages.Deployment.dll" />
-    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
     <Content Include="bin\System.Web.WebPages.dll" />
     <Content Include="bin\System.Web.WebPages.Razor.dll" />
-    <Content Include="bin\System.Web.WebPages.Razor.xml" />
-    <Content Include="bin\System.Web.WebPages.xml" />
     <Content Include="bin\WebGrease.dll" />
     <Content Include="bin\BGBC.Core.dll" />
     <Content Include="bin\System.Web.Helpers.dll" />
@@ -266,11 +253,13 @@
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <None Include="bin\BGBC.Web.dll.config" />
+    <Content Include="Logs\Log.txt" />
     <Content Include="obj\Debug\BGBC.Web.csprojResolveAssemblyReference.cache" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\BGBC.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="obj\Debug\BGBC.Web.csproj.FileListAbsolute.txt" />
     <Content Include="Scripts\bootstrap.js" />
@@ -307,30 +296,13 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Unused\AddProduct.cshtml" />
-    <Content Include="Views\Unused\AddPropertyOwner.cshtml" />
-    <Content Include="Views\Unused\AddTenant.cshtml" />
-    <Content Include="Views\Unused\AdminDashboard.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Unused\EditProduct.cshtml" />
-    <Content Include="Views\Unused\EditProfileOwner.cshtml" />
-    <Content Include="Views\Unused\EditProperty.cshtml" />
-    <Content Include="Views\Unused\EditPropertyOwner.cshtml" />
-    <Content Include="Views\Unused\EditTenant.cshtml" />
-    <Content Include="Views\Unused\EditTenant1.cshtml" />
-    <Content Include="Views\Unused\EditTenantOwner.cshtml" />
     <Content Include="Views\Home\ForgotPassword.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Unused\MyPropertiesOwner.cshtml" />
     <Content Include="Views\Home\PaymentProcess.cshtml" />
-    <Content Include="Views\Unused\ProductServices.cshtml" />
-    <Content Include="Views\Unused\Propertytenant.cshtml" />
-    <Content Include="Views\Unused\Register.cshtml" />
     <Content Include="Views\Home\RentalManagement.cshtml" />
     <Content Include="Views\Home\Tenants.cshtml" />
-    <Content Include="Views\Unused\ViewProperty.cshtml" />
-    <Content Include="Views\Unused\ViewTenant.cshtml" />
     <Content Include="Views\Owner\Index.cshtml" />
     <Content Include="Views\Products\Add.cshtml" />
     <Content Include="Views\Products\Edit.cshtml" />
@@ -349,8 +321,6 @@
     <Content Include="Views\Property\Edit.cshtml" />
     <Content Include="Views\Property\Add.cshtml" />
     <Content Include="Views\Property\AdminEdit.cshtml" />
-    <Content Include="Views\Unused\AdminProperty.cshtml" />
-    <Content Include="Views\Unused\AdminViewProperties.cshtml" />
     <Content Include="Views\Property\PropertyAdmin.cshtml" />
     <Content Include="Views\Owner\PropertyTenants.cshtml" />
     <Content Include="Views\Property\Delete.cshtml" />
@@ -367,19 +337,19 @@
     <Content Include="Views\Home\TenantReferral.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Admin\AllPropertyTenants.cshtml" />
-    <Content Include="Views\Reports\Contact.cshtml" />
+    <Content Include="Views\Report\Contact.cshtml" />
     <Content Include="Views\Products\Confirm.cshtml" />
     <Content Include="Views\Cart\Checkout.cshtml" />
     <Content Include="Views\Cart\Checkoutconfirm.cshtml" />
-    <Content Include="Views\Reports\AllProductsOrders.cshtml" />
-    <Content Include="Views\Reports\AllPropertiesAndTenant.cshtml" />
-    <Content Include="Views\Reports\ContactRealtor.cshtml" />
-    <Content Include="Views\Reports\PaymentHistory.cshtml" />
-    <Content Include="Views\Reports\PayoutPreferences.cshtml" />
-    <Content Include="Views\Reports\PropertyPaymentsHistory.cshtml" />
-    <Content Include="Views\Reports\TenantPaymentHistory.cshtml" />
-    <Content Include="Views\Reports\TenantPayments.cshtml" />
-    <Content Include="Views\Reports\TenantReferal.cshtml" />
+    <Content Include="Views\Report\AllProductsOrders.cshtml" />
+    <Content Include="Views\Report\AllPropertiesAndTenant.cshtml" />
+    <Content Include="Views\Report\ContactRealtor.cshtml" />
+    <Content Include="Views\Report\PaymentHistory.cshtml" />
+    <Content Include="Views\Report\PayoutPreferences.cshtml" />
+    <Content Include="Views\Report\PropertyPaymentsHistory.cshtml" />
+    <Content Include="Views\Report\TenantPaymentHistory.cshtml" />
+    <Content Include="Views\Report\TenantPayments.cshtml" />
+    <Content Include="Views\Report\TenantReferal.cshtml" />
     <Content Include="Views\Tenant\Delete.cshtml" />
     <Content Include="Views\Tenant\MyAccount.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
@@ -392,25 +362,24 @@
     <Content Include="Views\Tenant\ViewAllTenantPayments.cshtml" />
     <Content Include="Views\Tenant\ViewTenantsPayments.cshtml" />
     <Content Include="Views\Tenant\TenantPaymentconfirm.cshtml" />
-    <Content Include="Views\Reports\OrderHistory.cshtml" />
+    <Content Include="Views\Report\OrderHistory.cshtml" />
     <Content Include="Views\Tenant\ViewPayments.cshtml" />
     <Content Include="Views\Property\Confirm.cshtml" />
     <Content Include="Views\Tenant\Confirm.cshtml" />
     <Content Include="Views\Tenant\ConfirmEdit.cshtml" />
     <Content Include="Views\Tenant\ConfirmEditAdmin.cshtml" />
-    <Content Include="Views\Reports\OrderHistory.cshtml" />
+    <Content Include="Views\Report\OrderHistory.cshtml" />
     <Content Include="Views\Property\AdminConfirm.cshtml" />
     <Content Include="Views\Property\Confirm.cshtml" />
     <Content Include="Views\Property\EditConfirm.cshtml" />
     <Content Include="Views\Products\ConfirmEdit.cshtml" />
     <Content Include="Views\Tenant\ViewPayments.cshtml" />
     <Content Include="Views\Home\AccessDenied.cshtml" />
-    <Content Include="Views\Reports\ProductInvoice.cshtml" />
+    <Content Include="Views\Report\ProductInvoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Logs\" />
     <Folder Include="obj\Debug\TempPE\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>

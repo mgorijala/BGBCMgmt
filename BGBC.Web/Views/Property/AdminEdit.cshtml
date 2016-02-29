@@ -51,7 +51,7 @@
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-3">
             <div class="form-group">
                 @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label required" })
                 @Html.DropDownListFor(model => model.State, (IEnumerable<SelectListItem>)ViewBag.States, "--Select State--", new { @class = "form-control" })
@@ -65,15 +65,24 @@
             </div>
         </div>
         <div class="col-md-12">
+            <label>Please note that some of these fields will require you to contact BGBC Admin directly. These include, but are not limited to: rent amount, etc.</label><br />
+            </div>
+            <div class="col-md-12">
             <div class="form-group">
                 <label for="">Rent Due Monthly On(Please Select which day of the month the rent is due)</label>
+                <div class="col-sm-1 no-padd">
                 @Html.DropDownListFor(model => model.RentDueDay, (IEnumerable<SelectListItem>)ViewBag.MonthDays, "Select", new { @class = "form-control" })
+                    <br />
+                </div>
             </div>
         </div>
         <div class="col-md-12">
             <div class="form-group">
                 <label for="">Grace Period(Number of days before late fees are assessed )</label>
+                <div class="col-sm-1 no-padd">
                 @Html.DropDownListFor(model => model.GracePeriod, (IEnumerable<SelectListItem>)ViewBag.MonthDays, "Select", new { @class = "form-control" })
+                    <br />
+                </div>
             </div>
         </div>
         <div class="col-md-12">

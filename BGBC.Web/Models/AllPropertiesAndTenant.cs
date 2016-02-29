@@ -18,6 +18,7 @@ namespace BGBC.Web.Models
 
     public class TenantRentPay
     {
+        public int? tuserid { get; set; }
         public string tname { get; set; }
         public List<BGBC.Model.vRentPayment> RentPayment { get; set; }
     }
