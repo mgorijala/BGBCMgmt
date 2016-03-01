@@ -107,7 +107,7 @@ namespace BGBC.Model
 
         public User Find(string email)
         {
-            User user = context.Users.Where(u => u.Email == email).FirstOrDefault();
+            User user = context.Users.Where(u => u.Email == email && u.Deletedon == null).FirstOrDefault();
             return user;
         }
     }

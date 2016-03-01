@@ -2,6 +2,7 @@
 using BGBC.Model;
 using BGBC.Web.Models;
 using Newtonsoft.Json;
+using reCAPTCHA.MVC;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -55,7 +56,10 @@ namespace BGBC.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Contact(BGBC.Web.Models.Contact contact)
+        [CaptchaValidator(PrivateKey = "6LccqxkTAAAAAAKyvQ8oYrdCsZVmoR10Rul5zJQC",
+            ErrorMessage = "Invalid input captcha.",
+            RequiredMessage = "The captcha field is required.")]
+        public ActionResult Contact(BGBC.Web.Models.Contact contact, bool captchaValid)
         {
             try
             {
@@ -108,10 +112,10 @@ namespace BGBC.Web.Controllers
                     passwordresetRepo.Add(passwordreset);
                     BGBC.Web.Utilities.MailUtility obj = new Utilities.MailUtility();
                     obj.ForgetPassword(selUser.Email, selUser.FirstName + " " + selUser.LastName, "http://" + HttpContext.Request.Url.Authority + "/Home/ResetPassword/" + token);
-                    TempData["SucessMessage"] = "Message Successfully Send.";
+                    TempData["SucessMessage"] = "Password reminder sent!";
                 }
                 else
-                    TempData["SucessMessage"] = "Mail id not exists.";
+                    TempData["SucessMessage"] = "User not found with email address.";
             }
             catch (Exception ex)
             {
@@ -149,11 +153,18 @@ namespace BGBC.Web.Controllers
                 if (pwd != null)
                 {
                     User user = _userRepository.Find(pwd.EmailID);
-                    user.Password = BGBC.Core.Security.Cryptography.Encrypt(resetpassword.Password);
-                    _userRepository.Update(user);
-                    TempData["SucessMessage"] = "Your Password Successfully Changed.";
-                    passwordresetRepo.Remove(pwd);
-                    return RedirectToAction("Login", "Home");
+                    if (user != null)
+                    {
+                        user.Password = BGBC.Core.Security.Cryptography.Encrypt(resetpassword.Password);
+                        _userRepository.Update(user);
+                        TempData["SucessMessage"] = "Your Password Successfully Changed.";
+                        passwordresetRepo.Remove(pwd);
+                        return RedirectToAction("Login", "Home");
+                    }
+                    else
+                    {
+                        TempData["SucessMessage"] = "User not found with email address.";
+                    }
                 }
                 else
                 {
@@ -392,7 +403,10 @@ namespace BGBC.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult TenantReferral(TenantReferral tenantReferral)
+        [CaptchaValidator(PrivateKey = "6LccqxkTAAAAAAKyvQ8oYrdCsZVmoR10Rul5zJQC",
+            ErrorMessage = "Invalid input captcha.",
+            RequiredMessage = "The captcha field is required.")]
+        public ActionResult TenantReferral(TenantReferral tenantReferral, bool captchaValid)
         {
 
             try
@@ -400,9 +414,9 @@ namespace BGBC.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     _tenantRefRepo.Add(tenantReferral);
-                    MailSending mailsend = new MailSending();
-                    //mailsend.PropertyManagement(tenantReferral.Email);
-                    TempData["SucessMessage"] = "Tenant referred successfully";
+                    BGBC.Web.Utilities.MailUtility mailsend = new BGBC.Web.Utilities.MailUtility();
+                    mailsend.TenantReferral(tenantReferral);
+                    TempData["SucessMessage"] = "Mail sent successfully!";
                     return View();
                 }
             }

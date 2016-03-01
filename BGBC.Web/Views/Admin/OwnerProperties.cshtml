@@ -7,7 +7,7 @@
 
 
 <div class="back">
-    <div class="col-md-12 no-padd">
+    <div class="row no-padd">
         <div class="col-md-6 no-padd">
             <h1>@ViewBag.Name Properties</h1>
         </div>
@@ -16,8 +16,8 @@
                     @*@Html.ActionLink("Back to All Property Owners",null, new { @class = "btn-button btn-primary pull-right", @href = Request.UrlReferrer })*@
         </div>
     </div>
-        
-            <div class="col-md-12">
+    <div class="clearfix"></div>
+            <div class="row">
                 @if (TempData["SucessMessage"] != null)
                 {
                     <div class="alert alert-success">@TempData["SucessMessage"]</div>
@@ -36,13 +36,13 @@
                        Address
                     </td>
                     <td>
-                        Email
+                        Tenants
                     </td>
                     <td>
-                       Amount
+                      Rent
                     </td>
                     <td>
-                       
+                       Options
                     </td>
 
                 </tr>
@@ -58,7 +58,13 @@
                                     @Html.DisplayFor(modelItem => item.Address)<br />@Html.DisplayFor(modelItem => item.Address2)<br />@Html.DisplayFor(modelItem => item.City) @Html.DisplayFor(modelItem => item.State) @Html.DisplayFor(modelItem => item.Zip)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.User.Email)
+                                    @foreach (var tenant in item.Tenants.Where(x=>x.Deletedon == null))
+                                    {
+                                    <a onclick="location.href='@Url.Action("ViewTenantsPayment", "Admin", new { id = tenant.User.UserID })'" style=" cursor:pointer">
+                                        @Html.DisplayFor(modelItem => tenant.User.FirstName) @Html.DisplayFor(modelItem => tenant.User.LastName)
+                                    </a>
+                                    <br />
+                                    }
                                 </td>
                                 <td>
                                     @if (item.Tenants.Count > 0)

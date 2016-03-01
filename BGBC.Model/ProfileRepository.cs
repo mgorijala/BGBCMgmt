@@ -12,7 +12,7 @@ namespace BGBC.Model
         BGBCEntities context = new BGBCEntities();
         public IQueryable<Profile> Get()
         {
-            throw new NotImplementedException();
+            return context.Profiles;
         }
 
         public Profile Get(int id)

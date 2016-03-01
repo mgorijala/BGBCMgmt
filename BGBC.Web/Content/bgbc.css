@@ -40,8 +40,7 @@ form{margin-bottom: 50px}
    .menu ul{    
        position: inherit !important;
     display: none;
-    margin-left: -1px;
-    left: -1px;
+   
     padding-bottom: 10px;
     width: 100%;
     border-radius: 0 0 8px 8px;
@@ -156,3 +155,8 @@ float:left;
     .icon-img{width:17px !important;}
     .form-margin form{margin-bottom:20px !important}
     .btn-icon{width:35px;padding: 6px 6px !important;}
+
+
+    .sorting_desc{background:url("images/sort_desc.png") no-repeat center right;}
+    .sorting_asc{background:url("images/sort_asc.png") no-repeat center right;}
+    .sorting{background:url("images/sort_both.png") no-repeat center right;}

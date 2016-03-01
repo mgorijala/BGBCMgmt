@@ -161,28 +161,33 @@ namespace BGBC.Web.Controllers
         public ActionResult Checkoutconfirm(Models.Checkout checkout)
         {
 
-            if (!Request.IsAuthenticated && (string.IsNullOrEmpty(checkout.ChoosePassword))) //For login user password is not required
+            if (!Request.IsAuthenticated) //For login user password is not required
             {
-                ModelState.AddModelError("ChoosePassword", "The password field is required");
-                ModelState.AddModelError("ConfirmPassword", "The password field is required");
+                if (string.IsNullOrEmpty(checkout.ChoosePassword))
+                {
+                    ModelState.AddModelError("ChoosePassword", "The password field is required");
+                    ModelState.AddModelError("ConfirmPassword", "The password field is required");
+                }
+                else if (checkout.ChoosePassword.Length > 20 || checkout.ChoosePassword.Length < 6)
+                {
+                    ModelState.AddModelError("ConfirmPassword", "The field New Password must be a string with a minimum length of 6 and a maximum length of 20");
+                }
             }
 
-
-            if (string.IsNullOrEmpty(checkout.BillingAddress)) ModelState.AddModelError("BillingAddress", "The Billing Address field is required.");
-            if (string.IsNullOrEmpty(checkout.BillingCty)) ModelState.AddModelError("BillingCty", "The Billing City field is required.");
-            if (string.IsNullOrEmpty(checkout.BillingState)) ModelState.AddModelError("BillingState", "The Billing State field is required.");
-            if (string.IsNullOrEmpty(checkout.BillingZip)) ModelState.AddModelError("BillingZip", "The Billing Zip field is required.");
-
+            BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, checkout.BillingAddress, true, "Billing Address", "BillingAddress");
+            BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, checkout.BillingAddress_2, false, "Billing Address 2", "BillingAddress_2");
+            BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, checkout.BillingCty, true, "Billing City", "BillingCty");
+            BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, checkout.BillingState, true, "Billing State", "BillingState");
+            BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, checkout.BillingZip, true, "Billing Zip", "BillingZip");
 
             if (!checkout.ServiceBillingAddressSame)
             {
-                if (string.IsNullOrEmpty(checkout.ServiceAddress)) ModelState.AddModelError("ServiceAddress", "The Service Address field is required.");
-                if (string.IsNullOrEmpty(checkout.ServiceCty)) ModelState.AddModelError("ServiceCty", "The Service City field is required.");
-                if (string.IsNullOrEmpty(checkout.ServiceState)) ModelState.AddModelError("ServiceState", "The Service State field is required.");
-                if (string.IsNullOrEmpty(checkout.ServiceZip)) ModelState.AddModelError("ServiceZip", "The Service Zip field is required.");
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, checkout.ServiceAddress, true, "Service Address", "ServiceAddress");
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, checkout.ServiceAddress_2, false, "Service Address 2", "ServiceAddress_2");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, checkout.ServiceCty, true, "Service City", "ServiceCty");
+                BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, checkout.ServiceState, true, "Service State", "ServiceState");
+                BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, checkout.ServiceZip, true, "Service Zip", "ServiceZip");
             }
-
-
 
             if (checkout.PaymentMethod == "eCheck")
             {
@@ -214,7 +219,7 @@ namespace BGBC.Web.Controllers
             {
                 if (string.IsNullOrEmpty(checkout.CardNo)) ModelState.AddModelError("CardNo", "The Card No field is required.");
                 if (string.IsNullOrEmpty(checkout.CVV)) ModelState.AddModelError("CVV", "The Card CVV field is required.");
-                
+
                 if (!string.IsNullOrEmpty(checkout.CardNo))
                 {
                     if (checkout.CardNo.Trim().Length > 0)
@@ -404,16 +409,16 @@ namespace BGBC.Web.Controllers
                                     //Save Payment details
                                     if (checkout.SaveCard)
                                     {
-                                        UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                                        UserCC ccinfo = _userCCRep.Get(userid);
                                         if (ccinfo == null) //There is no details in database
                                         {
                                             if (checkout.PaymentMethod == "eCheck")
                                             {
-                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 2, AccountType = checkout.BankAccountType, RoutingNo = Cryptography.Encrypt(checkout.BankRoutingNumber), AccountNo = Cryptography.Encrypt(checkout.BankAccountNumber) });
+                                                _userCCRep.Add(new UserCC { UserID = userid, PaymentType = 2, AccountType = checkout.BankAccountType, RoutingNo = Cryptography.Encrypt(checkout.BankRoutingNumber), AccountNo = Cryptography.Encrypt(checkout.BankAccountNumber) });
                                             }
                                             else
                                             {
-                                                _userCCRep.Add(new UserCC { UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId, PaymentType = 1, CCNO = Cryptography.Encrypt(checkout.CardNo), ExpMon = Cryptography.Encrypt(checkout.CardExpMon), ExpYear = Cryptography.Encrypt(checkout.CardExpYear) });
+                                                _userCCRep.Add(new UserCC { UserID = userid, PaymentType = 1, CCNO = Cryptography.Encrypt(checkout.CardNo), ExpMon = Cryptography.Encrypt(checkout.CardExpMon), ExpYear = Cryptography.Encrypt(checkout.CardExpYear) });
                                             }
                                         }
                                         else
@@ -435,7 +440,7 @@ namespace BGBC.Web.Controllers
                                     }
                                     else
                                     {
-                                        UserCC ccinfo = _userCCRep.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                                        UserCC ccinfo = _userCCRep.Get(userid);
                                         if (ccinfo != null) _userCCRep.Remove(ccinfo);
                                     }
 

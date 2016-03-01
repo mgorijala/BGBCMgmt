@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
+using BGBC.Core;
 
 namespace BGBC.Web.Controllers
 {
@@ -19,6 +20,7 @@ namespace BGBC.Web.Controllers
         IUserRepository _userRepository;
         IRepository<Property, int> _propertyRepo;
         IRepository<Order, int> _order;
+        IRepository<Profile, int> _profileRepo;
 
         public ReportController()
         {
@@ -30,24 +32,136 @@ namespace BGBC.Web.Controllers
             _userRepository = new UserRepository();
             _propertyRepo = new PropertyRepository();
             _order = new OrderRepository();
+            _profileRepo = new ProfileRepository();
         }
 
+        [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult Contact()
         {
             return View(_contactForm.GetRef(1));
         }
+
+        [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult ContactRealtor()
         {
             return View(_contactForm.GetRef(1));
         }
+
+        [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult TenantReferal()
         {
             return View(_tenantReferal.Get());
         }
-        public ActionResult PayoutPreferences()
+
+        [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
+        public ActionResult PayoutPreferences(string sortOrder, string currentFilter, string searchString, int? page, string pageSize)
         {
-            return View(_userRepository.GetOwners());
+
+
+            int currentPageSize = int.Parse(pageSize == null ? "10" : pageSize), pageNumber = (page ?? 1);
+            try
+            {
+                var profile = _profileRepo.Get().Where(x => x.User.Deletedon == null && x.User.UserType==1);
+
+                ViewBag.currentSort = sortOrder;
+                ViewBag.nameSortParam = sortOrder == "name" ? "name_desc" : "name";
+                ViewBag.paymentMethodSortParam = sortOrder == "payment_method" ? "payment_method_desc" : "payment_method";
+                ViewBag.paypalEmailSortParam = sortOrder == "paypal_email" ? "paypal_email_desc" : "paypal_email";
+                ViewBag.paypalEmailAddressSortParam = sortOrder == "paypal_email_address" ? "paypal_email_address_desc" : "paypal_email_address";
+                ViewBag.paypalEmailAddress2SortParam = sortOrder == "paypal_email_address2" ? "paypal_email_address2_desc" : "paypal_email_address2";
+                ViewBag.payoutMailingCitySortParam = sortOrder == "payout_mailing_city" ? "payout_mailing_city_desc" : "payout_mailing_city";
+                ViewBag.payoutMailingStateSortParam = sortOrder == "payout_mailing_state" ? "payout_mailing_state_desc" : "payout_mailing_state";
+                ViewBag.payoutMailingZipSortParam = sortOrder == "payout_mailing_zip" ? "payout_mailing_zip_desc" : "payout_mailing_zip";
+
+                if (pageSize != null)
+                    ViewBag.currentPageSize = currentPageSize;
+
+
+                if (searchString != null)
+                {
+                    page = 1;
+                }
+                else
+                {
+                    searchString = currentFilter;
+                }
+
+                ViewBag.currentFilter = searchString;
+                ViewBag.page = pageNumber;
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    profile = profile.Where(x => x.User.FirstName.Contains(searchString)||x.PaymentMethod.Contains(searchString)||x.PaypalEmail.Contains (searchString)
+                        ||x.PayoutMailAddress.Contains(searchString)||x.PayoutMailAddress2.Contains(searchString)||x.PayoutMailCity.Contains(searchString)
+                        ||x.PayoutMailState.Contains(searchString)||x.PayoutMailZip.Contains(searchString));
+                }
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        profile = profile.OrderByDescending(x => x.User.FirstName);
+                        break;
+                    case "payment_method":
+                        profile = profile.OrderBy(x => x.PaymentMethod);
+                        break;
+                    case "payment_method_desc":
+                        profile = profile.OrderByDescending(x => x.PaymentMethod);
+                        break;
+                    case "paypal_email":
+                        profile = profile.OrderBy(x => x.PaypalEmail);
+                        break;
+                    case "paypal_email_desc":
+                        profile = profile.OrderByDescending(x => x.PaypalEmail);
+                        break;
+
+                    case "paypal_email_address":
+                        profile = profile.OrderBy(x => x.PayoutMailAddress);
+                        break;
+                    case "paypal_email_address_desc":
+                        profile = profile.OrderByDescending(x => x.PayoutMailAddress);
+                        break;
+                    case "paypal_email_address2":
+                        profile = profile.OrderBy(x => x.PayoutMailAddress2);
+                        break;
+                    case "paypal_email_address2_desc":
+                        profile = profile.OrderByDescending(x => x.PayoutMailAddress2);
+                        break;
+                    case "payout_mailing_city":
+                        profile = profile.OrderBy(x => x.PayoutMailCity);
+                        break;
+                    case "payout_mailing_city_desc":
+                        profile = profile.OrderByDescending(x => x.PayoutMailCity);
+                        break;
+                    case "payout_mailing_state":
+                        profile = profile.OrderBy(x => x.PayoutMailState);
+                        break;
+                    case "payout_mailing_state_desc":
+                        profile = profile.OrderByDescending(x => x.PayoutMailState);
+                        break;
+                    case "payout_mailing_zip":
+                        profile = profile.OrderBy(x => x.PayoutMailZip);
+                        break;
+                    case "payout_mailing_zip_desc":
+                        profile = profile.OrderByDescending(x => x.PayoutMailZip);
+                        break;
+                    default:
+                        profile = profile.OrderBy(x => x.User.FirstName);
+                        break;
+                }
+
+                return View(profile.ToPagedList(pageNumber, currentPageSize));
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
+            return View();
+         
         }
+
+        [Authorize]
         public ActionResult AllProductsOrders(int? id, string sortOrder, string currentFilter, string searchString, int? page, string PageSize)
         {
             int currentPageSize = int.Parse(PageSize == null ? "10" : PageSize), pageNumber = (page ?? 1);
@@ -126,6 +240,9 @@ namespace BGBC.Web.Controllers
             return View();
 
         }
+
+        [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult PaymentHistory(string sortOrder, string currentFilter, string searchString, int? page, string pageSize)
         {
             int currentPageSize = int.Parse(pageSize == null ? "10" : pageSize), pageNumber = (page ?? 1);
@@ -220,6 +337,7 @@ namespace BGBC.Web.Controllers
             }
             return View(new List<vRentPayment>());
         }
+
         public ActionResult TenantPayments()
         {
             return View();
@@ -246,6 +364,8 @@ namespace BGBC.Web.Controllers
             }
             return View(rentpay);
         }
+
+        [Authorize]
         public ActionResult TenantPaymentHistory(int? id)
         {
             IEnumerable<vRentPayment> paymentdetails = new List<vRentPayment>();
@@ -265,6 +385,8 @@ namespace BGBC.Web.Controllers
             }
             return View(paymentdetails);
         }
+
+        [Authorize]
         public ActionResult AllPropertiesAndTenant()
         {
 

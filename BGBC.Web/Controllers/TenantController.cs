@@ -512,10 +512,6 @@ namespace BGBC.Web.Controllers
             return View("MyProperties", "Owner");
         }
 
-        public ActionResult ManageTenant()
-        {
-            return View(_tenantRepo.Get());
-        }
         [Authorize]
         public ActionResult Add(int? id)
         {
@@ -545,6 +541,7 @@ namespace BGBC.Web.Controllers
             else { return View("Add", (TenantInfo)TempData["tenantdata"]); }
 
         }
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -594,6 +591,7 @@ namespace BGBC.Web.Controllers
 
 
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -681,7 +679,7 @@ namespace BGBC.Web.Controllers
                     return HttpNotFound();
                 }
                 Property _property = _propertyRepo.Get((int)tenant.PropertyID);
-
+                ViewBag.PropertyName = _property.Name;
                 tenantInfo.FirstName = user.FirstName;
                 tenantInfo.LastName = user.LastName;
                 tenantInfo.Email = user.Email;
@@ -797,6 +795,7 @@ namespace BGBC.Web.Controllers
         }
 
         [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult EditAdmin(int id)
         {
             if (id == null)
@@ -897,6 +896,7 @@ namespace BGBC.Web.Controllers
         [HttpPost, ActionName("EditAdmin")]
         [ValidateAntiForgeryToken]
         [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
 
         public ActionResult EditAdmin(TenantInfo tenantInfo)
         {
@@ -954,32 +954,18 @@ namespace BGBC.Web.Controllers
             return View(tenantInfo);
         }
 
+        [Authorize]
         public ActionResult AddTenant()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult EditTenant()
         {
             PopulateDropDown();
             return View();
         }
-
-        public ActionResult ViewProperty()
-        {
-            return View();
-        }
-
-        public ActionResult EditTenantAdmin()
-        {
-            PopulateDropDown();
-            return View();
-        }
-        public ActionResult TestPropertyTenant()
-        {
-            return View();
-        }
-
 
         [CustomAuthorize(Roles = "Tenant")]
         [Authorize]

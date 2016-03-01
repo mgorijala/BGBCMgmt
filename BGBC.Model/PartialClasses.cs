@@ -61,8 +61,14 @@ namespace BGBC.Model
 
     }
 
-    [MetadataType(typeof(ProductOrderMetadata))]
+    [MetadataType(typeof(vProductOrderMetadata))]
     public partial class ProductOrder
+    {
+
+    }
+
+    [MetadataType(typeof(vProductOrderMetadata))]
+    public partial class vProductOrder
     {
 
     }

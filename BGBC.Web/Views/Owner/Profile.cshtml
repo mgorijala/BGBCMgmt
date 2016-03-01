@@ -142,7 +142,7 @@
                         <div class="form-group">
                             @Html.LabelFor(tuple => tuple.ProfileInfo.BillingState, htmlAttributes: new { @class = "control-label" })
                             @Html.DropDownListFor(tuple => tuple.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "Select a State", new { @class = "form-control" })
-                            @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.BillingCty, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(tuple => tuple.ProfileInfo.BillingState, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>

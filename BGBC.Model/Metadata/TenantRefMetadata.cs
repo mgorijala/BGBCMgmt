@@ -32,6 +32,7 @@ namespace BGBC.Model.Metadata
 
         [Required]
         [Display(Name = "Email For Landlord/Property Management Company")]
+        [DataType(DataType.EmailAddress)]
         [RegularExpression(@"^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}", ErrorMessage = "Use valid email")]
         public string LandlordEmail { get; set; }
 

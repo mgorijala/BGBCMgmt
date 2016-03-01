@@ -13,15 +13,15 @@ namespace BGBC.Schedule
         static void Main(string[] args)
         {
             //Call Rent calculation SP
-
+            log4net.ILog log = log4net.LogManager.GetLogger(typeof(BGBC.Schedule.Program));
             try
             {
                 BGBC.Model.BGBCFunctions.RentCalcSchedule(DateTime.Today.Date);
+                log.Info("Executed for " + DateTime.Today.Date);
             }
             catch (Exception ex)
             {
-
-
+                log.Error(ex.Message);
             }
 
             IRepository<RentAutoPay, int> rentAutoRepo = new RentAutoPayRepository();

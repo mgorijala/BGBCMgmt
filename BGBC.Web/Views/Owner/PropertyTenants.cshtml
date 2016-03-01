@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="back">
-    <div class="col-md-12 no-padd">
+    <div class="row no-padd">
         <div class="col-md-9 col-sm-6 no-padd">
             <h1>@ViewBag.PropertyName Tenants</h1>
         </div>
@@ -12,6 +12,7 @@
             @Html.ActionLink("Back to My Properties", "MyProperties", "Owner", null, new { @class = "btn-button btn-primary pull-right" })
         </div>
     </div>
+    <div class="clearfix">&nbsp;</div> 
     <div class="col-md-12 no-padd">
         @if (TempData["SucessMessage"] != null)
         {

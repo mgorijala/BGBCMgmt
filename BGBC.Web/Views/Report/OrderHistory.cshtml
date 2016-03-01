@@ -40,6 +40,9 @@
                         Order Date
                     </th>
                     <th>
+                        Order Number
+                    </th>
+                    <th>
                         Name
                     </th>
                     <th>
@@ -56,6 +59,9 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.TransDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TransId)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)

@@ -14,7 +14,7 @@ namespace BGBC.Model
 
         public IQueryable<RentAutoPay> Get()
         {
-            throw new NotImplementedException();
+            return context.RentAutoPays;
         }
 
         public List<RentAutoPay> GetRef(int id)

@@ -26,31 +26,31 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         if (!Request.IsAuthenticated)
         {
-            <fieldset>
-                <legend>Account Info:</legend>
+        <fieldset>
+            <legend>Account Info:</legend>
 
-                <h5>Already Have an Account? @Html.ActionLink("Login", "Login", "Home")</h5>
+            <h5>Already Have an Account? @Html.ActionLink("Login", "Login", "Home")</h5>
 
 
-                <hr />
-                <h5>Register Now:</h5>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.ChoosePassword, htmlAttributes: new { @class = "control-label required" })
-                            @Html.EditorFor(model => model.ChoosePassword, new { htmlAttributes = new { @class = "form-control", @data_val = true } })
-                            @Html.ValidationMessageFor(model => model.ChoosePassword, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label required" })
-                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @data_val = true } })
-                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
-                        </div>
+            <hr />
+            <h5>Register Now:</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ChoosePassword, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(model => model.ChoosePassword, new { htmlAttributes = new { @class = "form-control", @data_val = true } })
+                        @Html.ValidationMessageFor(model => model.ChoosePassword, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            </fieldset>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label required" })
+                        @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @data_val = true } })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </fieldset>
         }
         <div>
             <fieldset>
@@ -202,17 +202,23 @@
 
             <fieldset>
                 <legend>Payment Method:</legend>
+                <div class="row">
+                    <div class="col-md-6">
                 <div class="form-group">
                     @Html.RadioButtonFor(model => model.PaymentMethod, "Credit Card", new { @id = "CreditCards", @checked = "true" })Credit Card<br />
                     @Html.RadioButtonFor(model => model.PaymentMethod, "eCheck", new { @id = "eChecks" })eCheck<br />
                     @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger" })
                 </div>
+                    </div>
+                </div>
                 <div class="row Creditcard">
                     <div class="col-md-7">
+                        <div class="form-group">
                         <span>Accepted methods: American Express, Discover, MasterCard, Visa</span>
                     </div>
                 </div>
-                <br />
+                </div>
+               
                 <div class="row Creditcard">
                     <div class="col-md-7">
                         <div class="form-group">
@@ -259,28 +265,33 @@
                 </div>
                 <div class="row eCheck">
                     <div class="col-md-3">
+                        <div class="form-group">
                         @Html.LabelFor(model => model.BankAccountType, htmlAttributes: new { @class = "control-label required" })
                         @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label form-control" } })
                         @Html.ValidationMessageFor(model => model.BankAccountType, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <br/>
+                </div>
+                
                 <div class="row eCheck">
-                    <div class="col-lg-6">
+                    <div class="col-md-6">
+                        <div class="form-group">
                         @Html.LabelFor(model => model.BankRoutingNumber, htmlAttributes: new { @class = "control-label required" })
                         @Html.EditorFor(model => model.BankRoutingNumber, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.BankRoutingNumber, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <br/>
+                </div>
+               
                 <div class="row eCheck">
-                    <div class="col-lg-6">
+                    <div class="col-md-6">
+                        <div class="form-group">
                         @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label required" })
                         @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <br/>
+                </div>
                 <div class="row savecard">
                     <div class="col-md-1  col-xs-2 col-sm-2" style="width:10px;">
                         <div class="form-group">
@@ -330,29 +341,29 @@
                 {
                     for (int i = 0; i < Model.OrderList.Count(); i++)
                     {
-                        <tr id="@( Model.OrderList[i].rowtype == "product" ? Model.OrderList[i].rowtype + i : Model.OrderList[i].rowtype)">
-                            <td>
-                                @Html.DisplayFor(p => Model.OrderList[i].Item)
-                                @Html.HiddenFor(p => Model.OrderList[i].ProductID)
-                                @Html.HiddenFor(p => Model.OrderList[i].Item)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(p => Model.OrderList[i].Price)
-                                @Html.HiddenFor(p => Model.OrderList[i].Price)
-                            </td>
-                            <td>
-                                @if (Model.OrderList[i].rowtype == "product")
+                    <tr id="@( Model.OrderList[i].rowtype == "product" ? Model.OrderList[i].rowtype + i : Model.OrderList[i].rowtype)">
+                        <td>
+                            @Html.DisplayFor(p => Model.OrderList[i].Item)
+                            @Html.HiddenFor(p => Model.OrderList[i].ProductID)
+                            @Html.HiddenFor(p => Model.OrderList[i].Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(p => Model.OrderList[i].Price)
+                            @Html.HiddenFor(p => Model.OrderList[i].Price)
+                        </td>
+                        <td>
+                            @if (Model.OrderList[i].rowtype == "product")
                                 {
-                                    @Html.DisplayFor(p => Model.OrderList[i].Quantity)
+                                @Html.DisplayFor(p => Model.OrderList[i].Quantity)
                                 }
-                                @Html.HiddenFor(p => Model.OrderList[i].Quantity)
-                                @Html.HiddenFor(p => Model.OrderList[i].rowtype)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(p => Model.OrderList[i].Subtotal)
-                                @Html.HiddenFor(p => Model.OrderList[i].Subtotal)
-                            </td>
-                        </tr>
+                            @Html.HiddenFor(p => Model.OrderList[i].Quantity)
+                            @Html.HiddenFor(p => Model.OrderList[i].rowtype)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(p => Model.OrderList[i].Subtotal)
+                            @Html.HiddenFor(p => Model.OrderList[i].Subtotal)
+                        </td>
+                    </tr>
                     }
                 }
                 <tfoot>
@@ -406,7 +417,7 @@
                 }
             });
         });
-     
+
         $(function () {
             if ($("#CreditCards").is(':checked')) {
                 $('.Creditcard').show();

@@ -28,6 +28,7 @@ namespace BGBC.Web.Models
 
         [Required]
         [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         [RegularExpression(@"^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}", ErrorMessage = "Use valid email")]
         public string Email { get; set; }
 

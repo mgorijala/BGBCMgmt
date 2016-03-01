@@ -11,6 +11,7 @@ namespace BGBC.Web.Models
         [RegularExpression(@"^[a-zA-Z]+[ a-zA-Z-_]*$", ErrorMessage = "Use only alpha characters")]
         public string Name { get; set; }
 
+        [DataType(DataType.EmailAddress)]
         [RegularExpression(@"^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}", ErrorMessage = "Use valid email")]
         public string Email { get; set; }
 

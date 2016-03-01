@@ -24,10 +24,10 @@
         @Html.HiddenFor(p => p.DepostDueDate)
         @Html.HiddenFor(p => p.PetDepositDue)
         @Html.HiddenFor(p => p.PetDeposit)
-        <h1>Test Property1-Edit Tenants</h1>
+    <h1>@ViewBag.PropertyName-Edit Tenants</h1>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <h5><span style="color:red">&#42;</span>indicates a required field</h5>
-        <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out this form.</h5>
+    <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out <a onclick="location.href='@Url.Action("Contact", "Home", null ,null)'" style=" cursor:pointer">this form.</a></h5>
         <br />
 
         @Html.Label("Property Manager Name")
@@ -159,7 +159,7 @@
         <div class="Row">
             <div class="form-group">
                 @Html.LabelFor(p => p.PetDepositDue, htmlAttributes: new { @class = "control-label" })<span style="color:blue"> &#134; </span>
-                @if (Model.PetDeposit.ToString() == "True")
+                @if (Model.PetDepositDue.ToString() == "True")
                 {
                     <span>Yes</span>
                 }
@@ -169,7 +169,7 @@
                 }
             </div>
         </div>
-        if (Model.PetDeposit.ToString() == "True")
+        if (Model.PetDepositDue.ToString() == "True")
         {
             <div class="Row pet-deposit-due">
                 <div class="form-group">

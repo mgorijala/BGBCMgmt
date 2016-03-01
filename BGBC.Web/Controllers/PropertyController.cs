@@ -25,11 +25,7 @@ namespace BGBC.Web.Controllers
             //_repository.Get()
             return View(_repository.Get());
         }
-        public ActionResult PropertyAdmin()
-        {
-            //_repository.Get()
-            return View();
-        }
+
         [Authorize]
         public ActionResult Add()
         {
@@ -40,6 +36,7 @@ namespace BGBC.Web.Controllers
                 return View("Add", (Property)TempData["propertydata"]);
             
         }
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -53,6 +50,7 @@ namespace BGBC.Web.Controllers
             }
             return View("Add", property);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -76,8 +74,8 @@ namespace BGBC.Web.Controllers
 
             return View(property);
         }
-       
 
+        [Authorize]
         public ActionResult Edit(int id)
         {
             PopulateDropDown();
@@ -98,6 +96,8 @@ namespace BGBC.Web.Controllers
                 
            
         }
+
+        [Authorize]
         [HttpPost]
         public ActionResult EditConfirm(Property property)
         {
@@ -109,6 +109,8 @@ namespace BGBC.Web.Controllers
             }
             return View("Edit", property);
         }
+
+        [Authorize]
         [HttpPost]
         public ActionResult AdminConfirm(Property property)
         {
@@ -120,8 +122,10 @@ namespace BGBC.Web.Controllers
             }
             return View("AdminEdit", property);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(Property property)
         {
             try
@@ -141,6 +145,7 @@ namespace BGBC.Web.Controllers
 
             return View(property);
         }
+
         [CustomAuthorize(Roles = "Owner")]
         [Authorize]
         public ActionResult Delete(int? id)
@@ -157,6 +162,7 @@ namespace BGBC.Web.Controllers
             }
             return View(property);
         }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [CustomAuthorize(Roles = "Owner")]
@@ -185,16 +191,7 @@ namespace BGBC.Web.Controllers
 
             return RedirectToAction("MyProperties","Owner");
         }
-    
-        public ActionResult AdminProperty()
-        {
-            return View();
-        }
-        public ActionResult AdminViewProperties()
-        {
-            return View();
-        }
-
+     
         [CustomAuthorize(Roles = "Admin")]
         [Authorize]
         public ActionResult AdminEdit(int? id)
@@ -228,7 +225,6 @@ namespace BGBC.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CustomAuthorize(Roles = "Admin")]
-       // [CustomAuthorize(Roles = "Owner")]
         [Authorize]
         public ActionResult AdminEdit(Property property)
         {

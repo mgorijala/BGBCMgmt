@@ -22,7 +22,7 @@ namespace BGBC.Web.Models
         public string Name { get; set; }
 
         [Required]
-        [DataType(DataType.Text)]
+        [DataType(DataType.EmailAddress)]
         [RegularExpression(@"^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}", ErrorMessage = "Use valid email")]
         [Display(Name = "Contact Email")]
         public string EMail { get; set; }

@@ -8,7 +8,7 @@
 }
 
 <style>
-   
+
 </style>
 <div class="back">
     <div class="col-md-12 no-padd">
@@ -21,12 +21,12 @@
     </div>
     <div class="clearfix">&nbsp; </div>
     @*Displays all products orders*@
-   
+
     <div class="row form-margin">
         <div class="col-md-1 col-sm-1 col-xs-3 no-padd">
             @using (Html.BeginForm())
             {
-                    @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50} }, "Key", "Value"), new { id = "pagesizelist" , @class = "form-control" })
+                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value"), new { id = "pagesizelist", @class = "form-control" })
             }
             @section scripts {
                 <script type="text/javascript">
@@ -34,7 +34,7 @@
                         var url = '@Html.Raw(Url.Action("AllProductsOrders", "Report", new { SortOrder = ViewBag.CurrentSort, page =1, pageSize = (ViewBag.currentPageSize == null ? "----" : (ViewBag.currentPageSize != null ? "ReplacedValue" : ViewBag.currentPageSize)) }))';
 
                         if (url.indexOf("pageSize=----") > -1)
-                        url = url.replace("----", $('#pagesizelist').val());
+                            url = url.replace("----", $('#pagesizelist').val());
                         else
                             url = url.replace("ReplacedValue", $('#pagesizelist').val());
                         window.location = url;
@@ -44,7 +44,7 @@
         </div>
         <div class="col-md-3 col-sm-4 col-xs-6 no-padd pull-right">
             @using (Html.BeginForm("AllProductsOrders", "Report", FormMethod.Get))
-        {
+            {
                 <div class="input-group">
                     @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", @placeholder = "Search for..." })
                     <span class="input-group-btn">
@@ -55,8 +55,8 @@
                     </span>
                 </div><!-- /input-group -->
             }
-            </div>
-            </div>
+        </div>
+    </div>
 
     <div class="clearfix"> </div>
 
@@ -64,64 +64,23 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>
+                    <th class="@(ViewBag.CurrentSort == "date_desc" || ViewBag.CurrentSort == "Date" ? (ViewBag.DateSortParm == "Date" ? "sorting_desc" : "sorting_asc") : "sorting")">
                         @Html.ActionLink("Date", "AllProductsOrders", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
-                        @if (ViewBag.CurrentSort == "date_desc" || ViewBag.CurrentSort == "Date")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.DateSortParm == "Date" ? "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
                     </th>
-
-                    <th>
-                        @Html.ActionLink("TransactionID", "AllProductsOrders", new { sortOrder = ViewBag.TransIDSortParm, currentFilter = ViewBag.CurrentFilter })
-                        @if (ViewBag.CurrentSort == "TransID" || ViewBag.CurrentSort == "TransID_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.TransIDSortParm == "TransID" ? "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
+                    <th class="@(ViewBag.CurrentSort == "TransID" || ViewBag.CurrentSort == "TransID_desc" ? (ViewBag.DateSortParm == "TransID" ? "sorting_desc" : "sorting_asc") : "sorting")">
+                        @Html.ActionLink("Trans ID", "AllProductsOrders", new { sortOrder = ViewBag.TransIDSortParm, currentFilter = ViewBag.CurrentFilter })
                     </th>
-                    <th>
+                    <th style="width:100px;" class="@(ViewBag.CurrentSort == "Customer" || ViewBag.CurrentSort == "Customer_desc" ? (ViewBag.DateSortParm == "Customer" ? "sorting_desc" : "sorting_asc") : "sorting")">
                         @Html.ActionLink("Customer", "AllProductsOrders", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter })
-                        @if (ViewBag.CurrentSort == "Customer" || ViewBag.CurrentSort == "Customer_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.CustomerSortParm == "Customer" ? "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
                     </th>
-                    <th>
+                    <th style="width:100px;" class="@(ViewBag.CurrentSort == "Type" || ViewBag.CurrentSort == "Type_desc" ? (ViewBag.DateSortParm == "Type" ? "sorting_desc" : "sorting_asc") : "sorting")">
                         @Html.ActionLink("Type", "AllProductsOrders", new { sortOrder = ViewBag.TypeSortParm, currentFilter = ViewBag.CurrentFilter })
-                        @if (ViewBag.CurrentSort == "Type" || ViewBag.CurrentSort == "Type_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.TypeSortParm == "Type" ? "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
                     </th>
                     <th>
                         Desc.
                     </th>
-                    <th>
+                    <th style="width:100px;" class="@(ViewBag.CurrentSort == "Price" || ViewBag.CurrentSort == "Price_desc" ? (ViewBag.DateSortParm == "Price" ? "sorting_desc" : "sorting_asc") : "sorting")">
                         @Html.ActionLink("Price", "AllProductsOrders", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter })
-                        @if (ViewBag.CurrentSort == "Price" || ViewBag.CurrentSort == "Price_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.PriceSortParm == "Price" ? "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
                     </th>
                     <th>
                         Comments
@@ -134,25 +93,25 @@
                     <tr>
                         <td>@Html.DisplayFor(p => prop.TransDate) </td>
                         <td>@Html.ActionLink(prop.TransId, "ProductInvoice", "Report", new { id = prop.OrderID }, new { }) </td>
-                        <td>@Html.DisplayFor(p => prop.CustomerFName) @Html.DisplayFor(p => prop.CustomerLName) </td>
+                        <td style="width:100px;">@Html.DisplayFor(p => prop.CustomerFName) @Html.DisplayFor(p => prop.CustomerLName) </td>
                         @if (prop.UserType == 1)
                         {
-                            <td>Owner</td>
+                            <td style="width:100px;">Owner</td>
                         }
                         else if (prop.UserType == 2)
                         {
-                            <td>Tenant</td>
+                            <td style="width:100px;">Tenant</td>
                         }
-                        else if (prop.UserType == 2)
+                        else if (prop.UserType == 3)
                         {
-                            <td>Customer</td>
+                            <td style="width:100px;">Customer</td>
                         }
                         else
                         {
                             <td></td>
                         }
                         <td>@Html.DisplayFor(p => prop.Description)</td>
-                        <td>@Html.DisplayFor(p => prop.Price) </td>
+                        <td style="width:100px;">@Html.DisplayFor(p => prop.Price) </td>
                         <td>@Html.DisplayFor(p => prop.Comments) </td>
                     </tr>
                 }

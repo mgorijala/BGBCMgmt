@@ -76,6 +76,7 @@
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Metadata\ProductOrderMetadata.cs" />
+    <Compile Include="Metadata\vProductOrderMetadata.cs" />
     <Compile Include="Order.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>

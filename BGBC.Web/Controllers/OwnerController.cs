@@ -266,18 +266,18 @@ namespace BGBC.Web.Controllers
         }
 
 
-
+        [Authorize]
         private void PropertyDropDown()
         {
             List<SelectListItem> property = new List<SelectListItem>();
             List<SelectListItem> tenants = new List<SelectListItem>();
-            foreach (var item in _propertyRepo.Get())
+            foreach (var item in _propertyRepo.Get().Where(x => x.UserID == ((BGBC.Core.CustomPrincipal)(User)).UserId))
             {
                 property.Add(new SelectListItem() { Text = item.Name, Value = Url.Action("PropertyPaymentsHistory", "Report", new { id = item.PropertyID }) });
             }
-            foreach (var item in _tenantRepo.Get())
+            foreach (var item in _tenantRepo.Get().Where(x => x.Property.UserID == ((BGBC.Core.CustomPrincipal)(User)).UserId))
             {
-                tenants.Add(new SelectListItem() { Text = (item.User).FirstName, Value = Url.Action("TenantPaymentHistory", "Report", new { id = item.UserID }) });
+                tenants.Add(new SelectListItem() { Text = (item.User).FirstName + " " + (item.User).LastName, Value = Url.Action("TenantPaymentHistory", "Report", new { id = item.UserID }) });
 
             }
             ViewBag.AllProperties = property;

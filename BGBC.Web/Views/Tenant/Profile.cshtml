@@ -203,7 +203,7 @@
                 </div>
             </div>
             <br />
-            <div class="Row">
+            <div class="row">
                 <div class="col-md-6">
                 <div class="form-group">
                     @Html.LabelFor(model => model.PaymentMethod, htmlAttributes: new { @class = "control-label required" })
@@ -242,11 +242,12 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
-                        <div class="col-md-3 col-xs-3 no-padd">
+                        <div class="col-md-4 col-xs-4 col-sm-3 no-padd">
                             @Html.DropDownListFor(model => model.CardExpMon, (IEnumerable<SelectListItem>)ViewBag.Months,  new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.CardExpMon, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-md-6 col-xs-6 col-sm-4 col">
                             @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.CardExpYear, "", new { @class = "text-danger" })
                         </div>
@@ -272,8 +273,7 @@
                 </div>
             </div>
             <br />
-            <div class="row">
-                <div class="eCheck">
+            <div class="row eCheck col-md-offset-9"> 
                     <div class="col-md-6">
                         <div class="form-group">
                     @Html.LabelFor(model => model.BankRoutingNumber, htmlAttributes: new { @class = "control-label required" })
@@ -281,7 +281,7 @@
                     @Html.ValidationMessageFor(model => model.BankRoutingNumber, "", new { @class = "text-danger" })
                 </div>
                     </div>
-                </div>
+      
                 <div class="eCheck">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -306,40 +306,44 @@
                 </div>
             </div>
             <div class="row" style="text-align:right">
-                <div class="row col-sm-9">
-                    <div class="col-md-7" style="text-align:right">
+                <div class="col-md-7 no-padd">
+                    <div class="col-md-9 col-sm-9 col-xs-9" style="text-align:right">
                         <b>
                             @Html.LabelFor(model => model.MonthlyRent, htmlAttributes: new { @class = "control-label" })
                         </b>
                     </div>
-                    <div class="col-sm-3" style="text-align:left">
+                    <div class="col-md-3 col-sm-3 col-xs-3" style="text-align:left">
                         @Html.DisplayFor(model => model.MonthlyRent)
                     </div>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="row col-sm-9"> 
-                    <div class="col-md-7" style="text-align:right">
+                <div class="col-md-7 no-padd">
+                    <div class="col-md-9 col-sm-9 col-xs-9" style="text-align:right">
                         <b>
                             @Html.LabelFor(model => model.ServiceFee, htmlAttributes: new { @class = "control-label" })
                         </b>
                     </div>
-                    <div class="col-sm-3" style="text-align:left">
+                    <div class="col-md-3 col-sm-3 col-xs-3" style="text-align:left">
                         @Html.DisplayFor(model => model.ServiceFee)
                     </div>
+                    <div class="clearfix"></div>
                 </div>
 
-                <div class="row col-sm-9"> 
-                    <div class="col-md-7" style="text-align:right"> 
+                <div class="col-md-7 no-padd">
+                    <div class="col-md-9 col-sm-9 col-xs-9" style="text-align:right">
                         <b>
                             @Html.LabelFor(model => model.TotalCharges, htmlAttributes: new { @class = "control-label" })
                         </b>
                     </div>
-                    <div class="col-sm-3" style="text-align:left">
+                    <div class="col-md-3 col-sm-3 col-xs-3" style="text-align:left">
                         @Html.DisplayFor(model => model.TotalCharges)
                     </div>
+                    <div class="clearfix"></div>
                 </div>
                 @Html.HiddenFor(model => model.MonthlyRent)
                 @Html.HiddenFor(model => model.ServiceFee)
                 @Html.HiddenFor(model => model.TotalCharges)
+                <div class="clearfix"></div>
             </div>
         </fieldset>
         <div>
@@ -372,7 +376,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            @Html.LabelFor(p => p.Ref1.Address, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(p => p.Ref1.Address, htmlAttributes: new { @class = "control-label required" })
                             @Html.EditorFor(p => p.Ref1.Address, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(p => p.Ref1.Address, "", new { @class = "text-danger" })
                         </div>

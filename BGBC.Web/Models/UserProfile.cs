@@ -22,6 +22,7 @@ namespace BGBC.Web.Models
         public string LastName { get; set; }
 
         [Required]
+        [DataType(DataType.EmailAddress)]
         [RegularExpression(@"^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}", ErrorMessage = "Use valid email")]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -96,7 +97,7 @@ namespace BGBC.Web.Models
         [Display(Name = "Bank Routing Number")]
         public string BankRoutingNumber { get; set; }
 
-        [Display(Name = "Automatically charge My account each month when my rent is due.")]
+        [Display(Name = "Automatically charge my account each month when my rent is due.")]
         public bool ChargeAccount { get; set; }
 
         [Display(Name = "Save Card")]

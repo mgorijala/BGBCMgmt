@@ -10,10 +10,7 @@ namespace BGBC.Model.Metadata
     class ProductMetadata
     {
         [Required]
-  
-        //[RegularExpression(@"^[^<>!@#%/?*]+$", ErrorMessage = "Invalid Product Name")]
-        //[RegularExpression(@"^[ A-Za-z0-9_@./#&+-]*$", ErrorMessage = "Use alphanumeric characters only")]
-        [RegularExpression(@"^[ A-Za-z0-9_'./:,-]*$", ErrorMessage = "Use alphanumeric characters  and :,._-/")]
+        [RegularExpression(@"^[ A-Za-z0-9_@./#&+-]*$", ErrorMessage = "Use alphanumeric characters only")]
         [StringLength(255)] 
         [Display(Name = "Product Name")]
         public string Name { get; set; }

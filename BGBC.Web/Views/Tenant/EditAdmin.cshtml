@@ -22,7 +22,9 @@
         <h1>Test Property1-Edit Tenants</h1>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-
+    <h5><span style="color:red">&#42;</span>indicates a required field</h5>
+    <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out <a onclick="location.href='@Url.Action("Contact", "Home", null ,null)'" style=" cursor:pointer">this form.</a></h5>
+    <br />
         @Html.Label("Property Manager Name")
         <h6>Test Owner  </h6>
         <br />
@@ -32,7 +34,7 @@
         <h6>@Model.Address2</h6>
         <h6>@Model.City,@Model.State @Model.Zip</h6>
         <br />
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.FirstName, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.FirstName, new { htmlAttributes = new { @class = "form-control required" } })
@@ -44,7 +46,7 @@
                 @Html.ValidationMessageFor(p => p.LastName, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.Email, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.Email, new { htmlAttributes = new { @class = "form-control required" } })
@@ -56,13 +58,13 @@
                 @Html.ValidationMessageFor(p => p.ConfirmEmail, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.BillingAddressSame, htmlAttributes: new { @class = "control-label " })
                 @Html.CheckBoxFor(p => p.ProfileInfo.BillingAddressSame, new Dictionary<String, object> { { "class", "control-label" }, { "onclick", "billingAddressSame.call(this)" }, { "data-on-text", "complete" }, { "data-off-text", "incomplete" } })<b> Same As Property Address</b>
             </div>
         </div>
-        <div class="Row billing-address-fields">
+        <div class="row billing-address-fields">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.BillingAddress, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.ProfileInfo.BillingAddress, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
@@ -70,14 +72,14 @@
             </div>
         </div>
 
-        <div class="Row billing-address-fields">
+        <div class="row billing-address-fields">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.BillingAddress_2, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(p => p.ProfileInfo.BillingAddress_2, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
                 @Html.ValidationMessageFor(p => p.ProfileInfo.BillingAddress_2, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row billing-address-fields">
+        <div class="row billing-address-fields">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.BillingCty, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.ProfileInfo.BillingCty, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
@@ -85,14 +87,14 @@
             </div>
         </div>
 
-        <div class="Row billing-address-fields">
+        <div class="row billing-address-fields">
             <div class="form-group col-md-3 no-padd">
                 @Html.LabelFor(p => p.ProfileInfo.BillingState, htmlAttributes: new { @class = "control-label required" })
                 @Html.DropDownListFor(p => p.ProfileInfo.BillingState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })
                 @Html.ValidationMessageFor(p => p.ProfileInfo.BillingState, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row billing-address-fields">
+    <div class="row billing-address-fields col-md-offset-9">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.BillingZip, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.ProfileInfo.BillingZip, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
@@ -100,14 +102,14 @@
             </div>
         </div>
 
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.HomePhone, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.ProfileInfo.HomePhone, new { htmlAttributes = new { @class = "form-control required phoneno-mask" } })
                 @Html.ValidationMessageFor(p => p.ProfileInfo.HomePhone, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.WorkPhone, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(p => p.ProfileInfo.WorkPhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
@@ -115,7 +117,7 @@
             </div>
         </div>
 
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.MobilePhone, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(p => p.ProfileInfo.MobilePhone, new { htmlAttributes = new { @class = "form-control phoneno-mask" } })
@@ -123,14 +125,14 @@
             </div>
         </div>
 
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.RentAmount, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.RentAmount, new { htmlAttributes = new { @class = "form-control required" } })
                 @Html.ValidationMessageFor(p => p.RentAmount, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.FinalDueDate, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.FinalDueDate, new { htmlAttributes = new { @class = "form-control required" } })
@@ -138,14 +140,14 @@
             </div>
         </div>
 
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.Deposit, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(p => p.Deposit, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(p => p.Deposit, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row">
+        <div class="row">
             <div class="form-group">
                 @Html.LabelFor(p => p.DepostDueDate, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(p => p.DepostDueDate, new { htmlAttributes = new { @class = "form-control" } })
@@ -153,14 +155,14 @@
             </div>
         </div>
 
-        <div class="Row">
+        <div class="row">
             <div class="form-group col-md-2 no-padd">
                 @Html.LabelFor(p => p.PetDepositDue, htmlAttributes: new { @class = "control-label" })
                 @Html.DropDownListFor(p => p.PetDepositDue, new List<SelectListItem> { new SelectListItem { Text = "Yes", Value = "true" }, new SelectListItem { Text = "No", Value = "false" } }, new Dictionary<String, object> { { "class", "control-label form-control" }, { "onchange", "petDepositDueClick.call(this)" } })
                 @Html.ValidationMessageFor(p => p.PetDepositDue, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row pet-deposit-due">
+        <div class="row pet-deposit-due">
             <div class="form-group">
                 @Html.LabelFor(p => p.PetDeposit, htmlAttributes: new { @class = "control-label requred" })
                 @Html.EditorFor(p => p.PetDeposit, new { htmlAttributes = new { @class = "form-control" } })
@@ -168,6 +170,7 @@
             </div>
         </div>
         <br />
+        <div class="row col-md-offset-10">
         <div class="form-group">
 
             <input type="submit" value="Save" class="btn btn-default" />
@@ -183,7 +186,7 @@
           }
             
         </div>
-
+        </div>
 
     }
 

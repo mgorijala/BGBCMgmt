@@ -382,9 +382,14 @@ footer {
 }
 
 #google_translate_element {
-  position: absolute;
+    /* position: absolute; */
   right: 0;
-  top: 50px;
+    /* top: 50px !important; */
+    float: right;
+ 
+    padding-left: 10px;
+    display: inline-grid;
+    padding-top: 5px;
 }
 
 #content-container,

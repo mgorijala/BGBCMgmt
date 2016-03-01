@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BGBC Management - @ViewBag.Title</title>
+    @*<title>BGBC Management - @ViewBag.Title</title>*@
+    <title>BGBC Management</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -11,7 +12,7 @@
 
 <body>
     <div class="container padd">
-        <div class="col-md-12">
+        <div class="col-md-12 no-padd">
             <div class="row">
                 <div class="col-md-12 no-padd">
                     <nav>
@@ -82,36 +83,37 @@
                                 <li class="btn btn-login">@Html.ActionLink("Login", "Login", "Home")</li>
                                 <li class="btn btn-register">@Html.ActionLink("Get Started", "Register", "Home")</li>
                             }
+                          
+                            <div id="google_translate_element"></div>   
                         </ul>
                     </nav>
                 </div>
-                <div class="clearfix"></div>
+                <div class="clearfix">&nbsp;</div>
                 <div class="col-md-12 no-padd">
                     <div class="col-md-6 col-sm-6 col-xs-6 no-padd">
                         <h1 id="logo" class="logo">
                             @Html.ActionLink("Index", "Index", "Home")
                         </h1>
+                        <div class="clearfix"></div>
                     </div>
+                   
                     <div class="col-md-6 col-sm-6 col-xs-6">
+
                         <button type="button" class="navbar-toggle collapsed btn btn-primary" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="background-color:#0b6295">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
+                        <div class="clearfix"></div>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
         <div class="col-md-12 no-padd">
             <div class="collapse navbar-collapse no-padd" id="bs-example-navbar-collapse-1">
-                <div id="google_translate_element"></div>
-                <script type="text/javascript">
-                    function googleTranslateElementInit() {
-                        new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'es', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-                    }
-                </script>
-                <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+               
                 <nav>
                     <ul class="menu">
                         <li>@Html.ActionLink("About Us", "About", "Home")</li>
@@ -180,6 +182,12 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'es', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+    }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

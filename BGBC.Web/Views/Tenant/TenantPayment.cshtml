@@ -89,7 +89,7 @@
                 @Html.ValidationMessageFor(p => p.BillingState, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="Row billing-address-fields">
+        <div class="row billing-address-fields col-md-offset-9">
             <div class="form-group">
                 @Html.LabelFor(p => p.BillingZip, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.BillingZip, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
@@ -155,26 +155,32 @@
             @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger" })
         </div>
         <div class="row Creditcard">
-            <div class="col-md-7">
+            <div class="col-md-7 no-padd">
+                <div class="form-group">
                 <span>Accepted methods: American Express, Discover, MasterCard, Visa</span>
             </div>
+        </div>
         </div>
         <div class="form-group Creditcard">
             @Html.LabelFor(model => model.CardNo, htmlAttributes: new { @class = "control-label required" })
             @Html.EditorFor(model => model.CardNo, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.CardNo, "", new { @class = "text-danger" })
         </div>
-        <div class="form-group Creditcard">
+       <div class="row Creditcard">
             <div class="col-md-4 no-padd">
+            <div class="form-group">
                 @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
-                <div class="date-drop no-padd">
+                <div class="col-md-4 col-xs-4 col-sm-3 no-padd">
                     @Html.DropDownListFor(model => model.CardExpMon, (IEnumerable<SelectListItem>)ViewBag.Months, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CardExpMon, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-6 ">
+
+                <div class="col-md-6 col-xs-6 col-sm-4 col">
                     @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CardExpYear, "", new { @class = "text-danger" })
                 </div>
+                <div class="clearfix"></div>
+            </div>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -184,29 +190,33 @@
             @Html.ValidationMessageFor(model => model.CVV, "", new { @class = "text-danger" })
         </div>
         <div class="row eCheck">
-            <div class="col-md-3">
+            <div class="col-md-3 no-padd">
+                <div class="form-group">
                 @Html.LabelFor(model => model.BankAccountType, htmlAttributes: new { @class = "control-label required" })
                 @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label form-control" }, { "onchange", "petDepositDueClick.call(this)" } })
                 @Html.ValidationMessageFor(model => model.BankAccountType, "", new { @class = "text-danger" })
             </div>
         </div>
-        <br/>
+     </div>
         <div class="row eCheck">
-            <div class="col-lg-6">
+            <div class="col-lg-6 no-padd">
+                <div class="form-group">
                 @Html.LabelFor(model => model.BankRoutingNumber, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(model => model.BankRoutingNumber, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.BankRoutingNumber, "", new { @class = "text-danger" })
             </div>
         </div>
-        <br/>
+        </div>
+        
         <div class="row eCheck">
-            <div class="col-lg-6">
+            <div class="col-lg-6 no-padd">
+                <div class="form-group">
                 @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
             </div>
         </div>
-        <br/>
+        </div> 
         <div class="form-group">
             <div class="col-md-10 checkbox">
                @Html.CheckBoxFor(model => model.SaveCard)

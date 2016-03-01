@@ -1,10 +1,10 @@
-﻿@model IEnumerable<BGBC.Model.User>
-
+﻿@model PagedList.IPagedList<BGBC.Model.Profile>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "PayoutPreferences";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 <div class="back"> 
     <div class="col-md-12 no-padd">
         <div class="col-md-11 col-sm-6 no-padd">
@@ -15,71 +15,181 @@
         </div>
     </div>
     <div class="clearfix">&nbsp;</div>
+
+    <div class="row form-margin">
+        <div class="col-md-1 col-sm-1 col-xs-3 no-padd">
+            @using (Html.BeginForm())
+            {
+                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value"), new { id = "pagesizelist", @class = "form-control" })
+            }
+            @section scripts {
+                <script type="text/javascript">
+                    $('#pagesizelist').on('change', function (event) {
+                        var url = '@Html.Raw(Url.Action("PayoutPreferences", "Report", new { sortOrder = ViewBag.currentSort, page = 1, pageSize = (ViewBag.currentPageSize == null ? "----" : (ViewBag.currentPageSize != null ? "ReplacedValue" : ViewBag.currentPageSize)) }))';
+
+                        if (url.indexOf("pageSize=----") > -1)
+                            url = url.replace("----", $('#pagesizelist').val());
+                        else
+                            url = url.replace("ReplacedValue", $('#pagesizelist').val());
+                        window.location = url;
+                    });
+                </script>
+            }
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-6 no-padd pull-right">
+            @using (Html.BeginForm("PayoutPreferences", "Report", FormMethod.Get))
+            {
+                <div class="input-group">
+                    @Html.TextBox("SearchString", ViewBag.currentFilter as string, new { @class = "form-control", @placeholder = "Search for..." })
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary btn-icon" type="submit">
+
+                            <img class="icon-img" src="~/Content/images/Icon-Search.png" />
+                        </button>
+                    </span>
+                </div><!-- /input-group -->
+            }
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>
-                            Name
+                        @Html.ActionLink("Name", "PayoutPreferences", new { sortOrder = ViewBag.nameSortParam, currentFilter = ViewBag.currentFilter })
+                        @if (ViewBag.currentSort == "name" || ViewBag.currentSort == "name_desc")
+                        {
+                            <img src='@Url.Content("/Content/Images/" + (ViewBag.nameSortParam == "name" ? "sort_desc" : "sort_asc") + ".png")' />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/sort_both.png" />
+                        }
+
                         </th>
                         <th>
-                            Payout Method
+                        @Html.ActionLink("Payout Method", "PayoutPreferences", new { sortOrder = ViewBag.paymentMethodSortParam, currentFilter = ViewBag.currentFilter })
+                        @if (ViewBag.currentSort == "payment_method" || ViewBag.currentSort == "payment_method_desc")
+                        {
+                            <img src='@Url.Content("/Content/Images/" + (ViewBag.paymentMethodSortParam == "payment_method" ? "sort_desc" : "sort_asc") + ".png")' />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/sort_both.png" />
+                        }
+
                         </th>
                         <th>
-                            Paypal Email
+                        @Html.ActionLink("Paypal Email", "PayoutPreferences", new { sortOrder = ViewBag.paypalEmailSortParam, currentFilter = ViewBag.currentFilter })
+                        @if (ViewBag.currentSort == "paypal_email" || ViewBag.currentSort == "paypal_email_desc")
+                        {
+                            <img src='@Url.Content("/Content/Images/" + (ViewBag.paypalEmailSortParam == "paypal_email" ? "sort_desc" : "sort_asc") + ".png")' />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/sort_both.png" />
+                        }
                         </th>
                         <th>
-                            Payout Mailing Address
+                        @Html.ActionLink("Payout Mailing Address", "PayoutPreferences", new { sortOrder = ViewBag.paypalEmailAddressSortParam, currentFilter = ViewBag.currentFilter })
+                        @if (ViewBag.currentSort == "paypal_email_address" || ViewBag.currentSort == "paypal_email_address_desc")
+                        {
+                            <img src='@Url.Content("/Content/Images/" + (ViewBag.paypalEmailAddressSortParam == "paypal_email_address" ? "sort_desc" : "sort_asc") + ".png")' />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/sort_both.png" />
+                        }
+
                         </th>
                         <th>
-                            Payout Mailing Address2
+                        @Html.ActionLink("Payout Mailing Address2", "PayoutPreferences", new { sortOrder = ViewBag.paypalEmailAddress2SortParam, currentFilter = ViewBag.currentFilter })
+                        @if (ViewBag.currentSort == "paypal_email_address2" || ViewBag.currentSort == "paypal_email_address2_desc")
+                        {
+                            <img src='@Url.Content("/Content/Images/" + (ViewBag.paypalEmailAddress2SortParam == "paypal_email_address2" ? "sort_desc" : "sort_asc") + ".png")' />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/sort_both.png" />
+                        }
+
                         </th>
                         <th>
-                            Payout Mailing City
+                        @Html.ActionLink("Payout Mailing City", "PayoutPreferences", new { sortOrder = ViewBag.payoutMailingCitySortParam, currentFilter = ViewBag.currentFilter })
+                        @if (ViewBag.currentSort == "payout_mailing_city" || ViewBag.currentSort == "payout_mailing_city_desc")
+                        {
+                            <img src='@Url.Content("/Content/Images/" + (ViewBag.payoutMailingCitySortParam == "payout_mailing_city" ? "sort_desc" : "sort_asc") + ".png")' />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/sort_both.png" />
+                        }
+
                         </th>
                         <th>
-                            Payout Mailing State
+                        @Html.ActionLink("Payout Mailing State", "PayoutPreferences", new { sortOrder = ViewBag.payoutMailingStateSortParam, currentFilter = ViewBag.currentFilter })
+                        @if (ViewBag.currentSort == "payout_mailing_state" || ViewBag.currentSort == "payout_mailing_state_desc")
+                        {
+                            <img src='@Url.Content("/Content/Images/" + (ViewBag.payoutMailingStateSortParam == "payout_mailing_state" ? "sort_desc" : "sort_asc") + ".png")' />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/sort_both.png" />
+                        }
+
                         </th>
                         <th>
-                            Payout Mailing Zip
+                        @Html.ActionLink("Payout Mailing Zip", "PayoutPreferences", new { sortOrder = ViewBag.payoutMailingZipSortParam, currentFilter = ViewBag.currentFilter })
+                        @if (ViewBag.currentSort == "payout_mailing_zip" || ViewBag.currentSort == "payout_mailing_zip_desc")
+                        {
+                            <img src='@Url.Content("/Content/Images/" + (ViewBag.payoutMailingZipSortParam == "payout_mailing_zip" ? "sort_desc" : "sort_asc") + ".png")' />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/sort_both.png" />
+                        }
+
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        var profiles = item.Profiles.ToList();
-
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
+                            @Html.DisplayFor(p => item.User.FirstName)
                             </td>
 
                             <td>
-                                @Html.DisplayFor(p => profiles[0].PaymentMethod)
+                            @Html.DisplayFor(p => item.PaymentMethod)
                             </td>
                             <td>
-                                @Html.DisplayFor(p => profiles[0].PaypalEmail)
+                            @Html.DisplayFor(p => item.PaypalEmail)
                             </td>
                             <td>
-                                @Html.DisplayFor(p => profiles[0].PayoutMailAddress)
+                            @Html.DisplayFor(p => item.PayoutMailAddress)
                             </td>
                             <td>
-                                @Html.DisplayFor(p => profiles[0].PayoutMailAddress2)
+                            @Html.DisplayFor(p => item.PayoutMailAddress2)
                             </td>
                             <td>
-                                @Html.DisplayFor(p => profiles[0].PayoutMailCity)
+                            @Html.DisplayFor(p => item.PayoutMailCity)
                             </td>
                             <td>
-                                @Html.DisplayFor(p => profiles[0].PayoutMailState)
+                            @Html.DisplayFor(p => item.PayoutMailState)
                             </td>
                             <td>
-                                @Html.DisplayFor(p => profiles[0].PayoutMailZip)
+                            @Html.DisplayFor(p => item.PayoutMailZip)
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("PayoutPreferences", new { page, sortOrder = ViewBag.currentSort, currentFilter = ViewBag.currentFilter, pageSize = ViewBag.currentPageSize }))
+
+
         </div>
     
 </div>
