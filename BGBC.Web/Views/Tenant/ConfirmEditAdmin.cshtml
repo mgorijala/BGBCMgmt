@@ -11,7 +11,29 @@
 </style>
 
 <div class="back">
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.OwnerName)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.OwnerName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayName("Property Address")
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.Address)  <br />
+            @Html.DisplayFor(model => model.Address2)<br />
+            @Html.DisplayFor(model => model.City), @Html.DisplayFor(model => model.State) @Html.DisplayFor(model => model.Zip)
 
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-3">
             <b>
@@ -52,56 +74,70 @@
             @Html.DisplayFor(model => model.ConfirmEmail)
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.ProfileInfo.BillingAddress)
-            </b>
+    @if (Model.ProfileInfo.BillingAddressSame.ToString() == "True")
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <b> @Html.DisplayName("Billing Address")</b>
+            </div>
+            <div class="col-md-9">
+                <h6>Same as property address.</h6>
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.ProfileInfo.BillingAddress)
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingAddress)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingAddress)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.ProfileInfo.BillingAddress_2)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingAddress_2)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingAddress_2)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.ProfileInfo.BillingAddress_2)
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingCty)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingCty)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.ProfileInfo.BillingCty)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingState)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingState)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.ProfileInfo.BillingCty)
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.ProfileInfo.BillingZip)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.ProfileInfo.BillingZip)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.ProfileInfo.BillingState)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.ProfileInfo.BillingState)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.ProfileInfo.BillingZip)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.ProfileInfo.BillingZip)
-        </div>
-    </div>
+    }
     <div class="row">
         <div class="col-md-3">
             <b>
@@ -179,13 +215,13 @@
             </b>
         </div>
         <div class="col-md-9">
-            @if(Model.PetDepositDue.ToString() == "True")
+            @if (Model.PetDepositDue.ToString() == "True")
             {
-            <span>Yes</span>
+                <span>Yes</span>
             }
             else
             {
-            <span>No</span>
+                <span>No</span>
             }
         </div>
     </div>
@@ -204,20 +240,20 @@
     }
     <div class="clearfix">&nbsp;</div>
     <div class="row">
-    <div class="col-md-6">
-        @using (Html.BeginForm("EditAdmin", "Tenant"))
-        {
-            @Html.AntiForgeryToken()
-            <div class="form-actions no-color">
-                <input type="submit" value="Save Tenant" class="btn-button btn btn-primary" />
-                @Html.ActionLink("Edit", "EditAdmin", "Tenant", new { id = Model.UserID }, new { @class = "btn-button btn-primary" })
-                @Html.ActionLink("Cancel", null, null, null, new { @class = "btn-button btn-primary",href = Request.UrlReferrer })
-                <h2></h2>
-            </div>
-        }
+        <div class="col-md-6">
+            @using (Html.BeginForm("EditAdmin", "Tenant"))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-actions no-color">
+                    <input type="submit" value="Save Tenant" class="btn-button btn btn-primary" />
+                    @Html.ActionLink("Edit", "EditAdmin", "Tenant", new { id = Model.UserID }, new { @class = "btn-button btn-primary" })
+                    @Html.ActionLink("Cancel", null, null, null, new { @class = "btn-button btn-primary", href = Request.UrlReferrer })
+                    <h2></h2>
+                </div>
+            }
+        </div>
     </div>
 </div>
-    </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

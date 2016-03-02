@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
- 
+
 <div class="back">
     @using (Html.BeginForm("ConfirmEditAdmin", "Tenant"))
     {
@@ -18,15 +18,16 @@
         @Html.HiddenFor(p => p.City)
         @Html.HiddenFor(p => p.State)
         @Html.HiddenFor(p => p.Zip)
-
-        <h1>Test Property1-Edit Tenants</h1>
+        @Html.HiddenFor(p => p.OwnerName)
+        @Html.HiddenFor(p => p.PropertyName)
+        <h1>@Model.PropertyName-Edit Tenants</h1>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <h5><span style="color:red">&#42;</span>indicates a required field</h5>
-    <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out <a onclick="location.href='@Url.Action("Contact", "Home", null ,null)'" style=" cursor:pointer">this form.</a></h5>
-    <br />
+        <h5><span style="color:red">&#42;</span>indicates a required field</h5>
+        <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out <a onclick="location.href='@Url.Action("Contact", "Home", null ,null)'" style=" cursor:pointer">this form.</a></h5>
+        <br />
         @Html.Label("Property Manager Name")
-        <h6>Test Owner  </h6>
+        <h6>@Model.OwnerName </h6>
         <br />
 
         @Html.Label("Property Address")
@@ -94,7 +95,7 @@
                 @Html.ValidationMessageFor(p => p.ProfileInfo.BillingState, "", new { @class = "text-danger" })
             </div>
         </div>
-    <div class="row billing-address-fields col-md-offset-9">
+        <div class="row billing-address-fields col-md-offset-9">
             <div class="form-group">
                 @Html.LabelFor(p => p.ProfileInfo.BillingZip, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.ProfileInfo.BillingZip, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
@@ -171,21 +172,21 @@
         </div>
         <br />
         <div class="row col-md-offset-10">
-        <div class="form-group">
+            <div class="form-group">
 
-            <input type="submit" value="Save" class="btn btn-default" />
-            @*@Html.ActionLink("Cancel", "AllPropertyTenants", "Admin", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" })*@
+                <input type="submit" value="Save" class="btn btn-default" />
+                @*@Html.ActionLink("Cancel", "AllPropertyTenants", "Admin", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" })*@
 
-          @if (@ViewBag.Url == "PropertyTenants")
-          {
-              @Html.ActionLink("Cancel", "PropertyTenants", "Admin", new { id = @ViewBag.PropertyID }, new { @class = "btn-button btn-primary" })
-          }
-          else
-          {
-            @Html.ActionLink("Cancel", "AllPropertyTenants", "Admin", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" }) 
-          }
-            
-        </div>
+                @if (@ViewBag.Url == "PropertyTenants")
+                {
+                    @Html.ActionLink("Cancel", "PropertyTenants", "Admin", new { id = @ViewBag.PropertyID }, new { @class = "btn-button btn-primary" })
+                }
+                else
+                {
+                    @Html.ActionLink("Cancel", "AllPropertyTenants", "Admin", new { id = @ViewBag.UserID }, new { @class = "btn-button btn-primary" })
+                }
+
+            </div>
         </div>
 
     }

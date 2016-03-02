@@ -24,14 +24,16 @@
         @Html.HiddenFor(p => p.DepostDueDate)
         @Html.HiddenFor(p => p.PetDepositDue)
         @Html.HiddenFor(p => p.PetDeposit)
-    <h1>@ViewBag.PropertyName-Edit Tenants</h1>
+        @Html.HiddenFor(p => p.OwnerName)
+        @Html.HiddenFor(p => p.PropertyName)
+        <h1>@Model.PropertyName-Edit Tenants</h1>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <h5><span style="color:red">&#42;</span>indicates a required field</h5>
-    <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out <a onclick="location.href='@Url.Action("Contact", "Home", null ,null)'" style=" cursor:pointer">this form.</a></h5>
+        <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out <a onclick="location.href='@Url.Action("Contact", "Home", null ,null)'" style=" cursor:pointer">this form.</a></h5>
         <br />
 
         @Html.Label("Property Manager Name")
-         <h6>@Model.OwnerName</h6>
+        <h6>@Model.OwnerName</h6>
         <br />
 
         @Html.Label("Property Address")
@@ -183,8 +185,15 @@
             <input type="submit" value="Save Changes" class="btn btn-default" />
 
             @*Id is not pass it returns error => Add -> Conform -> Edit -> Cancel*@
+            @if (@ViewBag.Url == "PropertyTenants")
+            {
+                @Html.ActionLink("Cancel", "PropertyTenants", "Owner", new { id = Model.PropertyID }, new { })
+            }
+            else
+            {
+                @Html.ActionLink("Cancel", "MyProperties", "Owner", null, new { })
+            }
 
-            @Html.ActionLink("Cancel", "PropertyTenants", "Owner", new { id = Model.PropertyID }, new { })
         </div>
     }
 

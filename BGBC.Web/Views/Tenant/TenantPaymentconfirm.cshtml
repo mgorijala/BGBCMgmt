@@ -54,7 +54,7 @@
     <br />
     <h5>Billing Address</h5>
     <br />
-    
+
     <div class="row checkoutconform">
         <div class="col-sm-3">
             @Html.DisplayNameFor(model => model.UsePropertyAddress)
@@ -164,6 +164,21 @@
                 @Html.DisplayFor(model => model.BankAccountNumber)
             </div>
         </div>
+         <div class="row checkoutconform">
+            <div class="col-sm-3">
+                <span>Save Account</span>
+            </div>
+            <div class="col-sm-9">
+                @if (Model.SaveCard.ToString() == "True")
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
+            </div>
+        </div>
     }
     else
     {
@@ -185,30 +200,23 @@
             </div>
         </div>
 
-        @*<div class="row checkoutconform">
+        <div class="row checkoutconform">
             <div class="col-sm-3">
-                @Html.DisplayNameFor(model => model.CardExpYear)
+                @Html.DisplayNameFor(model => model.SaveCard)
             </div>
             <div class="col-sm-9">
-                @Html.DisplayFor(model => model.CardExpYear)
+                @if (Model.SaveCard.ToString() == "True")
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
             </div>
-        </div>*@
+        </div>
     }
-    <div class="row checkoutconform">
-        <div class="col-sm-3">
-            @Html.DisplayNameFor(model => model.SaveCard)
-        </div>
-        <div class="col-sm-9">
-            @if (Model.SaveCard.ToString() == "True")
-            {
-                <span>Yes</span>
-            }
-            else
-            {
-                <span>No</span>
-            }
-        </div>
-    </div>
+
 
     <br />
     <h5>Selected Charges</h5>

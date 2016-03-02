@@ -18,7 +18,7 @@ namespace BGBC.Web.Controllers
         private IRepository<Product, int?> _producRepo;
         private IRepository<Profile, int> _profileRepo;
 
-         public CustomerController()
+        public CustomerController()
         {
             _propertyRepo = new PropertyRepository();
             _userRepository = new UserRepository();
@@ -32,9 +32,9 @@ namespace BGBC.Web.Controllers
         [Authorize]
         public ActionResult Index()
         {
-           BGBC.Model.User user = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+            BGBC.Model.User user = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
 
-           return View(user);
+            return View(user);
         }
         [Authorize]
         public ActionResult Profile()
@@ -42,9 +42,9 @@ namespace BGBC.Web.Controllers
             PopulateDropDown();
             BGBC.Model.User user = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
             Profile profile = _profileRepo.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
-            UserProfile userProfile = new UserProfile { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, ConfirmEmail = user.Email, Createdon = user.Createdon, Updatedon = user.Updatedon, AltEmail = profile.AltEmail, ProfileInfo = profile};
+            UserProfile userProfile = new UserProfile { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, ConfirmEmail = user.Email, Createdon = user.Createdon, Updatedon = user.Updatedon, AltEmail = profile.AltEmail, ProfileInfo = profile };
             return View(userProfile);
-           
+
         }
 
         [HttpPost, ActionName("Profile")]
@@ -52,27 +52,35 @@ namespace BGBC.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ProfilePost(UserProfile userprofile)
         {
+
+            if ((!string.IsNullOrEmpty(userprofile.NewPassword)) && (string.IsNullOrEmpty(userprofile.CurrentPassword)))
+            {
+                ModelState.AddModelError("CurrentPassword", "The Current Password field is required.");
+            }
+
+            if (string.IsNullOrEmpty(userprofile.ProfileInfo.BillingAddress)) ModelState.AddModelError("ProfileInfo.BillingAddress", "The Address field is required.");
+            if (string.IsNullOrEmpty(userprofile.ProfileInfo.BillingCty)) ModelState.AddModelError("ProfileInfo.BillingCty", "The City field is required.");
+            if (string.IsNullOrEmpty(userprofile.ProfileInfo.BillingState)) ModelState.AddModelError("ProfileInfo.BillingState", "The State field is required.");
+            if (string.IsNullOrEmpty(userprofile.ProfileInfo.BillingZip)) ModelState.AddModelError("ProfileInfo.BillingZip", "The Zip field is required.");
+
             try
             {
-                if (string.IsNullOrEmpty(userprofile.ProfileInfo.BillingAddress)) ModelState.AddModelError("ProfileInfo.BillingAddress", "The Address field is required.");
-                if (string.IsNullOrEmpty(userprofile.ProfileInfo.BillingCty)) ModelState.AddModelError("ProfileInfo.BillingCty", "The City field is required.");
-                if (string.IsNullOrEmpty(userprofile.ProfileInfo.BillingState)) ModelState.AddModelError("ProfileInfo.BillingState", "The State field is required.");
-                if (string.IsNullOrEmpty(userprofile.ProfileInfo.BillingZip)) ModelState.AddModelError("ProfileInfo.BillingZip", "The Zip field is required.");
-
                 if (ModelState.IsValid)
                 {
-                User selUser = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
-                if (!string.IsNullOrEmpty(userprofile.NewPassword))
-                {
-                    if (selUser.Password == BGBC.Core.Security.Cryptography.Encrypt(userprofile.CurrentPassword))
+                    User selUser = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
+                    if (!string.IsNullOrEmpty(userprofile.NewPassword))
                     {
-                        selUser.Password = BGBC.Core.Security.Cryptography.Encrypt(userprofile.NewPassword);
+                        if (selUser.Password == BGBC.Core.Security.Cryptography.Encrypt(userprofile.CurrentPassword))
+                        {
+                            selUser.Password = BGBC.Core.Security.Cryptography.Encrypt(userprofile.NewPassword);
+                        }
+                        else
+                        {
+                            PopulateDropDown();
+                            ModelState.AddModelError("CurrentPassword", "Invalid password");
+                            return View("Profile", userprofile);
+                        }
                     }
-                    else
-                    {
-                        ModelState.AddModelError("CurrentPassword", "Invalid password");
-                    }
-                }
                     selUser.FirstName = userprofile.FirstName;
                     selUser.LastName = userprofile.LastName;
                     selUser.Email = userprofile.Email;
@@ -85,8 +93,8 @@ namespace BGBC.Web.Controllers
                     _profile.BillingCty = userprofile.ProfileInfo.BillingCty;
                     _profile.BillingState = userprofile.ProfileInfo.BillingState;
                     _profile.BillingZip = userprofile.ProfileInfo.BillingZip;
-                        
-         
+
+
                     _profileRepo.Update(_profile);
 
 

@@ -679,7 +679,8 @@ namespace BGBC.Web.Controllers
                     return HttpNotFound();
                 }
                 Property _property = _propertyRepo.Get((int)tenant.PropertyID);
-                ViewBag.PropertyName = _property.Name;
+                tenantInfo.PropertyName = _property.Name;
+
                 tenantInfo.FirstName = user.FirstName;
                 tenantInfo.LastName = user.LastName;
                 tenantInfo.Email = user.Email;
@@ -699,6 +700,9 @@ namespace BGBC.Web.Controllers
                 tenantInfo.State = _property.State;
                 tenantInfo.Zip = _property.Zip;
                 tenantInfo.OwnerName = string.Format("{0} {1}", _property.User.FirstName, _property.User.LastName);
+
+                ViewBag.Url = (Request.UrlReferrer != null && Request.UrlReferrer.Segments.Length > 2 ? Request.UrlReferrer.Segments[2].ToString().Trim('/') : "");
+
                 return View(tenantInfo);
             }
             else { return View("Edit", (TenantInfo)TempData["tenantdata"]); }
@@ -843,6 +847,10 @@ namespace BGBC.Web.Controllers
                 tenantInfo.Zip = _property.Zip;
                 ViewBag.UserID = _property.UserID;
                 ViewBag.PropertyID = _property.PropertyID;
+
+               
+                tenantInfo.PropertyName = _property.Name;
+                tenantInfo.OwnerName = string.Format("{0} {1}", _property.User.FirstName, _property.User.LastName);
 
                 // Get the action name of Url
                 ViewBag.Url = Request.UrlReferrer.Segments[2].ToString().Trim('/');
@@ -1047,7 +1055,7 @@ namespace BGBC.Web.Controllers
 
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref1.Name, true, "Address", "Ref1.Name");
                 if (string.IsNullOrEmpty(userprofile.Ref1.Phone)) ModelState.AddModelError("Ref1.Phone", "The Phone field is required");
-                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref1.EMail, true, "EMail", "Ref1.EMail");
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref1.EMail, true, "Email", "Ref1.EMail");
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref1.Address, true, "Address", "Ref1.Address");
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref1.Address2, false, "Address 2", "Ref1.Address2");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref1.City, true, "City", "Ref1.City");
@@ -1057,13 +1065,18 @@ namespace BGBC.Web.Controllers
 
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.Name, true, "Address", "Ref2.Name");
                 if (string.IsNullOrEmpty(userprofile.Ref2.Phone)) ModelState.AddModelError("Ref2.Phone", "The Phone field is required");
-                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref2.EMail, true, "EMail", "Ref2.EMail");
+                BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref2.EMail, true, "Email", "Ref2.EMail");
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref2.Address, true, "Address", "Ref2.Address");
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, userprofile.Ref2.Address2, false, "Address 2", "Ref2.Address2");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.City, true, "City", "Ref2.City");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.State, true, "State", "Ref2.State");
                 BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.Ref2.Zip, true, "Zip", "Ref2.Zip");
                 BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.Ref2.Relationship, true, "Relationship", "Ref2.Relationship");
+
+                if ((!string.IsNullOrEmpty(userprofile.NewPassword)) && (string.IsNullOrEmpty(userprofile.CurrentPassword)))
+                {
+                    ModelState.AddModelError("CurrentPassword", "The Current Password field is required.");
+                }
 
                 if (userprofile.ChargeAccount)
                 {
@@ -1134,6 +1147,7 @@ namespace BGBC.Web.Controllers
                         }
                         else
                         {
+                            PopulateDropDown();
                             ModelState.AddModelError("CurrentPassword", "The CurrentPassword field is required.");
                             return View(userprofile);
                         }

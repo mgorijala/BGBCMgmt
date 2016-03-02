@@ -40,7 +40,8 @@ form{margin-bottom: 50px}
    .menu ul{    
        position: inherit !important;
     display: none;
-   
+    margin-left: 0px;
+    left: 0px;
     padding-bottom: 10px;
     width: 100%;
     border-radius: 0 0 8px 8px;
@@ -157,6 +158,42 @@ float:left;
     .btn-icon{width:35px;padding: 6px 6px !important;}
 
 
-    .sorting_desc{background:url("images/sort_desc.png") no-repeat center right;}
-    .sorting_asc{background:url("images/sort_asc.png") no-repeat center right;}
-    .sorting{background:url("images/sort_both.png") no-repeat center right;}
+  
+
+    .sorting .sorting-content{    background: url("images/sort_both.png");
+    display: block;
+    width: 35px;
+    height: 25px;
+    background-repeat: no-repeat;
+    /* background-position: right; */
+    background-attachment: right;
+    float: right;
+    margin-top: -3px;
+    padding-left: 10px;
+    right: 0px;
+}
+     .sorting_desc .sorting-content{    background: url("images/sort_desc.png");
+    display: block;
+    width: 35px;
+    height: 25px;
+    background-repeat: no-repeat;
+    /* background-position: right; */
+    background-attachment: right;
+    float: right;
+    margin-top: -3px;
+    padding-left: 10px;
+    right: 0px;
+}
+     .sorting_asc .sorting-content{    background: url("images/sort_asc.png");
+    display: block;
+    width: 35px;
+    height: 25px;
+    background-repeat: no-repeat;
+    /* background-position: right; */
+    background-attachment: right;
+    float: right;
+    margin-top: -3px;
+    padding-left: 10px;
+    right: 0px;
+}
+    .sorting-header{min-width:125px !important}

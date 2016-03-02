@@ -65,7 +65,7 @@ namespace BGBC.Web.Controllers
             int currentPageSize = int.Parse(pageSize == null ? "10" : pageSize), pageNumber = (page ?? 1);
             try
             {
-                var profile = _profileRepo.Get().Where(x => x.User.Deletedon == null && x.User.UserType==1);
+                var profile = _profileRepo.Get().Where(x => x.User.Deletedon == null && x.User.UserType == 1);
 
                 ViewBag.currentSort = sortOrder;
                 ViewBag.nameSortParam = sortOrder == "name" ? "name_desc" : "name";
@@ -94,9 +94,9 @@ namespace BGBC.Web.Controllers
                 ViewBag.page = pageNumber;
                 if (!string.IsNullOrEmpty(searchString))
                 {
-                    profile = profile.Where(x => x.User.FirstName.Contains(searchString)||x.PaymentMethod.Contains(searchString)||x.PaypalEmail.Contains (searchString)
-                        ||x.PayoutMailAddress.Contains(searchString)||x.PayoutMailAddress2.Contains(searchString)||x.PayoutMailCity.Contains(searchString)
-                        ||x.PayoutMailState.Contains(searchString)||x.PayoutMailZip.Contains(searchString));
+                    profile = profile.Where(x => x.User.FirstName.Contains(searchString) || x.PaymentMethod.Contains(searchString) || x.PaypalEmail.Contains(searchString)
+                        || x.PayoutMailAddress.Contains(searchString) || x.PayoutMailAddress2.Contains(searchString) || x.PayoutMailCity.Contains(searchString)
+                        || x.PayoutMailState.Contains(searchString) || x.PayoutMailZip.Contains(searchString));
                 }
                 switch (sortOrder)
                 {
@@ -158,12 +158,17 @@ namespace BGBC.Web.Controllers
                 log.Error(ex.Message);
             }
             return View();
-         
+
         }
 
         [Authorize]
         public ActionResult AllProductsOrders(int? id, string sortOrder, string currentFilter, string searchString, int? page, string PageSize)
         {
+            if (id != null)
+            {
+                Product product = _product.Get(id);
+                ViewBag.Name = product.Name;
+            }
             int currentPageSize = int.Parse(PageSize == null ? "10" : PageSize), pageNumber = (page ?? 1);
             try
             {
@@ -175,6 +180,8 @@ namespace BGBC.Web.Controllers
                 ViewBag.CustomerSortParm = sortOrder == "Customer" ? "Customer_desc" : "Customer";
                 ViewBag.TypeSortParm = sortOrder == "Type" ? "Type_desc" : "Type";
                 ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
+                ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
+                ViewBag.CommentsSortParm = sortOrder == "Comments" ? "comments_desc" : "Comments";
                 if (PageSize != null)
                     ViewBag.currentPageSize = currentPageSize;
 
@@ -220,11 +227,23 @@ namespace BGBC.Web.Controllers
                     case "Type_desc":
                         products = products.OrderByDescending(x => x.UserType);
                         break;
+                    case "Name":
+                        products = products.OrderBy(x => x.Name);
+                        break;
+                    case "name_desc":
+                        products = products.OrderByDescending(x => x.Name);
+                        break;
                     case "Price":
                         products = products.OrderBy(x => x.Price);
                         break;
                     case "Price_desc":
                         products = products.OrderByDescending(x => x.Price);
+                        break;
+                    case "Comments":
+                        products = products.OrderBy(x => x.Comments);
+                        break;
+                    case "comments_desc":
+                        products = products.OrderByDescending(x => x.Comments);
                         break;
                     default:  // Date ascending 
                         products = products.OrderBy(x => x.TransDate);
@@ -250,7 +269,7 @@ namespace BGBC.Web.Controllers
             {
                 var rentPayments = BGBCFunctions.RentPayments();
                 ViewBag.currentSort = sortOrder;
-                ViewBag.dateSortParam = sortOrder=="date" ? "date_desc" : "date";
+                ViewBag.dateSortParam = sortOrder == "date" ? "date_desc" : "date";
                 ViewBag.idSortParam = sortOrder == "id" ? "id_desc" : "id";
                 ViewBag.nameSortParam = sortOrder == "name" ? "name_desc" : "name";
                 ViewBag.ownerSortParam = sortOrder == "owner" ? "owner_desc" : "owner";

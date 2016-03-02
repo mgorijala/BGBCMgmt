@@ -10,7 +10,7 @@
 <div class="back">
     <div class="col-md-12 no-padd">
         <div class="col-md-6 col-sm-6 no-padd">
-            <h1>PaymentHistory</h1>
+            <h1>All Rent Payments</h1>
         </div>
         <div class="col-md-6 col-sm-6 no-padd header-btn">
             @Html.ActionLink("Back", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
@@ -18,11 +18,6 @@
         </div>
     </div>
     <div class="clearfix">&nbsp;</div>
-        <div class="col-md-12 no-padd">
-            <h2> All rent payments</h2>
-        </div>
-        <div class="clearfix">&nbsp;</div>
-     
     <div class="row form-margin">
         <div class="col-md-1 col-sm-1 col-xs-3 no-padd">
             @using (Html.BeginForm())
@@ -60,119 +55,47 @@
     </div>
 
     <div class="clearfix"> </div>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>
-                        @Html.ActionLink("Date", "PaymentHistory", new { sortOrder = ViewBag.dateSortParam, currentFilter = ViewBag.currentFilter })
-                        @if (ViewBag.currentSort == "date" || ViewBag.currentSort == "date_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.dateSortParam == "date" ? "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
-                            </th>
-
-                            <th>
-                        @Html.ActionLink("ID", "PaymentHistory", new { sortOrder = ViewBag.idSortParam, currentFilter = ViewBag.currentFilter })
-                        @if (ViewBag.currentSort == "id" || ViewBag.currentSort == "id_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.idSortParam == "id" ? "sort_desc"  : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
-                            </th>
-                            <th>
-                        @Html.ActionLink("Name", "PaymentHistory", new { sortOrder = ViewBag.nameSortParam, currentFilter = ViewBag.currentFilter })
-                        @if (ViewBag.currentSort == "name" || ViewBag.currentSort == "name_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.nameSortParam == "name" ? "sort_desc"  : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
-                            </th>
-                            <th>
-                        @Html.ActionLink("Owner", "PaymentHistory", new { sortOrder = ViewBag.ownerSortParam, currentFilter = ViewBag.currentFilter })
-                        @if (ViewBag.currentSort == "owner" || ViewBag.currentSort == "owner_desc")
-                        { 
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.ownerSortParam == "owner" ?  "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
-
-                            </th>
-                            <th>
-                        @Html.ActionLink("Desc.", "PaymentHistory", new { sortOrder = ViewBag.descSortParam, currentFilter = ViewBag.currentFilter })
-                       @if (ViewBag.currentSort == "desc" || ViewBag.currentSort == "desc_desc")
-                       {
-                        <img src='@Url.Content("/Content/Images/" + (ViewBag.descSortParam == "desc" ? "sort_desc" : "sort_asc") + ".png")' />
-                       }
-                       else
-                       {
-                        <img src="/Content/Images/sort_both.png" />
-                       }
-                            </th>
-                            <th>
-                        @Html.ActionLink("Amount", "PaymentHistory", new { sortOrder = ViewBag.amountSortParam, currentFilter = ViewBag.currentFilter })
-                        @if (ViewBag.currentSort == "amount" || ViewBag.currentSort == "amount_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.amountSortParam == "amount" ? "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
-                            </th>
-                            <th>
-                        @Html.ActionLink("Comments", "PaymentHistory", new { sortOrder = ViewBag.commentSortParam, currentFilter = ViewBag.currentFilter })
-                        @if (ViewBag.currentSort == "comment" || ViewBag.currentSort == "comment_desc")
-                        {
-                            <img src='@Url.Content("/Content/Images/" + (ViewBag.commentSortParam == "comment" ? "sort_desc" : "sort_asc") + ".png")' />
-                        }
-                        else
-                        {
-                            <img src="/Content/Images/sort_both.png" />
-                        }
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var prop in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(p => prop.TransDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(p => prop.TransID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(p => prop.TenantFirstName) @Html.DisplayFor(p => prop.TenantLastName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(p => prop.OwnerFirstName) @Html.DisplayFor(p => prop.OwnerLastName)
-                                </td>
-                                <td> @Html.DisplayFor(p => prop.Description)</td>
-                                <td>@Html.DisplayFor(p => prop.Amount)</td>
-                                <td>@Html.DisplayFor(p => prop.Comments)</td>
-                            </tr>
-                        }
-                    </tbody> 
-            </table>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "date_desc" || ViewBag.CurrentSort == "date" ? (ViewBag.dateSortParam == "date" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Date", "PaymentHistory", new { sortOrder = ViewBag.dateSortParam, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "id_desc" || ViewBag.CurrentSort == "id" ? (ViewBag.idSortParam == "id" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("ID", "PaymentHistory", new { sortOrder = ViewBag.idSortParam, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "name_desc" || ViewBag.CurrentSort == "name" ? (ViewBag.nameSortParam == "name" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Name", "PaymentHistory", new { sortOrder = ViewBag.nameSortParam, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "owner_desc" || ViewBag.CurrentSort == "owner" ? (ViewBag.ownerSortParam == "owner" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Owner", "PaymentHistory", new { sortOrder = ViewBag.ownerSortParam, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "desc_desc" || ViewBag.CurrentSort == "desc" ? (ViewBag.descSortParam == "desc" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Desc.", "PaymentHistory", new { sortOrder = ViewBag.descSortParam, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "amount_desc" || ViewBag.CurrentSort == "amount" ? (ViewBag.amountSortParam == "amount" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Amount", "PaymentHistory", new { sortOrder = ViewBag.amountSortParam, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "comment_desc" || ViewBag.CurrentSort == "comment" ? (ViewBag.commentSortParam == "comment" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Comments", "PaymentHistory", new { sortOrder = ViewBag.commentSortParam, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var prop in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(p => prop.TransDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(p => prop.TransID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(p => prop.TenantFirstName) @Html.DisplayFor(p => prop.TenantLastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(p => prop.OwnerFirstName) @Html.DisplayFor(p => prop.OwnerLastName)
+                        </td>
+                        <td> @Html.DisplayFor(p => prop.Description)</td>
+                        <td>@Html.DisplayFor(p => prop.Amount)</td>
+                        <td>@Html.DisplayFor(p => prop.Comments)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
         @Html.PagedListPager(Model, page => Url.Action("PaymentHistory",
                                                                                                                 new { page, sortOrder = ViewBag.currentSort, currentFilter = ViewBag.currentFilter, pageSize = ViewBag.currentPageSize }))
-        </div>
-       
+    </div>
+
 
 </div>
 

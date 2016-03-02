@@ -56,7 +56,7 @@ namespace BGBC.Web.Controllers
         }
 
         [HttpPost]
-        [CaptchaValidator(PrivateKey = "6LccqxkTAAAAAAKyvQ8oYrdCsZVmoR10Rul5zJQC",
+        [CaptchaValidator(PrivateKey = "6LfbxBkTAAAAABPjoGlyemz842Zl89oDZmvBJ0nn",
             ErrorMessage = "Invalid input captcha.",
             RequiredMessage = "The captcha field is required.")]
         public ActionResult Contact(BGBC.Web.Models.Contact contact, bool captchaValid)
@@ -403,7 +403,7 @@ namespace BGBC.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [CaptchaValidator(PrivateKey = "6LccqxkTAAAAAAKyvQ8oYrdCsZVmoR10Rul5zJQC",
+        [CaptchaValidator(PrivateKey = "6LfbxBkTAAAAABPjoGlyemz842Zl89oDZmvBJ0nn",
             ErrorMessage = "Invalid input captcha.",
             RequiredMessage = "The captcha field is required.")]
         public ActionResult TenantReferral(TenantReferral tenantReferral, bool captchaValid)

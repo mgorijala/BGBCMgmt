@@ -69,6 +69,19 @@
             @Html.DisplayFor(model => model.Email)
         </div>
     </div>
+    @if(Model.ProfileInfo.BillingAddressSame.ToString()=="True")
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <b> @Html.DisplayName("Billing Address")</b>
+            </div>
+            <div class="col-md-9">
+                <h6>Same as property address.</h6>
+            </div>
+        </div>
+    }
+    else
+    { 
     <div class="row">
         <div class="col-md-3">
             <b>
@@ -119,6 +132,7 @@
             @Html.DisplayFor(model => model.ProfileInfo.BillingZip)
         </div>
     </div>
+    }
     <div class="row">
         <div class="col-md-3">
             <b>

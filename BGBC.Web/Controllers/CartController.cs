@@ -158,6 +158,7 @@ namespace BGBC.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Checkoutconfirm(Models.Checkout checkout)
         {
 

@@ -96,6 +96,7 @@ namespace BGBC.Web.Models
         [Display(Name = "Card Expiry Year")]
         public string CardExpYear { get; set; }
 
+        [MaxLength(4)]
         [DataType(DataType.Password)]
         public string CVV { get; set; }
 

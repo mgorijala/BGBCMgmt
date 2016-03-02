@@ -8,6 +8,7 @@ namespace BGBC.Web.Models
 {
     public class Checkout
     {
+        [StringLength(20, MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Choose Password")]
         public string ChoosePassword { get; set; }

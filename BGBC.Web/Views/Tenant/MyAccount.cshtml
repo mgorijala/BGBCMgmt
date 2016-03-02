@@ -81,7 +81,10 @@
     </div>
 
                 <div class="form-group">
-                    <div class="col-md-12 no-padd">
+                    <div class="col-md-6 no-padd">
+                        <b>Automatic Payments Enabled</b>  <a onclick="location.href='@Url.Action("Profile", "Tenant")'" style=" cursor:pointer">Click here to edit your Payment Info</a>
+                    </div>
+                    <div class="col-md-6 no-padd">
                         @if (Model.TenantRent.Count > 0)
                         {
                             <input type="submit" id="btnsubmit" value="Pay Selected" class="btn btn-warning pull-right" />

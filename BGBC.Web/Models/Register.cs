@@ -35,6 +35,7 @@ namespace BGBC.Web.Models
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
+        [StringLength(20, MinimumLength = 6)]
         public string Password { get; set; }
 
         

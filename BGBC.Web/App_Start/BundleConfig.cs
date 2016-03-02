@@ -17,6 +17,7 @@ namespace BGBC.Web
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",
                         "~/Scripts/jquery.maskedinput*",
+                        "~/Scripts/jquery.creditCardValidator.js",
                         "~/Scripts/_extensions.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

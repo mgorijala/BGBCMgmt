@@ -12,18 +12,18 @@
             <h1>@ViewBag.Name Properties</h1>
         </div>
         <div class="col-md-6" style="padding-top:30px">
-                    @Html.ActionLink("Back to All Property Owners", "ManageProperty", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
-                    @*@Html.ActionLink("Back to All Property Owners",null, new { @class = "btn-button btn-primary pull-right", @href = Request.UrlReferrer })*@
+            @Html.ActionLink("Back to All Property Owners", "ManageProperty", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
+            @*@Html.ActionLink("Back to All Property Owners",null, new { @class = "btn-button btn-primary pull-right", @href = Request.UrlReferrer })*@
         </div>
     </div>
     <div class="clearfix"></div>
-            <div class="row">
-                @if (TempData["SucessMessage"] != null)
-                {
-                    <div class="alert alert-success">@TempData["SucessMessage"]</div>
-                }
-             
-            </div>
+    <div class="row">
+        @if (TempData["SucessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SucessMessage"]</div>
+        }
+
+    </div>
     <div class="clearfix"></div>
     <div class="table-responsive">
         <table class="table table-hover">
@@ -33,52 +33,55 @@
                         Name
                     </td>
                     <td>
-                       Address
+                        Address
                     </td>
                     <td>
                         Tenants
                     </td>
                     <td>
-                      Rent
+                        Rent
                     </td>
                     <td>
-                       Options
+                        Options
                     </td>
 
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)<br />@Html.DisplayFor(modelItem => item.Address2)<br />@Html.DisplayFor(modelItem => item.City) @Html.DisplayFor(modelItem => item.State) @Html.DisplayFor(modelItem => item.Zip)
+                        </td>
+                        <td>
+                            @foreach (var tenant in item.Tenants.Where(x => x.Deletedon == null))
                             {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Address)<br />@Html.DisplayFor(modelItem => item.Address2)<br />@Html.DisplayFor(modelItem => item.City) @Html.DisplayFor(modelItem => item.State) @Html.DisplayFor(modelItem => item.Zip)
-                                </td>
-                                <td>
-                                    @foreach (var tenant in item.Tenants.Where(x=>x.Deletedon == null))
-                                    {
-                                    <a onclick="location.href='@Url.Action("ViewTenantsPayment", "Admin", new { id = tenant.User.UserID })'" style=" cursor:pointer">
-                                        @Html.DisplayFor(modelItem => tenant.User.FirstName) @Html.DisplayFor(modelItem => tenant.User.LastName)
-                                    </a>
-                                    <br />
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.Tenants.Count > 0)
-                                        {@Html.DisplayFor(modelItem => item.Tenants.FirstOrDefault().RentAmount) }
-                                </td>
-                                <td>
-                                    <div class="pull-right">
-                                        @Html.ActionLink("View Property Tenants", "PropertyTenants", "Admin", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
-                                        @Html.ActionLink("View All Tenant Payments", "ViewAllTenantPayments", "Tenant", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
-                                        @Html.ActionLink("Edit Property", "AdminEdit", "Property", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
-                                    </div>
-                                </td>
-                            </tr>
+                                <a onclick="location.href='@Url.Action("ViewTenantsPayment", "Admin", new { id = tenant.User.UserID })'" style=" cursor:pointer">
+                                    @Html.DisplayFor(modelItem => tenant.User.FirstName) @Html.DisplayFor(modelItem => tenant.User.LastName)
+                                </a>
+                                <br />
                             }
+                        </td>
+                        <td>
+                            @foreach (var tenant in item.Tenants.Where(x => x.Deletedon == null))
+                            {
+                                @Html.DisplayFor(modelItem => tenant.RentAmount)
+                                <br />
+                            }
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                @Html.ActionLink("View Property Tenants", "PropertyTenants", "Admin", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
+                                @Html.ActionLink("View All Tenant Payments", "ViewAllTenantPayments", "Tenant", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
+                                @Html.ActionLink("Edit Property", "AdminEdit", "Property", new { id = item.PropertyID }, new { @class = "btn-button btn-primary" })
+                            </div>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

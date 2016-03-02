@@ -301,7 +301,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.SaveCard, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.SaveCard, htmlAttributes: new { @class = "control-label", @id="save_card" })
                         </div>
                     </div>
                 </div>
@@ -322,7 +322,7 @@
         <div class="table-responsive">
             @Html.Label(" Order Summary:")
 
-            <table class="table">
+            <table class="table" id="tblOrderSummery">
                 <tr>
                     <th>
                         Item
@@ -343,12 +343,16 @@
                     {
                     <tr id="@( Model.OrderList[i].rowtype == "product" ? Model.OrderList[i].rowtype + i : Model.OrderList[i].rowtype)">
                         <td>
+                                <span>
                             @Html.DisplayFor(p => Model.OrderList[i].Item)
+                                </span>
                             @Html.HiddenFor(p => Model.OrderList[i].ProductID)
                             @Html.HiddenFor(p => Model.OrderList[i].Item)
                         </td>
                         <td>
+                                <span>
                             @Html.DisplayFor(p => Model.OrderList[i].Price)
+                                </span>
                             @Html.HiddenFor(p => Model.OrderList[i].Price)
                         </td>
                         <td>
@@ -360,7 +364,9 @@
                             @Html.HiddenFor(p => Model.OrderList[i].rowtype)
                         </td>
                         <td>
+                                <span>
                             @Html.DisplayFor(p => Model.OrderList[i].Subtotal)
+                                </span>
                             @Html.HiddenFor(p => Model.OrderList[i].Subtotal)
                         </td>
                     </tr>
@@ -371,7 +377,7 @@
                         <td></td>
                         <td></td>
                         <td>@Html.LabelFor(model => model.OrderTotal, htmlAttributes: new { @class = "control-label" })   </td>
-                        <td>@Html.DisplayFor(model => model.OrderTotal, new { htmlAttributes = new { @class = "form-control" } })</td>
+                        <td id="tdOrderTotal"><span>@Html.DisplayFor(model => model.OrderTotal, new { htmlAttributes = new { @class = "form-control" } })   </span></td>
                         @Html.HiddenFor(p => Model.OrderTotal)
                         @Html.HiddenFor(p => Model.ProductIds)
                     </tr>
@@ -423,21 +429,25 @@
                 $('.Creditcard').show();
                 $('.savecard').show();
                 $('.eCheck').hide();
+                $('#save_card').text("Save Card");
             }
             else {
                 $('.Creditcard').hide();
                 $('.savecard').show();
                 $('.eCheck').show();
+                $('#save_card').text("Save Account");
             }
             if ($("#eChecks").is(':checked')) {
                 $('.Creditcard').hide();
                 $('.eCheck').show();
                 $('.savecard').show();
+                $('#save_card').text("Save Account");
             }
             else {
                 $('.Creditcard').show();
                 $('.eCheck').hide();
                 $('.savecard').show();
+                $('#save_card').text("Save Card");
             }
 
             $('#CreditCards').change(function () {
@@ -445,11 +455,13 @@
                     $('.Creditcard').show();
                     $('.savecard').show();
                     $('.eCheck').hide();
+                    $('#save_card').text("Save Card");
                 }
                 else {
                     $('.Creditcard').hide();
                     $('.savecard').show();
                     $('.eCheck').show();
+                    $('#save_card').text("Save Account");
                 }
             });
             $('#eChecks').change(function () {
@@ -457,13 +469,66 @@
                     $('.Creditcard').hide();
                     $('.eCheck').show();
                     $('.savecard').show();
+                    $('#save_card').text("Save Account");
                 }
                 else {
                     $('.Creditcard').show();
                     $('.eCheck').hide();
                     $('.savecard').show();
+                    $('#save_card').text("Save Card");
                 }
             });
         });
+        $('#CardNo').validateCreditCard(function (result) {
+            if (result.card_type != null) {
+                var processFeeValue, totalProductsPrices = 0, conventionFee = 0;
+                //for total product costs without tax and process fee
+                $('[id*=product]>td:last-child>span').each(function () {
+                    totalProductsPrices += parseFloat(parseCurrency($(this).text()), 10);
+                });
+
+                //percentage caliculator on basis of card type
+                switch (result.card_type.name) {
+                    case "discover":
+                    case "mastercard":
+                    case "visa": { processFeeValue = Math.round(((totalProductsPrices / 100) * 8) * 100) / 100; conventionFee = 8; break };
+                    case "amex": { processFeeValue = Math.round(((totalProductsPrices / 100) * 10) * 100) / 100;; conventionFee = 10; break };
+                    default: processFeeValue = 0;
+                }
+                //for subtotal column change
+                $('#fee>td:last-child>span').text('£' + processFeeValue);
+                $('#fee>td:last-child :input[type=hidden]').val(processFeeValue);
+                //for item column change
+                $('#fee>td:first-child>span').text('Payment Processing and Convenience Fee (' + conventionFee + '%)');
+                $('#fee>td:first-child :input[type=hidden]:last-child').val('Payment Processing and Convenience Fee (' + conventionFee + '%)');
+                //for price column change
+                $('#fee>td:nth-child(2)>span').text('£' + processFeeValue);
+                $('#fee>td:nth-child(2) :input[type=hidden]').val(processFeeValue);
+                //for order total count
+                var totalResult = 0;
+                $('#tblOrderSummery>tbody:first tr:not(:first-child) td:last-child').each(function () {
+                    totalResult += parseFloat(parseCurrency($(this).find('span').text()), 10);
+                });
+                $('#tdOrderTotal').text('£' + totalResult);
+                $('#OrderTotal').val(totalResult);
+            }
+        }).keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A, Command+A
+                (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        function parseCurrency(num) {
+            return num.replace(/[^0-9\.]+/g, "");
+        }
     </script>
 }

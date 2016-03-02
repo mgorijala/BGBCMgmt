@@ -72,6 +72,10 @@ namespace BGBC.Web.Controllers
         {
             try
             {
+                if ((!string.IsNullOrEmpty(userprofile.NewPassword)) && (string.IsNullOrEmpty(userprofile.CurrentPassword)))
+                {
+                    ModelState.AddModelError("CurrentPassword", "The Current Password field is required.");
+                }
 
                 User selUser = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
                 if (!string.IsNullOrEmpty(userprofile.NewPassword))

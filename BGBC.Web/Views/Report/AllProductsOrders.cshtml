@@ -11,13 +11,20 @@
 
 </style>
 <div class="back">
-    <div class="col-md-12 no-padd">
-        <div class="col-md-6 col-sm-6 no-padd">
+    @if (@ViewBag.Name != null)
+    {
+        <div class="col-md-6 no-padd">
+            <h1>@ViewBag.Name Orders</h1>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-6 no-padd">
             <h1>All Product Order</h1>
         </div>
-        <div class="col-md-6 col-sm-6 no-padd header-btn">
-            @Html.ActionLink("Back to Dashboard", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
-        </div>
+    }
+    <div class="col-md-6 col-sm-6 no-padd header-btn">
+        @Html.ActionLink("Back to Dashboard", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
     </div>
     <div class="clearfix">&nbsp; </div>
     @*Displays all products orders*@
@@ -64,27 +71,13 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th class="@(ViewBag.CurrentSort == "date_desc" || ViewBag.CurrentSort == "Date" ? (ViewBag.DateSortParm == "Date" ? "sorting_desc" : "sorting_asc") : "sorting")">
-                        @Html.ActionLink("Date", "AllProductsOrders", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
-                    </th>
-                    <th class="@(ViewBag.CurrentSort == "TransID" || ViewBag.CurrentSort == "TransID_desc" ? (ViewBag.DateSortParm == "TransID" ? "sorting_desc" : "sorting_asc") : "sorting")">
-                        @Html.ActionLink("Trans ID", "AllProductsOrders", new { sortOrder = ViewBag.TransIDSortParm, currentFilter = ViewBag.CurrentFilter })
-                    </th>
-                    <th style="width:100px;" class="@(ViewBag.CurrentSort == "Customer" || ViewBag.CurrentSort == "Customer_desc" ? (ViewBag.DateSortParm == "Customer" ? "sorting_desc" : "sorting_asc") : "sorting")">
-                        @Html.ActionLink("Customer", "AllProductsOrders", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter })
-                    </th>
-                    <th style="width:100px;" class="@(ViewBag.CurrentSort == "Type" || ViewBag.CurrentSort == "Type_desc" ? (ViewBag.DateSortParm == "Type" ? "sorting_desc" : "sorting_asc") : "sorting")">
-                        @Html.ActionLink("Type", "AllProductsOrders", new { sortOrder = ViewBag.TypeSortParm, currentFilter = ViewBag.CurrentFilter })
-                    </th>
-                    <th>
-                        Desc.
-                    </th>
-                    <th style="width:100px;" class="@(ViewBag.CurrentSort == "Price" || ViewBag.CurrentSort == "Price_desc" ? (ViewBag.DateSortParm == "Price" ? "sorting_desc" : "sorting_asc") : "sorting")">
-                        @Html.ActionLink("Price", "AllProductsOrders", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter })
-                    </th>
-                    <th>
-                        Comments
-                    </th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "date_desc" || ViewBag.CurrentSort == "Date" ? (ViewBag.DateSortParm == "Date" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Date", "AllProductsOrders", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "TransID_desc" || ViewBag.CurrentSort == "TransID" ? (ViewBag.TransIDSortParm == "TransID" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Trans ID", "AllProductsOrders", new { sortOrder = ViewBag.TransIDSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "Customer_desc" || ViewBag.CurrentSort == "Customer" ? (ViewBag.CustomerSortParm == "Customer" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Customer", "AllProductsOrders", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "Type_desc" || ViewBag.CurrentSort == "Type" ? (ViewBag.TypeSortParm == "Type" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Type", "AllProductsOrders", new { sortOrder = ViewBag.TypeSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "name_desc" || ViewBag.CurrentSort == "Name" ? (ViewBag.NameSortParm == "Name" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Name", "AllProductsOrders", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "Price_desc" || ViewBag.CurrentSort == "Price" ? (ViewBag.PriceSortParm == "Price" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Price", "AllProductsOrders", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "comments_desc" || ViewBag.CurrentSort == "Comments" ? (ViewBag.CommentsSortParm == "Comments" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Comments", "AllProductsOrders", new { sortOrder = ViewBag.CommentsSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
                 </tr>
             </thead>
             <tbody>
@@ -110,7 +103,7 @@
                         {
                             <td></td>
                         }
-                        <td>@Html.DisplayFor(p => prop.Description)</td>
+                        <td>@Html.DisplayFor(p => prop.Name)</td>
                         <td style="width:100px;">@Html.DisplayFor(p => prop.Price) </td>
                         <td>@Html.DisplayFor(p => prop.Comments) </td>
                     </tr>

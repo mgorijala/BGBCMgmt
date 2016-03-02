@@ -169,6 +169,10 @@ namespace BGBC.Web.Controllers
                     BGBC.Core.ModelDataValidation.Instance.Alpha(ModelState, userprofile.ProfileInfo.PayoutMailState, true, "Mailing State", "ProfileInfo.PayoutMailState");
                     BGBC.Core.ModelDataValidation.Instance.Zip(ModelState, userprofile.ProfileInfo.PayoutMailZip, true, "Mailing Zip", "ProfileInfo.PayoutMailZip");
                 }
+                if ((!string.IsNullOrEmpty(userprofile.NewPassword)) && (string.IsNullOrEmpty(userprofile.CurrentPassword)))
+                {
+                    ModelState.AddModelError("CurrentPassword", "The Current Password field is required.");
+                }
 
                 if (ModelState.IsValid)
                 {
@@ -181,6 +185,7 @@ namespace BGBC.Web.Controllers
                         }
                         else
                         {
+                            PopulateDropDown();
                             ModelState.AddModelError("CurrentPassword", "Invalid password");
                             return View(userprofile);
                         }

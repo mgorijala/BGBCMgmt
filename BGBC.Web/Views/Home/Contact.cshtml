@@ -19,7 +19,15 @@
             <div class="alert alert-success">@TempData["SucessMessage"]</div>
         }
         <br />
-        <p>If you are a client of BGBC and have an immediate issue, click @Html.ActionLink("here", "Login", "Home") to login and send a message. If you are not yet a client of BGBC and have questions, please click @Html.ActionLink("here", "Contact", "Home") to contact our office. We appreciate your interest in BGBC Management.</p>
+        <p>
+            If you are a client of BGBC and have an immediate issue, click @Html.ActionLink("here", "Login", "Home") to login and send a message. If you are not yet a client of BGBC and have questions, please click
+            @Html.Raw(HttpUtility.UrlDecode(Html.ActionLink("here", "Contact", "Home", new { id = "#Contact" }, new { @class = "" }).ToString()))
+            to contact our office. We appreciate your interest in BGBC Management.
+        </p>
+
+        <div id="Contact">
+            <br />
+        </div>
 
         <div class="Row">
             <div class="form-group">
@@ -61,7 +69,7 @@
             var RecaptchaOptions = { "curl_timeout": 1 };
         </script>
         <script src='https://www.google.com/recaptcha/api.js?render=onload'></script>
-        <div class="g-recaptcha" data-sitekey="6LccqxkTAAAAAAI36EiGvFkhOoPk0Y_U6hUmCZgd"></div>
+        <div class="g-recaptcha" data-sitekey="6LfbxBkTAAAAALfKZyXgy6aVrhNmXn4Pl6aCogK3"></div>
         @Html.ValidationMessage("ReCaptcha", "", new { @class = "text-danger" })
         <noscript>
             <div style="width: 302px; height: 352px;">

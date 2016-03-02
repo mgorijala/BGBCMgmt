@@ -34,6 +34,7 @@ namespace BGBC.Web.Models
         [Compare("Email", ErrorMessage = "Email and Confirm Email must match")]
         public string ConfirmEmail { get; set; }
 
+        [StringLength(20, MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "New Password")]
         public string NewPassword { get; set; }
