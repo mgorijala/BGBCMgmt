@@ -430,24 +430,30 @@
                 $('.savecard').show();
                 $('.eCheck').hide();
                 $('#save_card').text("Save Card");
+                var result = $('#CardNo').validateCreditCard();
+                feechargecalc(result.card_type != null ? result.card_type.name : '')
             }
             else {
                 $('.Creditcard').hide();
                 $('.savecard').show();
                 $('.eCheck').show();
                 $('#save_card').text("Save Account");
+                feechargecalc('echeck');
             }
             if ($("#eChecks").is(':checked')) {
                 $('.Creditcard').hide();
                 $('.eCheck').show();
                 $('.savecard').show();
                 $('#save_card').text("Save Account");
+                feechargecalc('echeck');
             }
             else {
                 $('.Creditcard').show();
                 $('.eCheck').hide();
                 $('.savecard').show();
                 $('#save_card').text("Save Card");
+                var result = $('#CardNo').validateCreditCard();
+                feechargecalc(result.card_type != null ? result.card_type.name : '')
             }
 
             $('#CreditCards').change(function () {
@@ -456,12 +462,15 @@
                     $('.savecard').show();
                     $('.eCheck').hide();
                     $('#save_card').text("Save Card");
+                    var result = $('#CardNo').validateCreditCard();
+                    feechargecalc(result.card_type != null ? result.card_type.name : '')
                 }
                 else {
                     $('.Creditcard').hide();
                     $('.savecard').show();
                     $('.eCheck').show();
                     $('#save_card').text("Save Account");
+                    feechargecalc('echeck');
                 }
             });
             $('#eChecks').change(function () {
@@ -470,47 +479,22 @@
                     $('.eCheck').show();
                     $('.savecard').show();
                     $('#save_card').text("Save Account");
+                    feechargecalc('echeck');
                 }
                 else {
                     $('.Creditcard').show();
                     $('.eCheck').hide();
                     $('.savecard').show();
                     $('#save_card').text("Save Card");
+                    var result = $('#CardNo').validateCreditCard();
+                    feechargecalc(result.card_type != null ? result.card_type.name : '')
                 }
             });
         });
         $('#CardNo').validateCreditCard(function (result) {
             if (result.card_type != null) {
-                var processFeeValue, totalProductsPrices = 0, conventionFee = 0;
-                //for total product costs without tax and process fee
-                $('[id*=product]>td:last-child>span').each(function () {
-                    totalProductsPrices += parseFloat(parseCurrency($(this).text()), 10);
-                });
-
-                //percentage caliculator on basis of card type
-                switch (result.card_type.name) {
-                    case "discover":
-                    case "mastercard":
-                    case "visa": { processFeeValue = Math.round(((totalProductsPrices / 100) * 8) * 100) / 100; conventionFee = 8; break };
-                    case "amex": { processFeeValue = Math.round(((totalProductsPrices / 100) * 10) * 100) / 100;; conventionFee = 10; break };
-                    default: processFeeValue = 0;
-                }
-                //for subtotal column change
-                $('#fee>td:last-child>span').text('£' + processFeeValue);
-                $('#fee>td:last-child :input[type=hidden]').val(processFeeValue);
-                //for item column change
-                $('#fee>td:first-child>span').text('Payment Processing and Convenience Fee (' + conventionFee + '%)');
-                $('#fee>td:first-child :input[type=hidden]:last-child').val('Payment Processing and Convenience Fee (' + conventionFee + '%)');
-                //for price column change
-                $('#fee>td:nth-child(2)>span').text('£' + processFeeValue);
-                $('#fee>td:nth-child(2) :input[type=hidden]').val(processFeeValue);
-                //for order total count
-                var totalResult = 0;
-                $('#tblOrderSummery>tbody:first tr:not(:first-child) td:last-child').each(function () {
-                    totalResult += parseFloat(parseCurrency($(this).find('span').text()), 10);
-                });
-                $('#tdOrderTotal').text('£' + totalResult);
-                $('#OrderTotal').val(totalResult);
+                console.log(result);
+                feechargecalc(result.card_type.name);
             }
         }).keydown(function (e) {
             // Allow: backspace, delete, tab, escape, enter and .
@@ -529,6 +513,41 @@
         });
         function parseCurrency(num) {
             return num.replace(/[^0-9\.]+/g, "");
+        }
+
+        function feechargecalc(cardtype) {
+            var processFeeValue, totalProductsPrices = 0, conventionFee = 0;
+            //for total product costs without tax and process fee
+            $('[id*=product]>td:last-child>span').each(function () {
+                totalProductsPrices += parseFloat(parseCurrency($(this).text()), 10);
+            });
+
+            //percentage caliculator on basis of card type
+            switch (cardtype) {
+                case "discover":
+                case "mastercard":
+                case "visa": { processFeeValue = Math.round(((totalProductsPrices / 100) * 8) * 100) / 100; conventionFee = 8; break };
+                case "amex": { processFeeValue = Math.round(((totalProductsPrices / 100) * 10) * 100) / 100;; conventionFee = 10; break };
+                case "echeck": { processFeeValue = Math.round(((totalProductsPrices / 100) * 10.75) * 100) / 100;; conventionFee = 10.75; break };
+                default: { processFeeValue = Math.round(((totalProductsPrices / 100) * 8) * 100) / 100;; conventionFee = 8; break };
+            }
+            var currsym = ($('#fee>td:last-child>span').text() != null && $('#fee>td:last-child>span').text().trim().length > 0 ? $('#fee>td:last-child>span').text().trim().substring(0, 1) : '');
+            //for subtotal column change
+            $('#fee>td:last-child>span').text(currsym + processFeeValue);
+            $('#fee>td:last-child :input[type=hidden]').val(processFeeValue);
+            //for item column change
+            $('#fee>td:first-child>span').text('Payment Processing and Convenience Fee (' + conventionFee + '%)');
+            $('#fee>td:first-child :input[type=hidden]:last-child').val('Payment Processing and Convenience Fee (' + conventionFee + '%)');
+            //for price column change
+            $('#fee>td:nth-child(2)>span').text(currsym + processFeeValue);
+            $('#fee>td:nth-child(2) :input[type=hidden]').val(processFeeValue);
+            //for order total count
+            var totalResult = 0;
+            $('#tblOrderSummery>tbody:first tr:not(:first-child) td:last-child').each(function () {
+                totalResult += parseFloat(parseCurrency($(this).find('span').text()), 10);
+            });
+            $('#tdOrderTotal').text(currsym + totalResult);
+            $('#OrderTotal').val(totalResult);
         }
     </script>
 }
