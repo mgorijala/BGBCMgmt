@@ -130,6 +130,7 @@ namespace BGBC.Web.Models
         public Nullable<System.DateTime> FinalDueDate { get; set; }
 
         [Display(Name = "Deposit Amount")]
+        [DataType(DataType.Currency)]
         public Nullable<decimal> Deposit { get; set; }
 
         [Display(Name = "Deposit Due Date")]
@@ -141,6 +142,7 @@ namespace BGBC.Web.Models
         public bool PetDepositDue { get; set; }
 
         [Display(Name = "Pet Deposit Amount")]
+        [DataType(DataType.Currency)]
         public Nullable<decimal> PetDeposit { get; set; }
 
         public string PropertyName { get; set; }

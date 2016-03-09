@@ -62,7 +62,7 @@ namespace BGBC.Web.Controllers
                 Property property = _propertyRepo.Get((int)user.Tenants.FirstOrDefault().PropertyID);
                 myaccount.Name = property.User.FirstName;
                 myaccount.Email = property.User.Email;
-                myaccount.Phone = property.User.Profiles.FirstOrDefault().HomePhone;
+                myaccount.Phone = property.User.Profiles.FirstOrDefault().MobilePhone;
                 myaccount.RentAmount = user.Tenants.FirstOrDefault().RentAmount;
                 myaccount.RentDue = property.RentDueDay.ToString();
                 List<RentDue> rentDue = _rentDueRepo.GetRef(((BGBC.Core.CustomPrincipal)(User)).UserId);

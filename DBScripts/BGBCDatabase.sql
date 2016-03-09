@@ -21,6 +21,7 @@ CREATE TABLE Product(
 	Description varchar(max) NULL,
 	Price decimal(15, 2) NULL,
 	isLocal bit not NULL,
+	DisOrder int,
 	Createdon datetime NULL,
 	Updatedon datetime NULL,
 	Deletedon datetime NULL
@@ -109,6 +110,9 @@ CREATE TABLE Tenants(
 	DepostDueDate datetime,
 	PetDepositDue bit not null,
 	PetDeposit decimal(15, 2) NULL,
+	PetRentAmount  decimal(15, 2) NULL,
+	Rent decimal(15, 2) NULL,
+	LeaseDocName varchar(255),
 	Createdon datetime NULL,
 	Updatedon datetime NULL,
 	Deletedon datetime NULL
@@ -246,6 +250,7 @@ CREATE TABLE RentPayment(
 	RentYear int,
 	Description varchar(255),
 	Amount decimal(15, 2) not NULL,
+	Type smallint,
 	Createdon datetime NULL
 )
 GO
@@ -291,8 +296,8 @@ CREATE TABLE Emails(
 	Subject varchar(255) NULL,
 	Body nvarchar(max) NULL,
 	Active bit NOT NULL,
-	CreatedDate datetime NULL,
-	ModifiedDate datetime NULL,
+	Createdon datetime NULL,
+	Updatedon datetime NULL,
 )
 GO
 
@@ -304,7 +309,7 @@ CREATE TABLE PasswordReset(
 	PasswordResetID int PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	EmailID varchar(255) NULL,
 	Token varchar(255),
-	CreatedDate datetime NULL
+	Createdon datetime NULL
 )
 GO
 

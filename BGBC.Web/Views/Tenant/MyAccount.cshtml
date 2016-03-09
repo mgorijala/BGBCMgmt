@@ -25,7 +25,23 @@
             <div class="col-md-4">
                 @Html.Label("Rental Details :")
                 @Html.Label("Rent Amount :", new { style = "display:inline;" }) @Html.DisplayFor(model => model.RentAmount)<br />
-                @Html.Label("Rent Due :", new { style = "display:inline;" })  @Html.DisplayFor(model => model.RentDue)
+                @Html.Label("Rent Due :", new { style = "display:inline;" })  @*@Html.DisplayFor(model => model.RentDue)*@
+                @if ((Model.RentDue.ToString() == "1") | (Model.RentDue.ToString() == "21"))
+                {
+                    @Html.DisplayFor(model => model.RentDue)<span>st</span>
+                }
+                else if ((Model.RentDue.ToString() == "2") | (Model.RentDue.ToString() == "22"))
+                {
+                    @Html.DisplayFor(model => model.RentDue)<span>nd</span>
+                }
+                else if ((Model.RentDue.ToString() == "3") | (Model.RentDue.ToString() == "23"))
+                {
+                    @Html.DisplayFor(model => model.RentDue)<span>rd</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.RentDue)<span>th</span>
+                }
             </div>
         </div>
 

@@ -63,6 +63,7 @@ namespace BGBC.Web.Models
 
         [Display(Name = "Card Number")]
         [DataType(DataType.CreditCard)]
+        [MaxLength(16)]
         public string CardNo { get; set; }
 
         public string CardNoMask

@@ -48,17 +48,17 @@
     <div class="row">
         <div class="col-md-3">
             <b>
-                @Html.DisplayNameFor(model => model.isLocal)
+                @Html.DisplayName("Restrict to Houston Area Customers Only?")
             </b>
         </div>
         <div class="col-md-9">
            @if (Model.isLocal.ToString() == "True")
            {
-            <span>Houston, TX</span>
+            <span>Yes</span>
            }
            else
            {
-            <span>National</span>
+            <span>No (Available Nationally)</span>
            }
         </div>
     </div>

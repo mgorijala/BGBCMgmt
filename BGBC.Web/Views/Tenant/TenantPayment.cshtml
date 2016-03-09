@@ -89,16 +89,14 @@
                 @Html.ValidationMessageFor(p => p.BillingState, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="row billing-address-fields col-md-offset-9">
+        <div class="row billing-address-fields">
             <div class="form-group">
                 @Html.LabelFor(p => p.BillingZip, htmlAttributes: new { @class = "control-label required" })
                 @Html.EditorFor(p => p.BillingZip, new { htmlAttributes = new { @class = "form-control billing-address-field" } })
                 @Html.ValidationMessageFor(p => p.BillingZip, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <br />
-        <div class="pull-left">
+        <div class=" pull-left">
             <h4>Selected charges</h4>
             <br />
         </div>

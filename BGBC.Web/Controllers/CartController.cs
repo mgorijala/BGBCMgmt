@@ -256,6 +256,7 @@ namespace BGBC.Web.Controllers
 
             var errorList = query.ToList();
             var allErrors = ModelState.Values.SelectMany(v => v.Errors);
+            checkout.OrderTotal = TotalAmountToPay(checkout.CardType, checkout.PaymentMethod);
             if (ModelState.IsValid)
             {
                 if (!Request.IsAuthenticated)
@@ -557,6 +558,31 @@ namespace BGBC.Web.Controllers
                 new SelectListItem() { Text="Wisconsin", Value="WI"},
                 new SelectListItem() { Text="Wyoming", Value="WY"}
             };
+        }
+
+        private decimal TotalAmountToPay(CreditCardTypeType cardType, string paymentMethod)
+        {
+            CreditCardTypeType CardType = paymentMethod == "eCheck" ? CreditCardTypeType.eCheck : cardType;
+            HttpCookie authCookie = Request.Cookies[".BGBCProducts"];
+            decimal total = 0;
+            if (authCookie != null)
+            {
+                string[] ids = authCookie.Value.ToString().Split(',');
+                IEnumerable<Product> list = _repository.Get();
+                foreach (var item in list)
+                {
+                    if (Array.Exists(ids, e => e == item.ProductID.ToString()))
+                    {
+                        total = total + (decimal)item.Price;
+                    }
+
+                }
+
+                decimal fee = CreditCardUtility.PaymentCaliculation(CardType, total);
+                decimal tax = Math.Round((total * (8.25m / 100)), 2);
+                total = total + tax + fee;
+            }
+            return total;
         }
     }
 }

@@ -165,6 +165,21 @@ namespace BGBC.Core
             //If Mod 10 equals 0, the number is good and this will return true
             return sum % 10 == 0;
         }
+
+        public static decimal PaymentCaliculation(CreditCardTypeType cardType, decimal totalPrice)
+        {
+            decimal finalPrice = 0;
+            switch (cardType)
+            {
+                case CreditCardTypeType.Visa:
+                case CreditCardTypeType.MasterCard:
+                case CreditCardTypeType.Discover: { finalPrice = Math.Round((totalPrice * (8m / 100)), 2); break; }
+                case CreditCardTypeType.Amex: { finalPrice = Math.Round((totalPrice * (10m / 100)), 2); break; }
+                case CreditCardTypeType.eCheck: { finalPrice = Math.Round((totalPrice * (10.75m / 100)), 2); break; }
+                default: { finalPrice = Math.Round((totalPrice * (8m / 100)), 2); break; }
+            }
+            return finalPrice;
+        }
     }
 
     /// <summary>
@@ -178,6 +193,7 @@ namespace BGBC.Core
         Discover,
         Amex,
         Switch,
-        Solo
+        Solo,
+        eCheck
     }
 }

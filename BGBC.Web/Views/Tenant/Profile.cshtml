@@ -305,7 +305,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="text-align:right">
+            <div class="row method" style="text-align:right">
                 <div class="col-md-7 no-padd">
                     <div class="col-md-9 col-sm-9 col-xs-9" style="text-align:right">
                         <b>
@@ -587,6 +587,23 @@
 
                 }
             });
+            $('#ChargeAccount').change(function () {
+                if ($('#ChargeAccount').is(':checked')) {
+                    $('.method').show();
+                }
+                else {
+                    $('.method').hide();
+                }
+            });
+            $(function () {
+                if ($('#ChargeAccount').is(':checked')) {
+                    $('.method').show();
+                }
+                else {
+                    $('.method').hide();
+                }
+            });
+
         });
     </script>
 }

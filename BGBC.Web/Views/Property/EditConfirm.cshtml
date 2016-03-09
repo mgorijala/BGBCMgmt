@@ -96,15 +96,15 @@
             </b>
         </div>
         <div class="col-md-9">
-            @if (Model.RentDueDay.ToString() == "1")
+            @if ((Model.RentDueDay.ToString() == "1") | (Model.RentDueDay.ToString() == "21"))
             {
                 @Html.DisplayFor(model => model.RentDueDay)<span>st</span>
             }
-            else if (Model.RentDueDay.ToString() == "2")
+            else if ((Model.RentDueDay.ToString() == "2") | (Model.RentDueDay.ToString() == "22"))
             {
                 @Html.DisplayFor(model => model.RentDueDay)<span>nd</span>
             }
-            else if (Model.RentDueDay.ToString() == "3")
+            else if ((Model.RentDueDay.ToString() == "3") | (Model.RentDueDay.ToString() == "23"))
             {
                 @Html.DisplayFor(model => model.RentDueDay)<span>rd</span>
             }
