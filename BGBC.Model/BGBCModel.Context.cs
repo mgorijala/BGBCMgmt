@@ -30,6 +30,7 @@ namespace BGBC.Model
         public virtual DbSet<ContactForm> ContactForms { get; set; }
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<JobStatu> JobStatus { get; set; }
+        public virtual DbSet<LeaseFile> LeaseFiles { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<PasswordReset> PasswordResets { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
@@ -37,16 +38,17 @@ namespace BGBC.Model
         public virtual DbSet<ProductOrder> ProductOrders { get; set; }
         public virtual DbSet<Profile> Profiles { get; set; }
         public virtual DbSet<Property> Properties { get; set; }
+        public virtual DbSet<RentAutoPay> RentAutoPays { get; set; }
         public virtual DbSet<RentDue> RentDues { get; set; }
         public virtual DbSet<RentPayment> RentPayments { get; set; }
         public virtual DbSet<TenantReferral> TenantReferrals { get; set; }
         public virtual DbSet<Tenant> Tenants { get; set; }
+        public virtual DbSet<UserCart> UserCarts { get; set; }
         public virtual DbSet<UserCC> UserCCs { get; set; }
         public virtual DbSet<UserReference> UserReferences { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<vProductOrder> vProductOrders { get; set; }
         public virtual DbSet<vRentPayment> vRentPayments { get; set; }
-        public virtual DbSet<RentAutoPay> RentAutoPays { get; set; }
     
         public virtual ObjectResult<Nullable<int>> SP_NextInvoiceNo()
         {

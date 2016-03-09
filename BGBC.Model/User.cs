@@ -20,11 +20,12 @@ namespace BGBC.Model
             this.Payments = new HashSet<Payment>();
             this.Profiles = new HashSet<Profile>();
             this.Properties = new HashSet<Property>();
+            this.RentAutoPays = new HashSet<RentAutoPay>();
             this.RentDues = new HashSet<RentDue>();
             this.Tenants = new HashSet<Tenant>();
+            this.UserCarts = new HashSet<UserCart>();
             this.UserCCs = new HashSet<UserCC>();
             this.UserReferences = new HashSet<UserReference>();
-            this.RentAutoPays = new HashSet<RentAutoPay>();
         }
     
         public int UserID { get; set; }
@@ -41,10 +42,11 @@ namespace BGBC.Model
         public virtual ICollection<Payment> Payments { get; set; }
         public virtual ICollection<Profile> Profiles { get; set; }
         public virtual ICollection<Property> Properties { get; set; }
+        public virtual ICollection<RentAutoPay> RentAutoPays { get; set; }
         public virtual ICollection<RentDue> RentDues { get; set; }
         public virtual ICollection<Tenant> Tenants { get; set; }
+        public virtual ICollection<UserCart> UserCarts { get; set; }
         public virtual ICollection<UserCC> UserCCs { get; set; }
         public virtual ICollection<UserReference> UserReferences { get; set; }
-        public virtual ICollection<RentAutoPay> RentAutoPays { get; set; }
     }
 }

@@ -17,6 +17,6 @@ namespace BGBC.Model
         public int PasswordResetID { get; set; }
         public string EmailID { get; set; }
         public string Token { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<System.DateTime> Createdon { get; set; }
     }
 }

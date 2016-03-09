@@ -10,16 +10,13 @@
 namespace BGBC.Model
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class TenantOutstanding
     {
         public int UserID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-        [DataType(DataType.Currency)]
         public decimal Balance { get; set; }
     }
 }

@@ -5,41 +5,46 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="6862d5f4634a475e8247ea8a5a0286b7" Name="Diagram1" ZoomLevel="89">
-        <EntityTypeShape EntityType="BGBCModel.ContactForm" Width="1.5" PointX="5.75" PointY="1.375" />
-        <EntityTypeShape EntityType="BGBCModel.Email" Width="1.5" PointX="7.75" PointY="1.375" />
-        <EntityTypeShape EntityType="BGBCModel.JobStatu" Width="1.5" PointX="7.75" PointY="5.375" />
-        <EntityTypeShape EntityType="BGBCModel.Order" Width="1.5" PointX="3" PointY="10.125" />
-        <EntityTypeShape EntityType="BGBCModel.PasswordReset" Width="1.5" PointX="7.75" PointY="8.375" />
-        <EntityTypeShape EntityType="BGBCModel.Payment" Width="1.5" PointX="3" PointY="19.25" />
-        <EntityTypeShape EntityType="BGBCModel.Product" Width="1.5" PointX="3" PointY="0.75" />
-        <EntityTypeShape EntityType="BGBCModel.ProductOrder" Width="1.5" PointX="5.25" PointY="8" />
-        <EntityTypeShape EntityType="BGBCModel.Profile" Width="1.5" PointX="3" PointY="28.375" />
-        <EntityTypeShape EntityType="BGBCModel.Property" Width="1.5" PointX="3" PointY="4.5" />
-        <EntityTypeShape EntityType="BGBCModel.RentDue" Width="1.5" PointX="8.25" PointY="11.375" />
-        <EntityTypeShape EntityType="BGBCModel.RentPayment" Width="1.5" PointX="8.25" PointY="15.5" />
-        <EntityTypeShape EntityType="BGBCModel.TenantReferral" Width="1.5" PointX="9.75" PointY="1.375" />
-        <EntityTypeShape EntityType="BGBCModel.Tenant" Width="1.5" PointX="5.25" PointY="11.125" />
-        <EntityTypeShape EntityType="BGBCModel.UserCC" Width="1.5" PointX="3" PointY="24.125" />
-        <EntityTypeShape EntityType="BGBCModel.UserReference" Width="1.5" PointX="3" PointY="14.875" />
-        <EntityTypeShape EntityType="BGBCModel.User" Width="1.5" PointX="0.75" PointY="17.125" />
-        <EntityTypeShape EntityType="BGBCModel.vProductOrder" Width="1.5" PointX="9.75" PointY="5.375" />
-        <EntityTypeShape EntityType="BGBCModel.vRentPayment" Width="1.5" PointX="10.75" PointY="10.375" />
+        <EntityTypeShape EntityType="BGBCModel.ContactForm" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BGBCModel.Email" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BGBCModel.JobStatu" Width="1.5" PointX="5.75" PointY="4.75" />
+        <EntityTypeShape EntityType="BGBCModel.LeaseFile" Width="1.5" PointX="7.5" PointY="18.875" />
+        <EntityTypeShape EntityType="BGBCModel.Order" Width="1.5" PointX="3" PointY="24.125" />
+        <EntityTypeShape EntityType="BGBCModel.PasswordReset" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BGBCModel.Payment" Width="1.5" PointX="3" PointY="11.875" />
+        <EntityTypeShape EntityType="BGBCModel.Product" Width="1.5" PointX="3.75" PointY="1.875" />
+        <EntityTypeShape EntityType="BGBCModel.ProductOrder" Width="1.5" PointX="5.25" PointY="25.875" />
+        <EntityTypeShape EntityType="BGBCModel.Profile" Width="1.5" PointX="3" PointY="33.25" />
+        <EntityTypeShape EntityType="BGBCModel.Property" Width="1.5" PointX="3" PointY="6.25" />
+        <EntityTypeShape EntityType="BGBCModel.RentAutoPay" Width="1.5" PointX="3" PointY="39.625" />
+        <EntityTypeShape EntityType="BGBCModel.RentDue" Width="1.5" PointX="8.25" PointY="14.375" />
+        <EntityTypeShape EntityType="BGBCModel.RentPayment" Width="1.5" PointX="5.25" PointY="9.625" />
+        <EntityTypeShape EntityType="BGBCModel.TenantReferral" Width="1.5" PointX="7.75" PointY="3.75" />
+        <EntityTypeShape EntityType="BGBCModel.Tenant" Width="1.5" PointX="5.25" PointY="13.75" />
+        <EntityTypeShape EntityType="BGBCModel.UserCart" Width="1.5" PointX="6" PointY="22.25" />
+        <EntityTypeShape EntityType="BGBCModel.UserCC" Width="1.5" PointX="3" PointY="16.75" />
+        <EntityTypeShape EntityType="BGBCModel.UserReference" Width="1.5" PointX="3" PointY="28.75" />
+        <EntityTypeShape EntityType="BGBCModel.User" Width="1.5" PointX="0.75" PointY="21.125" />
+        <EntityTypeShape EntityType="BGBCModel.vProductOrder" Width="1.5" PointX="7.75" PointY="7.75" />
+        <EntityTypeShape EntityType="BGBCModel.vRentPayment" Width="1.5" PointX="9.75" PointY="0.75" />
+        <AssociationConnector Association="BGBCModel.FK_LeaseFiles_Tenant" />
         <AssociationConnector Association="BGBCModel.FK_Orders_User" />
         <AssociationConnector Association="BGBCModel.FK_ProductOrders_Orders" />
         <AssociationConnector Association="BGBCModel.FK_Payment_User" />
         <AssociationConnector Association="BGBCModel.FK_RentPayment_Payment" />
         <AssociationConnector Association="BGBCModel.FK_ProductOrders_Product" />
+        <AssociationConnector Association="BGBCModel.FK_UserCart_Product" />
         <AssociationConnector Association="BGBCModel.FK_Profile_Users" />
         <AssociationConnector Association="BGBCModel.FK_Properties_Users" />
         <AssociationConnector Association="BGBCModel.FK_RentDue_Property" />
         <AssociationConnector Association="BGBCModel.FK_RentPayment_Property" />
         <AssociationConnector Association="BGBCModel.FK_Tenants_Properties" />
+        <AssociationConnector Association="BGBCModel.FK_RentAutoPay_User" />
         <AssociationConnector Association="BGBCModel.FK_RentDue_User" />
         <AssociationConnector Association="BGBCModel.FK_Tenants_Users" />
+        <AssociationConnector Association="BGBCModel.FK_UserCart_Users" />
         <AssociationConnector Association="BGBCModel.FK_UserCC_User" />
         <AssociationConnector Association="BGBCModel.FK_UserReferences_Users" />
-        <EntityTypeShape EntityType="BGBCModel.RentAutoPay" Width="1.5" PointX="3" PointY="35.375" />
-        <AssociationConnector Association="BGBCModel.FK_RentAutoPay_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

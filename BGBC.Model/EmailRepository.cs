@@ -28,7 +28,7 @@ namespace BGBC.Model
 
         public Email Add(Email entity)
         {
-            entity.CreatedDate = DateTime.Now;
+            entity.Createdon = DateTime.Now;
             entity.Active = true;
             context.Emails.Add(entity);
             context.SaveChanges();
@@ -52,7 +52,7 @@ namespace BGBC.Model
 
         public void Update(Email entity)
         {
-            entity.ModifiedDate = DateTime.Now;
+            entity.Updatedon = DateTime.Now;
             context.SaveChanges();
         }
     }

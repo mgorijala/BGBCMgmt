@@ -21,6 +21,7 @@ namespace BGBC.Model
         public Nullable<int> RentYear { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
+        public Nullable<short> Type { get; set; }
         public Nullable<System.DateTime> Createdon { get; set; }
     
         public virtual Payment Payment { get; set; }

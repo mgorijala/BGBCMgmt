@@ -15,6 +15,7 @@ namespace BGBC.Model
     public partial class vProductOrder
     {
         public int ProductOrderID { get; set; }
+        public int OrderID { get; set; }
         public int ProductID { get; set; }
         public int UserID { get; set; }
         public string TransId { get; set; }
@@ -26,6 +27,5 @@ namespace BGBC.Model
         public string Description { get; set; }
         public Nullable<decimal> Price { get; set; }
         public string Comments { get; set; }
-        public int OrderID { get; set; }
     }
 }

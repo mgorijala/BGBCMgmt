@@ -75,6 +75,9 @@
     <Compile Include="JobStatu.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LeaseFile.cs">
+      <DependentUpon>BGBCModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Metadata\ProductOrderMetadata.cs" />
     <Compile Include="Metadata\vProductOrderMetadata.cs" />
     <Compile Include="Order.cs">
@@ -136,13 +139,16 @@
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TenantRefRepository.cs" />
+    <Compile Include="RentAutoPayRepository.cs" />
     <Compile Include="User.cs">
+      <DependentUpon>BGBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserCart.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserCC.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RentAutoPayRepository.cs" />
     <Compile Include="UserCCRepository.cs" />
     <Compile Include="UserReference.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>

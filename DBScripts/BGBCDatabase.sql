@@ -97,6 +97,18 @@ CREATE TABLE Users(
 )
 GO
 
+IF OBJECT_ID('UserCart', 'U') IS NOT NULL
+  DROP TABLE UserCart; 
+GO
+CREATE TABLE UserCart(
+	ID  int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	ProductID int NOT NULL,
+	UserID int NOT NULL,
+	Createdon datetime NULL,
+	Deletedon datetime NULL
+)
+GO
+
 IF OBJECT_ID('Tenants', 'U') IS NOT NULL
   DROP TABLE Tenants; 
 GO
@@ -416,6 +428,12 @@ ALTER TABLE RentAutoPay  WITH CHECK ADD  CONSTRAINT FK_RentAutoPay_User FOREIGN 
 GO
 
 ALTER TABLE LeaseFiles  WITH CHECK ADD  CONSTRAINT FK_LeaseFiles_Tenant FOREIGN KEY(TenantID) REFERENCES Tenants (TenantID)
+GO
+
+ALTER TABLE UserCart  WITH CHECK ADD  CONSTRAINT FK_UserCart_Product FOREIGN KEY(ProductID) REFERENCES Product (ProductID)
+GO
+
+ALTER TABLE UserCart  WITH CHECK ADD  CONSTRAINT FK_UserCart_Users FOREIGN KEY(UserID) REFERENCES Users (UserID)
 GO
 
 INSERT INTO InvoiceNo values(1, GETDATE());

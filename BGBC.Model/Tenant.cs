@@ -14,6 +14,11 @@ namespace BGBC.Model
     
     public partial class Tenant
     {
+        public Tenant()
+        {
+            this.LeaseFiles = new HashSet<LeaseFile>();
+        }
+    
         public int TenantID { get; set; }
         public Nullable<int> PropertyID { get; set; }
         public Nullable<int> UserID { get; set; }
@@ -23,10 +28,14 @@ namespace BGBC.Model
         public Nullable<System.DateTime> DepostDueDate { get; set; }
         public bool PetDepositDue { get; set; }
         public Nullable<decimal> PetDeposit { get; set; }
+        public Nullable<decimal> PetRentAmount { get; set; }
+        public Nullable<decimal> Rent { get; set; }
+        public string LeaseDocName { get; set; }
         public Nullable<System.DateTime> Createdon { get; set; }
         public Nullable<System.DateTime> Updatedon { get; set; }
         public Nullable<System.DateTime> Deletedon { get; set; }
     
+        public virtual ICollection<LeaseFile> LeaseFiles { get; set; }
         public virtual Property Property { get; set; }
         public virtual User User { get; set; }
     }

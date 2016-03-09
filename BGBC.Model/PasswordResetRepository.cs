@@ -27,7 +27,7 @@ namespace BGBC.Model
 
         public PasswordReset Add(PasswordReset entity)
         {
-            entity.CreatedDate = DateTime.Now;
+            entity.Createdon = DateTime.Now;
             context.PasswordResets.Add(entity);
             context.SaveChanges();
             return entity;

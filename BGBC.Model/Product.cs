@@ -17,6 +17,7 @@ namespace BGBC.Model
         public Product()
         {
             this.ProductOrders = new HashSet<ProductOrder>();
+            this.UserCarts = new HashSet<UserCart>();
         }
     
         public int ProductID { get; set; }
@@ -24,10 +25,12 @@ namespace BGBC.Model
         public string Description { get; set; }
         public Nullable<decimal> Price { get; set; }
         public bool isLocal { get; set; }
+        public Nullable<int> DisOrder { get; set; }
         public Nullable<System.DateTime> Createdon { get; set; }
         public Nullable<System.DateTime> Updatedon { get; set; }
         public Nullable<System.DateTime> Deletedon { get; set; }
     
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
+        public virtual ICollection<UserCart> UserCarts { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BGBCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BGBCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ContactForm">
           <Key>
             <PropertyRef Name="ContactusID" />
@@ -28,8 +28,8 @@
           <Property Name="Subject" Type="varchar" MaxLength="255" />
           <Property Name="Body" Type="nvarchar(max)" />
           <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="CreatedDate" Type="datetime" />
-          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
         </EntityType>
         <EntityType Name="JobStatus">
           <Key>
@@ -40,6 +40,17 @@
           <Property Name="JobName" Type="varchar" MaxLength="255" />
           <Property Name="RunDate" Type="datetime" />
           <Property Name="Createdon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LeaseFiles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenantID" Type="int" />
+          <Property Name="FileContent" Type="varbinary(max)" />
+          <Property Name="ContentType" Type="varchar" MaxLength="255" />
+          <Property Name="Createdon" Type="datetime" />
+          <Property Name="Updatedon" Type="datetime" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -66,7 +77,7 @@
           <Property Name="PasswordResetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmailID" Type="varchar" MaxLength="255" />
           <Property Name="Token" Type="varchar" MaxLength="255" />
-          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="Createdon" Type="datetime" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -96,6 +107,7 @@
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="Price" Type="decimal" Precision="15" Scale="2" />
           <Property Name="isLocal" Type="bit" Nullable="false" />
+          <Property Name="DisOrder" Type="int" />
           <Property Name="Createdon" Type="datetime" />
           <Property Name="Updatedon" Type="datetime" />
           <Property Name="Deletedon" Type="datetime" />
@@ -205,6 +217,7 @@
           <Property Name="RentYear" Type="int" />
           <Property Name="Description" Type="varchar" MaxLength="255" />
           <Property Name="Amount" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Type" Type="smallint" />
           <Property Name="Createdon" Type="datetime" />
         </EntityType>
         <EntityType Name="TenantReferral">
@@ -235,8 +248,21 @@
           <Property Name="DepostDueDate" Type="datetime" />
           <Property Name="PetDepositDue" Type="bit" Nullable="false" />
           <Property Name="PetDeposit" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="PetRentAmount" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="Rent" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="LeaseDocName" Type="varchar" MaxLength="255" />
           <Property Name="Createdon" Type="datetime" />
           <Property Name="Updatedon" Type="datetime" />
+          <Property Name="Deletedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserCart">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Createdon" Type="datetime" />
           <Property Name="Deletedon" Type="datetime" />
         </EntityType>
         <EntityType Name="UserCC">
@@ -342,6 +368,18 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="OwnerLastName" Type="varchar" MaxLength="255" />
           <Property Name="OwnerUserID" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_LeaseFiles_Tenant">
+          <End Role="Tenants" Type="Self.Tenants" Multiplicity="0..1" />
+          <End Role="LeaseFiles" Type="Self.LeaseFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tenants">
+              <PropertyRef Name="TenantID" />
+            </Principal>
+            <Dependent Role="LeaseFiles">
+              <PropertyRef Name="TenantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Orders_User">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
@@ -498,6 +536,30 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserCart_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="UserCart" Type="Self.UserCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="UserCart">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCart_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserCart" Type="Self.UserCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCart">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserCC_User">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="UserCC" Type="Self.UserCC" Multiplicity="*" />
@@ -560,6 +622,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySet Name="ContactForm" EntityType="Self.ContactForm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Emails" EntityType="Self.Emails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JobStatus" EntityType="Self.JobStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LeaseFiles" EntityType="Self.LeaseFiles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PasswordReset" EntityType="Self.PasswordReset" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
@@ -572,6 +635,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySet Name="RentPayment" EntityType="Self.RentPayment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TenantReferral" EntityType="Self.TenantReferral" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tenants" EntityType="Self.Tenants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserCart" EntityType="Self.UserCart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserCC" EntityType="Self.UserCC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserReferences" EntityType="Self.UserReferences" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -610,6 +674,10 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
     [vRentPayment].[OwnerUserID] AS [OwnerUserID]
     FROM [dbo].[vRentPayment] AS [vRentPayment]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_LeaseFiles_Tenant" Association="Self.FK_LeaseFiles_Tenant">
+            <End Role="Tenants" EntitySet="Tenants" />
+            <End Role="LeaseFiles" EntitySet="LeaseFiles" />
+          </AssociationSet>
           <AssociationSet Name="FK_Orders_User" Association="Self.FK_Orders_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
@@ -662,6 +730,14 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             <End Role="Users" EntitySet="Users" />
             <End Role="Tenants" EntitySet="Tenants" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserCart_Product" Association="Self.FK_UserCart_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="UserCart" EntitySet="UserCart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCart_Users" Association="Self.FK_UserCart_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserCart" EntitySet="UserCart" />
+          </AssociationSet>
           <AssociationSet Name="FK_UserCC_User" Association="Self.FK_UserCC_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="UserCC" EntitySet="UserCC" />
@@ -679,6 +755,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySet Name="ContactForms" EntityType="BGBCModel.ContactForm" />
           <EntitySet Name="Emails" EntityType="BGBCModel.Email" />
           <EntitySet Name="JobStatus" EntityType="BGBCModel.JobStatu" />
+          <EntitySet Name="LeaseFiles" EntityType="BGBCModel.LeaseFile" />
           <EntitySet Name="Orders" EntityType="BGBCModel.Order" />
           <EntitySet Name="PasswordResets" EntityType="BGBCModel.PasswordReset" />
           <EntitySet Name="Payments" EntityType="BGBCModel.Payment" />
@@ -686,15 +763,21 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySet Name="ProductOrders" EntityType="BGBCModel.ProductOrder" />
           <EntitySet Name="Profiles" EntityType="BGBCModel.Profile" />
           <EntitySet Name="Properties" EntityType="BGBCModel.Property" />
+          <EntitySet Name="RentAutoPays" EntityType="BGBCModel.RentAutoPay" />
           <EntitySet Name="RentDues" EntityType="BGBCModel.RentDue" />
           <EntitySet Name="RentPayments" EntityType="BGBCModel.RentPayment" />
           <EntitySet Name="TenantReferrals" EntityType="BGBCModel.TenantReferral" />
           <EntitySet Name="Tenants" EntityType="BGBCModel.Tenant" />
+          <EntitySet Name="UserCarts" EntityType="BGBCModel.UserCart" />
           <EntitySet Name="UserCCs" EntityType="BGBCModel.UserCC" />
           <EntitySet Name="UserReferences" EntityType="BGBCModel.UserReference" />
           <EntitySet Name="Users" EntityType="BGBCModel.User" />
           <EntitySet Name="vProductOrders" EntityType="BGBCModel.vProductOrder" />
           <EntitySet Name="vRentPayments" EntityType="BGBCModel.vRentPayment" />
+          <AssociationSet Name="FK_LeaseFiles_Tenant" Association="BGBCModel.FK_LeaseFiles_Tenant">
+            <End Role="Tenant" EntitySet="Tenants" />
+            <End Role="LeaseFile" EntitySet="LeaseFiles" />
+          </AssociationSet>
           <AssociationSet Name="FK_Orders_User" Association="BGBCModel.FK_Orders_User">
             <End Role="User" EntitySet="Users" />
             <End Role="Order" EntitySet="Orders" />
@@ -714,6 +797,10 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <AssociationSet Name="FK_ProductOrders_Product" Association="BGBCModel.FK_ProductOrders_Product">
             <End Role="Product" EntitySet="Products" />
             <End Role="ProductOrder" EntitySet="ProductOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCart_Product" Association="BGBCModel.FK_UserCart_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="UserCart" EntitySet="UserCarts" />
           </AssociationSet>
           <AssociationSet Name="FK_Profile_Users" Association="BGBCModel.FK_Profile_Users">
             <End Role="User" EntitySet="Users" />
@@ -735,6 +822,10 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             <End Role="Property" EntitySet="Properties" />
             <End Role="Tenant" EntitySet="Tenants" />
           </AssociationSet>
+          <AssociationSet Name="FK_RentAutoPay_User" Association="BGBCModel.FK_RentAutoPay_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="RentAutoPay" EntitySet="RentAutoPays" />
+          </AssociationSet>
           <AssociationSet Name="FK_RentDue_User" Association="BGBCModel.FK_RentDue_User">
             <End Role="User" EntitySet="Users" />
             <End Role="RentDue" EntitySet="RentDues" />
@@ -742,6 +833,10 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <AssociationSet Name="FK_Tenants_Users" Association="BGBCModel.FK_Tenants_Users">
             <End Role="User" EntitySet="Users" />
             <End Role="Tenant" EntitySet="Tenants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCart_Users" Association="BGBCModel.FK_UserCart_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserCart" EntitySet="UserCarts" />
           </AssociationSet>
           <AssociationSet Name="FK_UserCC_User" Association="BGBCModel.FK_UserCC_User">
             <End Role="User" EntitySet="Users" />
@@ -766,7 +861,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             <Parameter Name="v_Products" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_RentCalcSchedule">
-          <Parameter Name="DT_SELDATE" Mode="In" Type="DateTime" />
+            <Parameter Name="DT_SELDATE" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_RentPayment" EntitySet="Payments" ReturnType="Collection(BGBCModel.Payment)">
             <Parameter Name="i_UserID" Mode="In" Type="Int32" />
@@ -783,13 +878,8 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             <Parameter Name="v_RentDueids" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_TenantOutstanding" ReturnType="Collection(BGBCModel.TenantOutstanding)">
-          <Parameter Name="i_PropertyID" Mode="In" Type="Int32" />
+            <Parameter Name="i_PropertyID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="RentAutoPays" EntityType="BGBCModel.RentAutoPay" />
-          <AssociationSet Name="FK_RentAutoPay_User" Association="BGBCModel.FK_RentAutoPay_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="RentAutoPay" EntitySet="RentAutoPays" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ContactForm">
           <Key>
@@ -814,8 +904,8 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="Subject" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="JobStatu">
           <Key>
@@ -826,6 +916,18 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="JobName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="RunDate" Type="DateTime" Precision="3" />
           <Property Name="Createdon" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LeaseFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenantID" Type="Int32" />
+          <Property Name="FileContent" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ContentType" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Tenant" Relationship="BGBCModel.FK_LeaseFiles_Tenant" FromRole="LeaseFile" ToRole="Tenant" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -854,7 +956,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="PasswordResetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmailID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Token" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -886,10 +988,12 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Price" Type="Decimal" Precision="15" Scale="2" />
           <Property Name="isLocal" Type="Boolean" Nullable="false" />
+          <Property Name="DisOrder" Type="Int32" />
           <Property Name="Createdon" Type="DateTime" Precision="3" />
           <Property Name="Updatedon" Type="DateTime" Precision="3" />
           <Property Name="Deletedon" Type="DateTime" Precision="3" />
           <NavigationProperty Name="ProductOrders" Relationship="BGBCModel.FK_ProductOrders_Product" FromRole="Product" ToRole="ProductOrder" />
+          <NavigationProperty Name="UserCarts" Relationship="BGBCModel.FK_UserCart_Product" FromRole="Product" ToRole="UserCart" />
         </EntityType>
         <EntityType Name="ProductOrder">
           <Key>
@@ -957,6 +1061,27 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <NavigationProperty Name="RentPayments" Relationship="BGBCModel.FK_RentPayment_Property" FromRole="Property" ToRole="RentPayment" />
           <NavigationProperty Name="Tenants" Relationship="BGBCModel.FK_Tenants_Properties" FromRole="Property" ToRole="Tenant" />
         </EntityType>
+        <EntityType Name="RentAutoPay">
+          <Key>
+            <PropertyRef Name="RentAutoPayID" />
+          </Key>
+          <Property Name="RentAutoPayID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="PaymentType" Type="Int16" />
+          <Property Name="CCNO" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="ExpMon" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="ExpYear" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="CVV" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="AccountType" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="RoutingNo" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="AccountNo" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="Rent" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="Charges" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="TotalAmt" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Updatedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_RentAutoPay_User" FromRole="RentAutoPay" ToRole="User" />
+        </EntityType>
         <EntityType Name="RentDue">
           <Key>
             <PropertyRef Name="RentDueID" />
@@ -985,6 +1110,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="RentYear" Type="Int32" />
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Amount" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="Type" Type="Int16" />
           <Property Name="Createdon" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Payment" Relationship="BGBCModel.FK_RentPayment_Payment" FromRole="RentPayment" ToRole="Payment" />
           <NavigationProperty Name="Property" Relationship="BGBCModel.FK_RentPayment_Property" FromRole="RentPayment" ToRole="Property" />
@@ -1017,11 +1143,27 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="DepostDueDate" Type="DateTime" Precision="3" />
           <Property Name="PetDepositDue" Type="Boolean" Nullable="false" />
           <Property Name="PetDeposit" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="PetRentAmount" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="Rent" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="LeaseDocName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Createdon" Type="DateTime" Precision="3" />
           <Property Name="Updatedon" Type="DateTime" Precision="3" />
           <Property Name="Deletedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="LeaseFiles" Relationship="BGBCModel.FK_LeaseFiles_Tenant" FromRole="Tenant" ToRole="LeaseFile" />
           <NavigationProperty Name="Property" Relationship="BGBCModel.FK_Tenants_Properties" FromRole="Tenant" ToRole="Property" />
           <NavigationProperty Name="User" Relationship="BGBCModel.FK_Tenants_Users" FromRole="Tenant" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserCart">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
+          <Property Name="Deletedon" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Product" Relationship="BGBCModel.FK_UserCart_Product" FromRole="UserCart" ToRole="Product" />
+          <NavigationProperty Name="User" Relationship="BGBCModel.FK_UserCart_Users" FromRole="UserCart" ToRole="User" />
         </EntityType>
         <EntityType Name="UserCC">
           <Key>
@@ -1077,23 +1219,25 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <NavigationProperty Name="Payments" Relationship="BGBCModel.FK_Payment_User" FromRole="User" ToRole="Payment" />
           <NavigationProperty Name="Profiles" Relationship="BGBCModel.FK_Profile_Users" FromRole="User" ToRole="Profile" />
           <NavigationProperty Name="Properties" Relationship="BGBCModel.FK_Properties_Users" FromRole="User" ToRole="Property" />
+          <NavigationProperty Name="RentAutoPays" Relationship="BGBCModel.FK_RentAutoPay_User" FromRole="User" ToRole="RentAutoPay" />
           <NavigationProperty Name="RentDues" Relationship="BGBCModel.FK_RentDue_User" FromRole="User" ToRole="RentDue" />
           <NavigationProperty Name="Tenants" Relationship="BGBCModel.FK_Tenants_Users" FromRole="User" ToRole="Tenant" />
+          <NavigationProperty Name="UserCarts" Relationship="BGBCModel.FK_UserCart_Users" FromRole="User" ToRole="UserCart" />
           <NavigationProperty Name="UserCCs" Relationship="BGBCModel.FK_UserCC_User" FromRole="User" ToRole="UserCC" />
           <NavigationProperty Name="UserReferences" Relationship="BGBCModel.FK_UserReferences_Users" FromRole="User" ToRole="UserReference" />
-          <NavigationProperty Name="RentAutoPays" Relationship="BGBCModel.FK_RentAutoPay_User" FromRole="User" ToRole="RentAutoPay" />
         </EntityType>
         <EntityType Name="vProductOrder">
           <Key>
             <PropertyRef Name="ProductOrderID" />
+            <PropertyRef Name="OrderID" />
             <PropertyRef Name="ProductID" />
             <PropertyRef Name="UserID" />
             <PropertyRef Name="TransId" />
             <PropertyRef Name="TransDate" />
             <PropertyRef Name="UserType" />
-            <PropertyRef Name="OrderID" />
           </Key>
           <Property Name="ProductOrderID" Type="Int32" Nullable="false" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="TransId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -1105,7 +1249,6 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Price" Type="Decimal" Precision="15" Scale="2" />
           <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="OrderID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="vRentPayment">
           <Key>
@@ -1133,6 +1276,18 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="OwnerLastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="OwnerUserID" Type="Int32" Nullable="false" />
         </EntityType>
+        <Association Name="FK_LeaseFiles_Tenant">
+          <End Type="BGBCModel.Tenant" Role="Tenant" Multiplicity="0..1" />
+          <End Type="BGBCModel.LeaseFile" Role="LeaseFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tenant">
+              <PropertyRef Name="TenantID" />
+            </Principal>
+            <Dependent Role="LeaseFile">
+              <PropertyRef Name="TenantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Orders_User">
           <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
           <End Type="BGBCModel.Order" Role="Order" Multiplicity="*" />
@@ -1189,6 +1344,18 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
               <PropertyRef Name="ProductID" />
             </Principal>
             <Dependent Role="ProductOrder">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCart_Product">
+          <End Type="BGBCModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="BGBCModel.UserCart" Role="UserCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="UserCart">
               <PropertyRef Name="ProductID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1253,6 +1420,18 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RentAutoPay_User">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BGBCModel.RentAutoPay" Role="RentAutoPay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RentAutoPay">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RentDue_User">
           <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
           <End Type="BGBCModel.RentDue" Role="RentDue" Multiplicity="*" />
@@ -1273,6 +1452,18 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="Tenant">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCart_Users">
+          <End Type="BGBCModel.User" Role="User" Multiplicity="1" />
+          <End Type="BGBCModel.UserCart" Role="UserCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCart">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1308,40 +1499,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Type="String" Name="Email" Nullable="true" MaxLength="255" />
           <Property Type="Decimal" Name="Balance" Nullable="false" Precision="38" Scale="2" />
         </ComplexType>
-        <EntityType Name="RentAutoPay">
-          <Key>
-            <PropertyRef Name="RentAutoPayID" />
-          </Key>
-          <Property Name="RentAutoPayID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="PaymentType" Type="Int16" />
-          <Property Name="CCNO" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="ExpMon" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="ExpYear" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="CVV" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="AccountType" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="RoutingNo" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="AccountNo" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="Rent" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
-          <Property Name="Charges" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
-          <Property Name="TotalAmt" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
-          <Property Name="Createdon" Type="DateTime" Precision="3" />
-          <Property Name="Updatedon" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="User" Relationship="BGBCModel.FK_RentAutoPay_User" FromRole="RentAutoPay" ToRole="User" />
-        </EntityType>
-        <Association Name="FK_RentAutoPay_User">
-          <End Type="BGBCModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="BGBCModel.RentAutoPay" Role="RentAutoPay" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="RentAutoPay">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        </Schema>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1365,8 +1523,8 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySetMapping Name="Emails">
             <EntityTypeMapping TypeName="BGBCModel.Email">
               <MappingFragment StoreEntitySet="Emails">
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Body" ColumnName="Body" />
                 <ScalarProperty Name="Subject" ColumnName="Subject" />
@@ -1383,6 +1541,18 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
                 <ScalarProperty Name="JobName" ColumnName="JobName" />
                 <ScalarProperty Name="JobType" ColumnName="JobType" />
                 <ScalarProperty Name="JobStatusID" ColumnName="JobStatusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LeaseFiles">
+            <EntityTypeMapping TypeName="BGBCModel.LeaseFile">
+              <MappingFragment StoreEntitySet="LeaseFiles">
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="FileContent" ColumnName="FileContent" />
+                <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1408,7 +1578,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySetMapping Name="PasswordResets">
             <EntityTypeMapping TypeName="BGBCModel.PasswordReset">
               <MappingFragment StoreEntitySet="PasswordReset">
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
                 <ScalarProperty Name="Token" ColumnName="Token" />
                 <ScalarProperty Name="EmailID" ColumnName="EmailID" />
                 <ScalarProperty Name="PasswordResetID" ColumnName="PasswordResetID" />
@@ -1441,6 +1611,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
                 <ScalarProperty Name="Deletedon" ColumnName="Deletedon" />
                 <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
                 <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="DisOrder" ColumnName="DisOrder" />
                 <ScalarProperty Name="isLocal" ColumnName="isLocal" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1511,6 +1682,27 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RentAutoPays">
+            <EntityTypeMapping TypeName="BGBCModel.RentAutoPay">
+              <MappingFragment StoreEntitySet="RentAutoPay">
+                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="TotalAmt" ColumnName="TotalAmt" />
+                <ScalarProperty Name="Charges" ColumnName="Charges" />
+                <ScalarProperty Name="Rent" ColumnName="Rent" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="RoutingNo" ColumnName="RoutingNo" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="CVV" ColumnName="CVV" />
+                <ScalarProperty Name="ExpYear" ColumnName="ExpYear" />
+                <ScalarProperty Name="ExpMon" ColumnName="ExpMon" />
+                <ScalarProperty Name="CCNO" ColumnName="CCNO" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RentAutoPayID" ColumnName="RentAutoPayID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="RentDues">
             <EntityTypeMapping TypeName="BGBCModel.RentDue">
               <MappingFragment StoreEntitySet="RentDue">
@@ -1531,6 +1723,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
             <EntityTypeMapping TypeName="BGBCModel.RentPayment">
               <MappingFragment StoreEntitySet="RentPayment">
                 <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="RentYear" ColumnName="RentYear" />
@@ -1563,6 +1756,9 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
                 <ScalarProperty Name="Deletedon" ColumnName="Deletedon" />
                 <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
                 <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="LeaseDocName" ColumnName="LeaseDocName" />
+                <ScalarProperty Name="Rent" ColumnName="Rent" />
+                <ScalarProperty Name="PetRentAmount" ColumnName="PetRentAmount" />
                 <ScalarProperty Name="PetDeposit" ColumnName="PetDeposit" />
                 <ScalarProperty Name="PetDepositDue" ColumnName="PetDepositDue" />
                 <ScalarProperty Name="DepostDueDate" ColumnName="DepostDueDate" />
@@ -1572,6 +1768,17 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
                 <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCarts">
+            <EntityTypeMapping TypeName="BGBCModel.UserCart">
+              <MappingFragment StoreEntitySet="UserCart">
+                <ScalarProperty Name="Deletedon" ColumnName="Deletedon" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1630,7 +1837,6 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySetMapping Name="vProductOrders">
             <EntityTypeMapping TypeName="BGBCModel.vProductOrder">
               <MappingFragment StoreEntitySet="vProductOrders">
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1642,6 +1848,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
                 <ScalarProperty Name="TransId" ColumnName="TransId" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ProductOrderID" ColumnName="ProductOrderID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1683,27 +1890,6 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="RentAutoPays">
-            <EntityTypeMapping TypeName="BGBCModel.RentAutoPay">
-              <MappingFragment StoreEntitySet="RentAutoPay">
-                <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
-                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
-                <ScalarProperty Name="TotalAmt" ColumnName="TotalAmt" />
-                <ScalarProperty Name="Charges" ColumnName="Charges" />
-                <ScalarProperty Name="Rent" ColumnName="Rent" />
-                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
-                <ScalarProperty Name="RoutingNo" ColumnName="RoutingNo" />
-                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
-                <ScalarProperty Name="CVV" ColumnName="CVV" />
-                <ScalarProperty Name="ExpYear" ColumnName="ExpYear" />
-                <ScalarProperty Name="ExpMon" ColumnName="ExpMon" />
-                <ScalarProperty Name="CCNO" ColumnName="CCNO" />
-                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="RentAutoPayID" ColumnName="RentAutoPayID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

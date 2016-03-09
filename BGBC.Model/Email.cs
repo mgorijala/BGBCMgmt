@@ -19,7 +19,7 @@ namespace BGBC.Model
         public string Subject { get; set; }
         public string Body { get; set; }
         public bool Active { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<System.DateTime> Createdon { get; set; }
+        public Nullable<System.DateTime> Updatedon { get; set; }
     }
 }
