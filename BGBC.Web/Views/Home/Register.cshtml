@@ -62,4 +62,17 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(function () {
+            $('#UserType').change ( function (e) {
+                if (this.options.selectedIndex == 1)
+                    $('#UserType').attr('data-original-title', "Owner").attr('data-placement', "right").tooltip();
+                else if (this.options.selectedIndex == 2)
+                    $('#UserType').attr('data-original-title', "Customer").attr('data-placement', "right").tooltip();
+                else
+                    $('#UserType').tooltip('destroy');            });
+
+        })
+    </script>
 }
