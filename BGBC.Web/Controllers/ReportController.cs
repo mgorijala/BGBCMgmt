@@ -21,6 +21,7 @@ namespace BGBC.Web.Controllers
         IRepository<Property, int> _propertyRepo;
         IRepository<Order, int> _order;
         IRepository<Profile, int> _profileRepo;
+        IRepository<UserCart, int?> _userCart;
 
         public ReportController()
         {
@@ -33,6 +34,7 @@ namespace BGBC.Web.Controllers
             _propertyRepo = new PropertyRepository();
             _order = new OrderRepository();
             _profileRepo = new ProfileRepository();
+            _userCart = new UserCartRepository();
         }
 
         [Authorize]
@@ -464,6 +466,89 @@ namespace BGBC.Web.Controllers
             }
 
             return View(productOrderList);
+        }
+
+        [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
+        public ActionResult UserCartHistory(string sortOrder, string currentFilter, string searchString, int? page, string pageSize)
+        {
+
+            int currentPageSize = int.Parse(pageSize == null ? "10" : pageSize), pageNumber = (page ?? 1);
+            try
+            {
+                var userCart = _userCart.Get().Where(x => x.Deletedon == null);
+
+                ViewBag.currentSort = sortOrder;
+                ViewBag.dateSortParam = sortOrder == "date" ? "date_desc" : "date";
+                ViewBag.productNameSortParam = sortOrder == "product_name" ? "product_name_desc" : "product_name";
+                ViewBag.userNameSortParam = sortOrder == "user_name" ? "user_name_desc" : "user_name";
+                ViewBag.emailSortParam = sortOrder == "email" ? "email_desc" : "email";
+                ViewBag.contactParam = sortOrder == "contact" ? "contact_desc" : "contact";
+
+
+                if (pageSize != null)
+                    ViewBag.currentPageSize = currentPageSize;
+
+
+                if (searchString != null)
+                {
+                    page = 1;
+                }
+                else
+                {
+                    searchString = currentFilter;
+                }
+
+                ViewBag.currentFilter = searchString;
+                ViewBag.page = pageNumber;
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    userCart = userCart.Where(x => x.User.FirstName.Contains(searchString) || x.User.LastName.Contains(searchString) || x.User.Email.Contains(searchString)
+                        || x.Product.Name.Contains(searchString));
+                    //pending date and contactno
+                }
+                switch (sortOrder)
+                {
+                    case "date_desc":
+                        userCart = userCart.OrderByDescending(x => x.Createdon);
+                        break;
+                    case "product_name":
+                        userCart = userCart.OrderBy(x => x.Product.Name);
+                        break;
+                    case "product_name_desc":
+                        userCart = userCart.OrderByDescending(x => x.Product.Name);
+                        break;
+                    case "user_name":
+                        userCart = userCart.OrderBy(x => x.User.FirstName);
+                        break;
+                    case "user_name_desc":
+                        userCart = userCart.OrderByDescending(x => x.User.FirstName);
+                        break;
+
+                    case "email":
+                        userCart = userCart.OrderBy(x => x.User.Email);
+                        break;
+                    case "email_desc":
+                        userCart = userCart.OrderByDescending(x => x.User.Email);
+                        break;
+                    //case "contact":
+                    //    userCart = userCart.OrderBy(x => x.PayoutMailAddress2);
+                    //    break;
+                    //case "contact_desc":
+                    //    userCart = userCart.OrderByDescending(x => x.PayoutMailAddress2);
+                    //    break;
+                    default:
+                        userCart = userCart.OrderBy(x => x.Createdon);
+                        break;
+                }
+
+                return View(userCart.ToPagedList(pageNumber, currentPageSize));
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
+            return View();
         }
 
     }

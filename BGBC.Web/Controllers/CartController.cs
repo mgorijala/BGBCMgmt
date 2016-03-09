@@ -17,6 +17,7 @@ namespace BGBC.Web.Controllers
         private IUserRepository _userRepository;
         private IRepository<Profile, int> _profileRepo;
         IRepository<UserCC, int> _userCCRep;
+        IRepository<UserCart, int?> _userCart;
 
         public CartController()
         {
@@ -24,6 +25,7 @@ namespace BGBC.Web.Controllers
             _userRepository = new UserRepository();
             _profileRepo = new ProfileRepository();
             _userCCRep = new UserCCRepository();
+            _userCart = new UserCartRepository();
         }
         public ActionResult Index()
         {
@@ -67,6 +69,8 @@ namespace BGBC.Web.Controllers
                 {
                     HttpCookie faCookie = new HttpCookie(".BGBCProducts", id.ToString());
                     Response.Cookies.Add(faCookie);
+                    if (Request.IsAuthenticated)
+                        _userCart.Add(new UserCart { ProductID = Convert.ToInt32(id), UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId });
                     TempData["SucessMessage"] = "Item Added to Cart";
                 }
                 else
@@ -77,6 +81,8 @@ namespace BGBC.Web.Controllers
                         {
                             authCookie.Value = authCookie.Value + (authCookie.Value.ToString().Length > 0 ? "," : "") + id.ToString();
                             Response.SetCookie(authCookie);
+                            if (Request.IsAuthenticated)
+                                _userCart.Add(new UserCart { ProductID = Convert.ToInt32(id), UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId });
                             TempData["SucessMessage"] = "Item Added to Cart";
                         }
                     }
@@ -99,6 +105,8 @@ namespace BGBC.Web.Controllers
                         ids = ids.Except(new string[] { id.ToString() }).ToArray();
                         authCookie.Value = string.Join(",", ids);
                         Response.SetCookie(authCookie);
+                        if (Request.IsAuthenticated)
+                            _userCart.Add(new UserCart { ProductID = Convert.ToInt32(id), UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId });
                     }
                 }
             }

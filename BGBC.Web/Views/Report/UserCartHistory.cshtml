@@ -1,0 +1,105 @@
+﻿@*@model IEnumerable<BGBC.Model.UserCart>*@
+@model PagedList.IPagedList<BGBC.Model.UserCart>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "UserCartHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+<div class="back">
+    <div class="col-md-6 no-padd">
+        <h1>User Cart History</h1>
+    </div>
+    <div class="col-md-6 col-sm-6 no-padd header-btn">
+        @Html.ActionLink("Back to Dashboard", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
+    </div>
+    <div class="clearfix">&nbsp; </div>
+
+    <div class="row form-margin">
+        <div class="col-md-1 col-sm-1 col-xs-3 no-padd">
+            @using (Html.BeginForm())
+            {
+                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value"), new { id = "pagesizelist", @class = "form-control" })
+            }
+            @section scripts {
+                <script type="text/javascript">
+                    $('#pagesizelist').on('change', function (event) {
+                        var url = '@Html.Raw(Url.Action("UserCartHistory", "Report", new { SortOrder = ViewBag.CurrentSort, page = 1, pageSize = (ViewBag.currentPageSize == null ? "----" : (ViewBag.currentPageSize != null ? "ReplacedValue" : ViewBag.currentPageSize)) }))';
+
+                        if (url.indexOf("pageSize=----") > -1)
+                            url = url.replace("----", $('#pagesizelist').val());
+                        else
+                            url = url.replace("ReplacedValue", $('#pagesizelist').val());
+                        window.location = url;
+                    });
+                </script>
+            }
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-6 no-padd pull-right">
+            @using (Html.BeginForm("UserCartHistory", "Report", FormMethod.Get))
+            {
+                <div class="input-group">
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", @placeholder = "Search for..." })
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary btn-icon" type="submit">
+
+                            <img class="icon-img" src="~/Content/images/Icon-Search.png" />
+                        </button>
+                    </span>
+                </div><!-- /input-group -->
+            }
+        </div>
+    </div>
+
+    <div class="clearfix"> </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th class="sorting-header @(ViewBag.currentSort == "date_desc" || ViewBag.currentSort == "date" ? (ViewBag.dateSortParam == "date" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Date", "UserCartHistory", new { sortOrder = ViewBag.dateSortParam, currentFilter = ViewBag.currentFilter }) <span class="sorting-content"></span></th>
+                <th class="sorting-header @(ViewBag.currentSort == "product_name_desc" || ViewBag.currentSort == "product_name" ? (ViewBag.productNameSortParam == "product_name" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Product Name", "UserCartHistory", new { sortOrder = ViewBag.productNameSortParam, currentFilter = ViewBag.currentFilter }) <span class="sorting-content"></span></th>
+                <th class="sorting-header @(ViewBag.currentSort == "user_name_desc" || ViewBag.currentSort == "user_name" ? (ViewBag.userNameSortParam == "user_name" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("User Name", "UserCartHistory", new { sortOrder = ViewBag.userNameSortParam, currentFilter = ViewBag.currentFilter }) <span class="sorting-content"></span></th>
+                <th class="sorting-header @(ViewBag.currentSort == "email_desc" || ViewBag.currentSort == "email" ? (ViewBag.emailSortParam == "email" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Email", "UserCartHistory", new { sortOrder = ViewBag.emailSortParam, currentFilter = ViewBag.currentFilter }) <span class="sorting-content"></span></th>
+             <th>Contact No</th>
+                   @*<th class="sorting-header @(ViewBag.currentSort == "contact_desc" || ViewBag.currentSort == "contact" ? (ViewBag.contactParam == "contact" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Contact No", "UserCartHistory", new { sortOrder = ViewBag.contactParam, currentFilter = ViewBag.currentFilter }) <span class="sorting-content"></span></th>*@
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Createdon)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem=>item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem=>item.User.Email)
+                    </td>
+                    
+                    <td>
+                        @foreach (var x in item.User.Profiles) { 
+                        @Html.DisplayFor(modelItem => x.MobilePhone)
+                        }
+                    </td>
+                   
+                </tr>
+            }
+
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("UserCartHistory",
+                                                                                                           new { page, sortOrder = ViewBag.currentSort, currentFilter = ViewBag.currentFilter, pageSize = ViewBag.currentPageSize }))
+
+
+    </div>
+
+
+
+</div>

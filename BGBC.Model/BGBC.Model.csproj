@@ -146,6 +146,7 @@
     <Compile Include="UserCart.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserCartRepository.cs" />
     <Compile Include="UserCC.cs">
       <DependentUpon>BGBCModel.tt</DependentUpon>
     </Compile>
