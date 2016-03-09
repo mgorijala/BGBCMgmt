@@ -119,6 +119,20 @@ CREATE TABLE Tenants(
 )
 GO
 
+IF OBJECT_ID('LeaseFiles', 'U') IS NOT NULL
+  DROP TABLE LeaseFiles; 
+GO
+
+CREATE TABLE LeaseFiles(
+	ID int  PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	TenantID int,
+	FileContent varbinary(max),
+	ContentType varchar(255),
+	Createdon datetime NULL,
+	Updatedon datetime NULL
+)
+GO
+
 IF OBJECT_ID('UserReferences', 'U') IS NOT NULL
   DROP TABLE UserReferences; 
 GO
@@ -399,6 +413,9 @@ ALTER TABLE UserCC  WITH CHECK ADD  CONSTRAINT FK_UserCC_User FOREIGN KEY(UserID
 GO
 
 ALTER TABLE RentAutoPay  WITH CHECK ADD  CONSTRAINT FK_RentAutoPay_User FOREIGN KEY(UserID) REFERENCES Users (UserID)
+GO
+
+ALTER TABLE LeaseFiles  WITH CHECK ADD  CONSTRAINT FK_LeaseFiles_Tenant FOREIGN KEY(TenantID) REFERENCES Tenants (TenantID)
 GO
 
 INSERT INTO InvoiceNo values(1, GETDATE());
