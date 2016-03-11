@@ -18,8 +18,8 @@
         </div>
     </div>
     <div class="clearfix">&nbsp;</div>
-    <div class="row form-margin">
-        <div class="col-md-1 col-sm-1 col-xs-3 no-padd">
+    <div class="row form-margin new-input">
+        <div class="col-md-3 col-sm-4 col-xs-12">
             @using (Html.BeginForm())
             {
                 @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value"), new { id = "pagesizelist", @class = "form-control" })
@@ -38,9 +38,14 @@
                 </script>
             }
         </div>
-        <div class="col-md-3 col-sm-4 col-xs-6 no-padd pull-right">
-            @using (Html.BeginForm("PaymentHistory", "Report", FormMethod.Get))
-            {
+        @using (Html.BeginForm("PaymentHistory", "Report", FormMethod.Get))
+        {
+            <div class="col-md-3 col-sm-4 col-xs-12 col-md-offset-3">
+                <div class="form-group">
+                    @Html.DropDownList("ddlSelectOwner", @ViewBag.OwnerList as IEnumerable<SelectListItem>, "Select Owner", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-12  pull-right">
                 <div class="input-group">
                     @Html.TextBox("SearchString", ViewBag.currentFilter as string, new { @class = "form-control", @placeholder = "Search for..." })
                     <span class="input-group-btn">
@@ -50,8 +55,9 @@
                         </button>
                     </span>
                 </div><!-- /input-group -->
-            }
-        </div>
+
+            </div>
+        }
     </div>
 
     <div class="clearfix"> </div>
@@ -98,4 +104,3 @@
 
 
 </div>
-

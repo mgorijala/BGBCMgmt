@@ -264,7 +264,7 @@ namespace BGBC.Web.Controllers
 
         [Authorize]
         [CustomAuthorize(Roles = "Admin")]
-        public ActionResult PaymentHistory(string sortOrder, string currentFilter, string searchString, int? page, string pageSize)
+        public ActionResult PaymentHistory(string sortOrder, string currentFilter, string searchString, int? page, string pageSize,string searchOwner)
         {
             int currentPageSize = int.Parse(pageSize == null ? "10" : pageSize), pageNumber = (page ?? 1);
             try
@@ -296,13 +296,13 @@ namespace BGBC.Web.Controllers
                 ViewBag.page = pageNumber;
                 if (!string.IsNullOrEmpty(searchString))
                 {
-                    var SearchValue = searchString.ToString();
                     rentPayments = rentPayments.Where(x => x.TenantLastName.Contains(searchString) || x.TenantFirstName.Contains(searchString)
                         || x.OwnerFirstName.Contains(searchString) || x.OwnerLastName.Contains(searchString)
                         || x.TransID.Contains(searchString));
                     //  ||  x.Amount.Equals(searchString)||  x.TransDate.Equals(searchString));
-                    //getting issue DbComparisonExpression requires arguments with comparable types
                 }
+                if (!string.IsNullOrEmpty(searchOwner))
+                    rentPayments.Where(x => x.OwnerFirstName.Contains(searchOwner) || x.OwnerLastName.Contains(searchOwner));
                 switch (sortOrder)
                 {
                     case "date_desc":
@@ -349,7 +349,7 @@ namespace BGBC.Web.Controllers
                         rentPayments = rentPayments.OrderBy(x => x.TransDate);
                         break;
                 }
-
+                PropagateOwnerDropdown();
                 return View(rentPayments.ToPagedList(pageNumber, currentPageSize));
             }
             catch (Exception ex)
@@ -610,7 +610,7 @@ namespace BGBC.Web.Controllers
                     case "date_desc":
                         emails = emails.OrderBy(x => x.Createdon);
                         break;
-                    default:  
+                    default:
                         emails = emails.OrderBy(x => x.Createdon);
                         break;
                 }
@@ -623,5 +623,19 @@ namespace BGBC.Web.Controllers
             return View();
         }
 
+        void PropagateOwnerDropdown()
+        {
+            var rentPayments = _propertyRepo.Get().Select(x => new {x.User.FirstName,x.User.LastName }).Distinct(); 
+            List<SelectListItem> items = new List<SelectListItem>();
+            foreach (var item in rentPayments)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(item.FirstName + " " + item.LastName),
+                    Value = Convert.ToString(item.FirstName)
+                });
+            }
+            ViewBag.OwnerList = items;
+        }
     }
 }
