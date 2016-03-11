@@ -233,7 +233,18 @@
             </div>
         </div>
     }
-    <br/>
+    
+    <div class="row">
+        <div class="col-md-3">
+            <b>
+                @Html.DisplayNameFor(model => model.PetRentAmount)
+            </b>
+        </div>
+        <div class="col-md-9">
+            @Html.DisplayFor(model => model.PetRentAmount)
+        </div>
+    </div>
+    <br />
     <div class="alert alert-info">
         <div class="alert-link">
             The tenant will be sent an email with instructions on how to complete their registration.

@@ -180,6 +180,12 @@
                 </div>
             </div>
         }
+        <div class="Row">
+            <div class="form-group">
+                @Html.LabelFor(p => p.PetRentAmount, htmlAttributes: new { @class = "control-label" })<span style="color:blue"> &#134; </span>
+                @Html.DisplayFor(p => p.PetRentAmount)
+            </div>
+        </div>
         <br />
         <div class="form-group">
             <input type="submit" value="Save Changes" class="btn btn-default" />

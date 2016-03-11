@@ -75,7 +75,7 @@
                             {
                                 foreach (var tenant in item.Tenants.Where(x => x.Deletedon == null))
                                 {
-                                    @Html.DisplayFor(modelItem => tenant.RentAmount)
+                                    @Html.DisplayFor(modelItem => tenant.Rent)
                                     <br />
                                 }
                             }

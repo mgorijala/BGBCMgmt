@@ -624,6 +624,12 @@ namespace BGBC.Web.Controllers
                 tenant.DepostDueDate = tenantInfo.DepostDueDate;
                 tenant.PetDepositDue = tenantInfo.PetDepositDue;
                 tenant.PetDeposit = tenantInfo.PetDeposit;
+                tenant.PetRentAmount = tenantInfo.PetRentAmount;
+
+               //  decimal? PetRent = tenantInfo.PetRentAmount == null ? 0 : tenantInfo.PetRentAmount;
+
+                 tenant.Rent = tenantInfo.RentAmount + (tenantInfo.PetRentAmount == null ? 0 : tenantInfo.PetRentAmount);
+                tenant.Createdon = DateTime.Now;
                 user.Tenants.Add(tenant);
                 //_tenantRepo.Add(tenant);
                 //user.Profiles.Add(profile);
@@ -692,6 +698,8 @@ namespace BGBC.Web.Controllers
                 tenantInfo.DepostDueDate = tenant.DepostDueDate;
                 tenantInfo.PetDepositDue = (bool)tenant.PetDepositDue;
                 tenantInfo.PetDeposit = tenant.PetDeposit;
+                tenantInfo.PetRentAmount = tenant.PetRentAmount;
+
 
                 tenantInfo.PropertyID = (int)tenant.PropertyID;
                 tenantInfo.Address = _property.Address;

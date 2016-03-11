@@ -145,6 +145,10 @@ namespace BGBC.Web.Models
         [DataType(DataType.Currency)]
         public Nullable<decimal> PetDeposit { get; set; }
 
+        [Display(Name = "Pet Rent Amount")]
+        [DataType(DataType.Currency)]
+        public Nullable<decimal> PetRentAmount { get; set; }
+
         public string PropertyName { get; set; }
 
         public int PropertyID { get; set; }

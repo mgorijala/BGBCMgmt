@@ -198,6 +198,15 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(p => p.PetRentAmount, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(p => p.PetRentAmount, new { htmlAttributes = new { @class = "form-control", @placeholder = "$00.00" } })
+                        @Html.ValidationMessageFor(p => p.PetRentAmount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
         </fieldset>
 
         <div class="alert alert-info">
