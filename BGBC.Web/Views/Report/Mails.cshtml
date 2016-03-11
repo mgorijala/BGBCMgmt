@@ -1,0 +1,100 @@
+﻿@model PagedList.IPagedList<BGBC.Model.Email>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Mails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="back">
+    <div class="col-md-6 no-padd">
+        <h1>Mails</h1>
+    </div>
+    <div class="col-md-6 col-sm-6 no-padd header-btn pull-right">
+        @Html.ActionLink("Back to Dashboard", "Index", "Admin", null, new { @class = "btn-button btn-primary pull-right" })
+    </div>
+    <div class="clearfix">&nbsp; </div>
+    <div class="row new-input">
+        <div class="col-md-3 col-sm-3 col-xs-12 ">
+            @using (Html.BeginForm())
+            {
+                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value"), new { id = "pagesizelist", @class = "form-control" })
+            }
+            @section scripts {
+                <script type="text/javascript">
+                    $('#pagesizelist').on('change', function (event) {
+                        var url = '@Html.Raw(Url.Action("Mails", "Report", new { SortOrder = ViewBag.CurrentSort, page =1, pageSize = (ViewBag.currentPageSize == null ? "----" : (ViewBag.currentPageSize != null ? "ReplacedValue" : ViewBag.currentPageSize)) }))';
+
+                        if (url.indexOf("pageSize=----") > -1)
+                            url = url.replace("----", $('#pagesizelist').val());
+                        else
+                            url = url.replace("ReplacedValue", $('#pagesizelist').val());
+                        window.location = url;
+                    });
+                </script>
+            }
+            </div>
+
+            @using (Html.BeginForm("Mails", "Report", FormMethod.Get))
+            {
+                <div class="col-md-3 col-sm-3 col-xs-12 ">
+                    <div class="input-group">
+                        @Html.Label("From Date", new { @class = "display:inline", @style = "margin-top: -24px" })
+                        @Html.TextBox("Fromdate", ViewBag.fromdate as string, new { @class = "form-control", @type = "date" })
+                    </div>
+
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-12 ">
+                    <div class="input-group">
+                        @Html.Label("To Date", new { @class = "display:inline", @style = "margin-top: -24px" })
+                        @Html.TextBox("Todate", ViewBag.todate as string, new { @class = "form-control", @type = "date" })
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-12 ">
+                    <div class="input-group">
+                        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", @placeholder = "Search.." })
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-icon" type="submit">
+                                <img class="icon-img" src="~/Content/images/Icon-Search.png" />
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    <div class="clearfix"> </div>
+   
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "to_desc" || ViewBag.CurrentSort == "To_Address" ? (ViewBag.toSortParm == "To_Address" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("To Address", "Mails", new { sortOrder = ViewBag.toSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "sub_desc" || ViewBag.CurrentSort == "Subject" ? (ViewBag.subSortParm == "Subject" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Subject", "Mails", new { sortOrder = ViewBag.subSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "body_desc" || ViewBag.CurrentSort == "Body" ? (ViewBag.bodySortParm == "Body" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Body", "Mails", new { sortOrder = ViewBag.bodySortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                    <th class="sorting-header @(ViewBag.CurrentSort == "date_desc" || ViewBag.CurrentSort == "Mail_Date" ? (ViewBag.dateSortParm == "Mail_Date" ? "sorting_desc" : "sorting_asc") : "sorting")"> @Html.ActionLink("Mail Date", "Mails", new { sortOrder = ViewBag.dateSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="sorting-content"></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ToAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </td>
+                        <td>
+                            @Html.Raw(HttpUtility.HtmlDecode(Html.DisplayFor(modelItem => item.Body).ToString()))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Createdon)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Mails", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, pageSize = ViewBag.currentPageSize }))
+    </div>
+</div>

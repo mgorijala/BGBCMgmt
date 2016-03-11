@@ -197,3 +197,6 @@ float:left;
     right: 0px;
 }
     .sorting-header{min-width:125px !important}
+    .new-input .input-group{width:100%;margin-bottom:30px}
+    .new-input{margin: 0px -15px !important}
+    .new-input form,select{margin-bottom:30px !important}

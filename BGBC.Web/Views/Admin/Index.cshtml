@@ -29,6 +29,7 @@
                 <option value="payment_activity_all" data-url="@Url.Action("PaymentHistory", "Report")">Payment History</option>
                 <option value="all_payouts" data-url="@Url.Action("PayoutPreferences", "Report")">Payout Preferences</option>
                 <option value="all_usercarts" data-url="@Url.Action("UserCartHistory", "Report")">User Cart History</option>
+                <option value="mails" data-url="@Url.Action("Mails","Report")">Mails</option>
             </select>
         </div>
         <div class="col-md-4 col-sm-4  col-xs-12">
@@ -37,6 +38,7 @@
                 <option value="referral" data-url="@Url.Action("TenantReferal", "Report")">Tenant Referral Form</option>
                 <option value="contact" data-url="@Url.Action("Contact", "Report")">Contact Us Form</option>
                 <option value="realtor" data-url="@Url.Action("ContactRealtor", "Report")">Contact A Realtor Form</option>
+                <option value="mails" data-url="@Url.Action("Mails","Report")">Mails</option>
             </select>
             @Html.DropDownList("products", (IEnumerable<SelectListItem>)ViewBag.AllProducts, "Select", new { @class = "form-control hidden", @id = "dd_products", @style = "width:200px", @onchange = "productsonchange(this);" })
         </div>

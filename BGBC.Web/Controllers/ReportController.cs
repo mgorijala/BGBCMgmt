@@ -22,9 +22,11 @@ namespace BGBC.Web.Controllers
         IRepository<Order, int> _order;
         IRepository<Profile, int> _profileRepo;
         IRepository<UserCart, int?> _userCart;
+        IRepository<Email, int?> _email;
 
         public ReportController()
         {
+            _email = new EmailRepository();
             _contactForm = new ContactRepository();
             _tenantReferal = new TenantRefRepository();
             _tenantRepo = new TenantRepository();
@@ -203,9 +205,7 @@ namespace BGBC.Web.Controllers
                 {
                     products = products.Where(x => x.CustomerFName.Contains(searchString) || x.CustomerLName.Contains(searchString)
                         || x.Name.Contains(searchString) || x.TransId.Contains(searchString));
-
                 }
-
                 switch (sortOrder)
                 {
                     case "date_desc":
@@ -543,6 +543,78 @@ namespace BGBC.Web.Controllers
                 }
 
                 return View(userCart.ToPagedList(pageNumber, currentPageSize));
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
+            return View();
+        }
+
+
+        [Authorize]
+        [CustomAuthorize(Roles = "Admin")]
+        public ActionResult Mails(int? id, string sortOrder, string currentFilter, string searchString, int? page, string PageSize, DateTime? fromdate, DateTime? todate)
+        {
+
+            int currentPageSize = int.Parse(PageSize == null ? "10" : PageSize), pageNumber = (page ?? 1);
+            try
+            {
+                var emails = (id == null ? BGBCFunctions.EmailDates() : BGBCFunctions.EmailDates().Where(x => x.EmailID == id));
+                if (PageSize != null)
+                    ViewBag.currentPageSize = currentPageSize;
+
+                ViewBag.CurrentSort = sortOrder;
+                ViewBag.toSortParm = sortOrder == "To_Address" ? "to_desc" : "To_Address";
+                ViewBag.subSortParm = sortOrder == "Subject" ? "sub_desc" : "Subject";
+                ViewBag.bodySortParm = sortOrder == "Body" ? "body_desc" : "Body";
+                ViewBag.dateSortParm = sortOrder == "Mail_Date" ? "date_desc" : "Mail_Date";
+
+                if (searchString != null)
+                {
+                    page = 1;
+                }
+                else
+                {
+                    searchString = currentFilter;
+                }
+                ViewBag.CurrentFilter = searchString;
+                ViewBag.page = pageNumber;
+                if (fromdate != null)
+                {
+                    ViewBag.fromdate = fromdate;
+                    ViewBag.todate = todate;
+                }
+
+                if (fromdate.HasValue)
+                    emails = emails.Where(x => x.Createdon >= fromdate);
+                if (todate.HasValue)
+                {
+                    var finaldate = Convert.ToDateTime(todate).AddDays(1);
+                    emails = emails.Where(x => x.Createdon <= finaldate);
+                }
+                if (!string.IsNullOrEmpty(searchString))
+                    emails = emails.Where(x => x.ToAddress.Contains(searchString) || x.Subject.Contains(searchString));
+
+                switch (sortOrder)
+                {
+                    case "to_desc":
+                        emails = emails.OrderBy(x => x.ToAddress);
+                        break;
+                    case "sub_desc":
+                        emails = emails.OrderBy(x => x.Subject);
+                        break;
+                    case "body_desc":
+                        emails = emails.OrderBy(x => x.Body);
+                        break;
+                    case "date_desc":
+                        emails = emails.OrderBy(x => x.Createdon);
+                        break;
+                    default:  
+                        emails = emails.OrderBy(x => x.Createdon);
+                        break;
+                }
+                return View(emails.ToPagedList(pageNumber, currentPageSize));
             }
             catch (Exception ex)
             {

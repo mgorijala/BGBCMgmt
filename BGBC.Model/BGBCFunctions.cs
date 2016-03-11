@@ -49,5 +49,9 @@ namespace BGBC.Model
         {
             context.SP_RentCalcSchedule(ExecDate);
         }
+        public static IQueryable<Email> EmailDates()
+        {
+            return from s in context.Emails select s;
+        }
     }
 }
