@@ -361,6 +361,7 @@
     <Content Include="Views\Report\ProductInvoice.cshtml" />
     <Content Include="Views\Admin\ViewPropertyPayment.cshtml" />
     <Content Include="Views\Report\UserCartHistory.cshtml" />
+    <Content Include="Views\Report\Mails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
