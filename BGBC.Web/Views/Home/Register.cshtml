@@ -55,7 +55,16 @@
             @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
         </div>
         </div>
-        <input type="submit" value="Submit">
+    <div class="row">
+        <div class="form-group">
+            @Html.CheckBoxFor(model => model.TermsAccepted)I accept the<a href="#"> terms & conditions</a>
+            <br />
+            @Html.ValidationMessageFor(model => model.TermsAccepted, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <br />
+    <input type="submit" value="Submit">
 
     }
 

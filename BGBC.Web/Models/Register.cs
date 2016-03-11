@@ -43,5 +43,17 @@ namespace BGBC.Web.Models
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "New Password and Confirm Password must match")]
         public string ConfirmPassword { get; set; }
+
+        [MustBeTrue(ErrorMessage = "Please accept the terms & conditions")]
+        public bool TermsAccepted { get; set; }
+
+
+        public class MustBeTrueAttribute : ValidationAttribute
+        {
+            public override bool IsValid(object value)
+            {
+                return value is bool && (bool)value;
+            }
+        }
     }
 }
