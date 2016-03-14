@@ -40,10 +40,10 @@
         </div>
         @using (Html.BeginForm("PaymentHistory", "Report", FormMethod.Get))
         {
-            <div class="col-md-3 col-sm-4 col-xs-12 col-md-offset-3">
-                <div class="form-group">
-                    @Html.DropDownList("ddlSelectOwner", @ViewBag.OwnerList as IEnumerable<SelectListItem>, "Select Owner", new { @class = "form-control" })
-                </div>
+            <div class="col-md-3 col-sm-4 col-xs-12 col-md-offset-3 ">
+                
+                    @Html.DropDownList("SearchOwner", @ViewBag.OwnerList as IEnumerable<SelectListItem>, "Select Owner", new { @class = "form-control" })
+                
             </div>
             <div class="col-md-3 col-sm-4 col-xs-12  pull-right">
                 <div class="input-group">
@@ -99,7 +99,7 @@
         </table>
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
         @Html.PagedListPager(Model, page => Url.Action("PaymentHistory",
-                                                                                                                new { page, sortOrder = ViewBag.currentSort, currentFilter = ViewBag.currentFilter, pageSize = ViewBag.currentPageSize }))
+                                                                                                                new { page, sortOrder = ViewBag.currentSort, currentFilter = ViewBag.currentFilter,SearchOwner=ViewBag.currentFilterForDropdown, pageSize = ViewBag.currentPageSize }))
     </div>
 
 

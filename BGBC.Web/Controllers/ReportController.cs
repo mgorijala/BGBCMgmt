@@ -302,7 +302,10 @@ namespace BGBC.Web.Controllers
                     //  ||  x.Amount.Equals(searchString)||  x.TransDate.Equals(searchString));
                 }
                 if (!string.IsNullOrEmpty(searchOwner))
-                    rentPayments.Where(x => x.OwnerFirstName.Contains(searchOwner) || x.OwnerLastName.Contains(searchOwner));
+                {
+                    rentPayments=rentPayments.Where(x => x.OwnerFirstName.Contains(searchOwner));
+                    ViewBag.currentFilterForDropdown = searchOwner;
+                }
                 switch (sortOrder)
                 {
                     case "date_desc":
@@ -349,7 +352,7 @@ namespace BGBC.Web.Controllers
                         rentPayments = rentPayments.OrderBy(x => x.TransDate);
                         break;
                 }
-                PropagateOwnerDropdown();
+                PropagateOwnerDropdown(ViewBag.currentFilterForDropdown);
                 return View(rentPayments.ToPagedList(pageNumber, currentPageSize));
             }
             catch (Exception ex)
@@ -623,16 +626,17 @@ namespace BGBC.Web.Controllers
             return View();
         }
 
-        void PropagateOwnerDropdown()
+        void PropagateOwnerDropdown(string selectedValue)
         {
             var rentPayments = _propertyRepo.Get().Select(x => new {x.User.FirstName,x.User.LastName }).Distinct(); 
             List<SelectListItem> items = new List<SelectListItem>();
             foreach (var item in rentPayments)
             {
-                items.Add(new SelectListItem
+                items.Add(new SelectListItem()
                 {
                     Text = Convert.ToString(item.FirstName + " " + item.LastName),
-                    Value = Convert.ToString(item.FirstName)
+                    Value = Convert.ToString(item.FirstName),
+                    Selected = (!string.IsNullOrEmpty(selectedValue)?true:false)
                 });
             }
             ViewBag.OwnerList = items;
