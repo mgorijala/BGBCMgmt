@@ -106,7 +106,7 @@ namespace BGBC.Web.Controllers
                         authCookie.Value = string.Join(",", ids);
                         Response.SetCookie(authCookie);
                         if (Request.IsAuthenticated)
-                            _userCart.Add(new UserCart { ProductID = Convert.ToInt32(id), UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId });
+                            _userCart.Remove(new UserCart { ProductID = Convert.ToInt32(id), UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId });
                     }
                 }
             }

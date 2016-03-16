@@ -24,6 +24,7 @@ namespace BGBC.Web.Controllers
         private IRepository<TenantReferral, int?> _tenantRefRepo;
         IRepository<PasswordReset, int?> passwordresetRepo;
         UserRepository repos = new UserRepository();
+        IRepository<UserCart, int?> _userCartRepo;
 
         public HomeController()
         {
@@ -32,6 +33,7 @@ namespace BGBC.Web.Controllers
             _repository = new ContactRepository();
             _tenantRefRepo = new TenantRefRepository();
             passwordresetRepo = new PasswordResetRepository();
+            _userCartRepo = new UserCartRepository();
         }
         public ActionResult Index()
         {
@@ -260,6 +262,12 @@ namespace BGBC.Web.Controllers
                     HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
                     Response.Cookies.Add(faCookie);
 
+                    if (selUser.UserType != 0)
+                    {
+                        HttpCookie authCookie = Request.Cookies[".BGBCProducts"];
+                        AddProductsToUserCart(authCookie, selUser.UserID);
+                    }
+
                     if (selUser.UserType == 0)
                     {
                         return RedirectToAction("Index", "Admin");
@@ -432,7 +440,18 @@ namespace BGBC.Web.Controllers
         {
             return View();
         }
-
+        void AddProductsToUserCart(HttpCookie authCookie, int loginUserID)
+        {
+            var userCart = _userCartRepo.Get().Where(x => x.UserID == loginUserID && x.Deletedon == null).Select(x => x.ProductID).ToArray();
+            string[] ids = authCookie.Value.Split(',');
+            foreach (var item in ids)
+            {
+                if (!Array.Exists(userCart, e => e == Convert.ToInt32(item)))
+                {
+                    _userCartRepo.Add(new UserCart { ProductID = Convert.ToInt32(item), UserID = loginUserID });
+                }
+            }
+        }
     }
 
 }
