@@ -105,7 +105,6 @@ namespace BGBC.Web.Controllers
         [CustomAuthorize(Roles = "Owner")]
         public ActionResult MyProperties()
         {
-            TempData.Remove("propertydata");
             return View(_propertyRepo.GetRef(((BGBC.Core.CustomPrincipal)(User)).UserId));
         }
 

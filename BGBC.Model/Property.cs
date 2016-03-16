@@ -34,6 +34,8 @@ namespace BGBC.Model
         public Nullable<short> GracePeriod { get; set; }
         public Nullable<decimal> Penalty { get; set; }
         public Nullable<decimal> DailyPenalty { get; set; }
+        public Nullable<short> FinalDueDay { get; set; }
+        public bool LeaseDocument { get; set; }
         public Nullable<System.DateTime> Createdon { get; set; }
         public Nullable<System.DateTime> Updatedon { get; set; }
         public Nullable<System.DateTime> Deletedon { get; set; }

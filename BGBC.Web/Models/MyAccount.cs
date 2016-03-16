@@ -18,6 +18,9 @@ namespace BGBC.Web.Models
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
 
+        public int TenantID { get; set; }
+        public string LeaseDocName { get; set; }
+
         [Display(Name = "Rent Due")]
         public string RentDue { get; set; }
 

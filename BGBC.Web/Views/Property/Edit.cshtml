@@ -12,6 +12,7 @@
     @Html.HiddenFor(model => model.Createdon)
     @Html.HiddenFor(model => model.RentDueDay)
     @Html.HiddenFor(model => model.GracePeriod)
+    @Html.HiddenFor(model => model.FinalDueDay)
     @Html.HiddenFor(model => model.Penalty)
     @Html.HiddenFor(model => model.DailyPenalty)
     @Html.HiddenFor(model => model.UserID)
@@ -71,6 +72,12 @@
             </div>
         </div>
         <div class="row">
+            <div class="form-group">
+                @Html.CheckBoxFor(model => model.LeaseDocument) <span><b>Lease Document is Required </b></span>
+            </div>
+        </div>
+    
+        <div class="row">
             <dl>
                 <dt>
                     @Html.DisplayName("Rent Due Monthly On(Please Select which day of the month the rent is due)") <span style="color:blue">&dagger;</span>
@@ -101,6 +108,27 @@
                 </dt>
                 <dd>
                     @Html.DisplayFor(model=>model.GracePeriod)
+                </dd>
+                <dt>
+                    @Html.DisplayName("Final Due day") <span style="color:blue">&dagger;</span>
+                </dt>
+                <dd>
+                    @if ((Model.FinalDueDay.ToString() == "1") | (Model.FinalDueDay.ToString() == "21"))
+                    {
+                        @Html.DisplayFor(model => model.FinalDueDay)<span>st</span>
+                    }
+                    else if ((Model.FinalDueDay.ToString() == "2") | (Model.FinalDueDay.ToString() == "22"))
+                    {
+                        @Html.DisplayFor(model => model.FinalDueDay)<span>nd</span>
+                    }
+                    else if ((Model.FinalDueDay.ToString() == "3") | (Model.FinalDueDay.ToString() == "23"))
+                    {
+                        @Html.DisplayFor(model => model.FinalDueDay)<span>rd</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.FinalDueDay)<span>th</span>
+                    }
                 </dd>
                 <dt>
                     @Html.DisplayName("Late Penalty Charge ") <span style="color:blue">&dagger;</span>

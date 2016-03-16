@@ -11,6 +11,8 @@ using BGBC.Model.Metadata;
 using System.Text.RegularExpressions;
 using BGBC.Core.Security;
 using System.Web.Routing;
+using System.IO;
+
 
 namespace BGBC.Web.Controllers
 {
@@ -26,6 +28,7 @@ namespace BGBC.Web.Controllers
         IRepository<PasswordReset, int?> passwordresetRepo;
         IRepository<UserCC, int> _userCCRep;
         IRepository<RentAutoPay, int> _rentAutoPayRep;
+        IRepository<LeaseFile, int> _uploasRepo;
 
         public TenantController()
         {
@@ -38,6 +41,7 @@ namespace BGBC.Web.Controllers
             passwordresetRepo = new PasswordResetRepository();
             _userCCRep = new UserCCRepository();
             _rentAutoPayRep = new RentAutoPayRepository();
+            _uploasRepo = new UploadRepository();
         }
 
         [CustomAuthorize(Roles = "Tenant")]
@@ -58,13 +62,16 @@ namespace BGBC.Web.Controllers
             try
             {
                 User user = _userRepository.Get(((BGBC.Core.CustomPrincipal)(User)).UserId);
-
+                Tenant tenant = _tenantRepo.Get((int)user.Tenants.FirstOrDefault().TenantID);
                 Property property = _propertyRepo.Get((int)user.Tenants.FirstOrDefault().PropertyID);
                 myaccount.Name = property.User.FirstName;
                 myaccount.Email = property.User.Email;
                 myaccount.Phone = property.User.Profiles.FirstOrDefault().MobilePhone;
                 myaccount.RentAmount = user.Tenants.FirstOrDefault().RentAmount;
-                myaccount.RentDue = property.RentDueDay.ToString();
+                myaccount.RentDue = property.FinalDueDay.ToString();
+                myaccount.LeaseDocName = tenant.LeaseDocName;
+                myaccount.TenantID = tenant.TenantID;
+
                 List<RentDue> rentDue = _rentDueRepo.GetRef(((BGBC.Core.CustomPrincipal)(User)).UserId);
                 foreach (var item in rentDue)
                 {
@@ -272,7 +279,6 @@ namespace BGBC.Web.Controllers
                     }
                 }
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -515,41 +521,41 @@ namespace BGBC.Web.Controllers
         [Authorize]
         public ActionResult Add(int? id)
         {
-            PopulateDropDown();
-
-            if (TempData["tenantdata"] == null)
+            if (id == null)
             {
-                TenantInfo tenant = new TenantInfo();
-                tenant.ProfileInfo = new Model.Profile();
-                tenant.PetDepositDue = false;
-                tenant.ProfileInfo.BillingAddressSame = true;
-
-                Property property = _propertyRepo.Get((int)id);
-                if (property != null)
-                {
-                    tenant.PropertyID = property.PropertyID;
-                    tenant.PropertyName = property.Name;
-                    tenant.Address = property.Address;
-                    tenant.Address2 = property.Address2;
-                    tenant.City = property.City;
-                    tenant.State = property.State;
-                    tenant.Zip = property.Zip;
-                    tenant.OwnerName = string.Format("{0} {1}", property.User.FirstName, property.User.LastName);
-                }
-                return View(tenant);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            else { return View("Add", (TenantInfo)TempData["tenantdata"]); }
 
+            TenantInfo tenant = new TenantInfo();
+            tenant.ProfileInfo = new Model.Profile();
+            tenant.PetDepositDue = false;
+            tenant.ProfileInfo.BillingAddressSame = true;
+
+            Property property = _propertyRepo.Get(id.Value);
+            if (property != null)
+            {
+                tenant.PropertyID = property.PropertyID;
+                tenant.PropertyName = property.Name;
+                tenant.Address = property.Address;
+                tenant.Address2 = property.Address2;
+                tenant.City = property.City;
+                tenant.State = property.State;
+                tenant.Zip = property.Zip;
+                tenant.OwnerName = string.Format("{0} {1}", property.User.FirstName, property.User.LastName);
+                tenant.LeaseDocument = property.LeaseDocument;
+            }
+            PopulateDropDown();
+            return View(tenant);
         }
 
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Confirm(TenantInfo tenantInfo)
+        public ActionResult Confirm(TenantInfo tenantInfo, HttpPostedFileBase file)
         {
-            string messages = string.Join("; ", ModelState.Values
-                                        .SelectMany(x => x.Errors)
-                                        .Select(x => x.ErrorMessage));
+            //string messages = string.Join("; ", ModelState.Values
+            //                            .SelectMany(x => x.Errors)
+            //                            .Select(x => x.ErrorMessage));
             if (!tenantInfo.ProfileInfo.BillingAddressSame)
             {
                 BGBC.Core.ModelDataValidation.Instance.AlphaNumeric(ModelState, tenantInfo.ProfileInfo.BillingAddress, true, "Billing Address", "ProfileInfo.BillingAddress");
@@ -561,10 +567,14 @@ namespace BGBC.Web.Controllers
 
             if (tenantInfo.ProfileInfo.HomePhone == null) ModelState.AddModelError("ProfileInfo.HomePhone", "The Home Phone field is required.");
             if (tenantInfo.FinalDueDate == null) ModelState.AddModelError("FinalDueDate", "The Final Due Date field is required.");
+
+            if (tenantInfo.LeaseDocument == true)
+            {
+                if (file == null) ModelState.AddModelError("file", "Lease document is required.");
+            }
+
             if (tenantInfo.PetDepositDue) { if (string.IsNullOrEmpty(tenantInfo.PetDeposit.ToString())) ModelState.AddModelError("PetDeposit", "The Pet Deposit field is required."); }
 
-            PopulateDropDown();
-            ModelState["PropertyID"].Errors.Clear();
             if (ModelState.IsValid)
             {
                 if (tenantInfo.ProfileInfo.BillingAddressSame)
@@ -575,6 +585,8 @@ namespace BGBC.Web.Controllers
                     tenantInfo.ProfileInfo.BillingCty = property.City;
                     tenantInfo.ProfileInfo.BillingState = property.State;
                     tenantInfo.ProfileInfo.BillingZip = property.Zip;
+                    tenantInfo.LeaseDocument = property.LeaseDocument;
+
                 }
                 User user = _userRepository.Find(tenantInfo.Email);
                 if (user != null)
@@ -583,26 +595,40 @@ namespace BGBC.Web.Controllers
                 }
                 else
                 {
-                    TempData["tenantdata"] = tenantInfo;
+                    if (tenantInfo.LeaseDocument == true)
+                    {
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            var path = Server.MapPath("~/Attactments/");
+                            var directory = new DirectoryInfo(path);
+                            if (directory.Exists == false) { directory.Create(); }
+
+                            tenantInfo.LeaseDocGUID = System.Guid.NewGuid().ToString();
+                            var filePath = (path + tenantInfo.LeaseDocGUID);
+                            file.SaveAs(filePath);
+                            tenantInfo.LeaseDocName = Path.GetFileName(file.FileName);
+                            tenantInfo.ContentType = file.ContentType;
+                        }
+                    }
+
                     return View(tenantInfo);
                 }
             }
+            PopulateDropDown();
             return View("Add", tenantInfo);
-
-
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-
-        public ActionResult Add(TenantInfo tenantInfo)
+        public ActionResult Add(TenantInfo tenantInfo, string Command)
         {
+            if (Command == "Edit") { PopulateDropDown(); return View("Add", tenantInfo); }
             try
             {
 
-                PopulateDropDown();
-                tenantInfo = (TenantInfo)TempData["tenantdata"];
                 User user = new User();
                 user.FirstName = tenantInfo.FirstName;
                 user.LastName = tenantInfo.LastName;
@@ -624,11 +650,13 @@ namespace BGBC.Web.Controllers
                 tenant.DepostDueDate = tenantInfo.DepostDueDate;
                 tenant.PetDepositDue = tenantInfo.PetDepositDue;
                 tenant.PetDeposit = tenantInfo.PetDeposit;
+                tenant.LeaseDocName = tenantInfo.LeaseDocName;
+
                 tenant.PetRentAmount = tenantInfo.PetRentAmount;
 
-               //  decimal? PetRent = tenantInfo.PetRentAmount == null ? 0 : tenantInfo.PetRentAmount;
+                //  decimal? PetRent = tenantInfo.PetRentAmount == null ? 0 : tenantInfo.PetRentAmount;
 
-                 tenant.Rent = tenantInfo.RentAmount + (tenantInfo.PetRentAmount == null ? 0 : tenantInfo.PetRentAmount);
+                tenant.Rent = tenantInfo.RentAmount + (tenantInfo.PetRentAmount == null ? 0 : tenantInfo.PetRentAmount);
                 tenant.Createdon = DateTime.Now;
                 user.Tenants.Add(tenant);
                 //_tenantRepo.Add(tenant);
@@ -639,14 +667,22 @@ namespace BGBC.Web.Controllers
                 user.UserReferences.Add(new UserReference());
                 user.UserReferences.Add(new UserReference());
                 user = _userRepository.Add(user);
+
+                if (tenantInfo.LeaseDocument)
+                {
+
+                    if (System.IO.File.Exists(Server.MapPath("~/Attactments/") + tenantInfo.LeaseDocGUID))
+                    {
+                        LeaseFile leasefile = new LeaseFile();
+                        leasefile.FileContent = System.IO.File.ReadAllBytes(Server.MapPath("~/Attactments/") + tenantInfo.LeaseDocGUID);
+                        leasefile.ContentType = tenantInfo.ContentType;
+                        leasefile.TenantID = tenant.TenantID;
+                        _uploasRepo.Add(leasefile);
+                    }
+                }
+
+                SendTenantLogMail(user);
                 TempData["SucessMessage"] = "Tenant " + tenantInfo.FirstName + " " + tenantInfo.LastName + " Added  successfully.";
-                var token = BGBC.Core.Security.Cryptography.RandomString(32);
-                PasswordReset passwordreset = new PasswordReset();
-                passwordreset.EmailID = user.Email;
-                passwordreset.Token = token;
-                passwordresetRepo.Add(passwordreset);
-                BGBC.Web.Utilities.MailUtility obj = new Utilities.MailUtility();
-                obj.TenantAdd(user.Email, user.FirstName + " " + user.LastName, "http://" + HttpContext.Request.Url.Authority + "/Home/ResetPassword/" + token);
                 return RedirectToAction("PropertyTenants", "Owner", new { id = tenantInfo.PropertyID });
             }
 
@@ -666,60 +702,62 @@ namespace BGBC.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = _userRepository.Get((int)id);
+
+            User user = _userRepository.Get(id.Value);
             if (user == null)
             {
                 return HttpNotFound();
             }
-            PopulateDropDown();
-            if (TempData["tenantdata"] == null)
+
+            TenantInfo tenantInfo = new TenantInfo();
+            tenantInfo.UserID = user.UserID;
+            tenantInfo.FirstName = user.FirstName;
+            tenantInfo.LastName = user.LastName;
+            tenantInfo.Email = user.Email;
+            tenantInfo.ConfirmEmail = user.Email;
+            tenantInfo.ProfileInfo = user.Profiles.Where(x => x.UserID == id).SingleOrDefault();
+            Tenant tenant = user.Tenants.Where(x => x.UserID == id).SingleOrDefault();
+            if (tenant == null)
             {
-
-                TenantInfo tenantInfo = new TenantInfo();
-                tenantInfo.UserID = user.UserID;
-                tenantInfo.ProfileInfo = user.Profiles.Where(x => x.UserID == id).SingleOrDefault();
-                Tenant tenant = user.Tenants.Where(x => x.UserID == id).SingleOrDefault();
-                tenantInfo.TenantID = user.UserID;
-                if (tenant == null)
-                {
-                    return HttpNotFound();
-                }
-                Property _property = _propertyRepo.Get((int)tenant.PropertyID);
-                tenantInfo.PropertyName = _property.Name;
-
-                tenantInfo.FirstName = user.FirstName;
-                tenantInfo.LastName = user.LastName;
-                tenantInfo.Email = user.Email;
-                tenantInfo.ConfirmEmail = user.Email;
-
-                tenantInfo.RentAmount = tenant.RentAmount;
-                tenantInfo.FinalDueDate = tenant.FinalDueDate;
-                tenantInfo.Deposit = tenant.Deposit;
-                tenantInfo.DepostDueDate = tenant.DepostDueDate;
-                tenantInfo.PetDepositDue = (bool)tenant.PetDepositDue;
-                tenantInfo.PetDeposit = tenant.PetDeposit;
-                tenantInfo.PetRentAmount = tenant.PetRentAmount;
-
-
-                tenantInfo.PropertyID = (int)tenant.PropertyID;
-                tenantInfo.Address = _property.Address;
-                tenantInfo.Address2 = _property.Address2;
-                tenantInfo.City = _property.City;
-                tenantInfo.State = _property.State;
-                tenantInfo.Zip = _property.Zip;
-                tenantInfo.OwnerName = string.Format("{0} {1}", _property.User.FirstName, _property.User.LastName);
-
-                ViewBag.Url = (Request.UrlReferrer != null && Request.UrlReferrer.Segments.Length > 2 ? Request.UrlReferrer.Segments[2].ToString().Trim('/') : "");
-
-                return View(tenantInfo);
+                return HttpNotFound();
             }
-            else { return View("Edit", (TenantInfo)TempData["tenantdata"]); }
+            tenantInfo.TenantID = tenant.TenantID;
+            tenantInfo.RentAmount = tenant.RentAmount;
+            tenantInfo.FinalDueDate = tenant.FinalDueDate;
+            tenantInfo.Deposit = tenant.Deposit;
+            tenantInfo.DepostDueDate = tenant.DepostDueDate;
+            tenantInfo.PetDepositDue = tenant.PetDepositDue;
+            tenantInfo.PetDeposit = tenant.PetDeposit;
+            tenantInfo.PetRentAmount = tenant.PetRentAmount;
+            if (tenant.LeaseDocName != null)
+            {
+                tenantInfo.LeaseDocName = tenant.LeaseDocName;
+            }
+
+            Property _property = _propertyRepo.Get((int)tenant.PropertyID);
+            if (_property == null)
+            {
+                return HttpNotFound();
+            }
+            tenantInfo.PropertyName = _property.Name;
+            tenantInfo.LeaseDocument = _property.LeaseDocument;
+            tenantInfo.PropertyID = tenant.PropertyID.Value;
+            tenantInfo.Address = _property.Address;
+            tenantInfo.Address2 = _property.Address2;
+            tenantInfo.City = _property.City;
+            tenantInfo.State = _property.State;
+            tenantInfo.Zip = _property.Zip;
+            tenantInfo.OwnerName = string.Format("{0} {1}", _property.User.FirstName, _property.User.LastName);
+
+            ViewBag.Url = (Request.UrlReferrer != null && Request.UrlReferrer.Segments.Length > 2 ? Request.UrlReferrer.Segments[2].ToString().Trim('/') : "");
+            PopulateDropDown();
+            return View(tenantInfo);
         }
 
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult ConfirmEdit(TenantInfo tenantInfo)
+        public ActionResult ConfirmEdit(TenantInfo tenantInfo, HttpPostedFileBase file)
         {
             var query = from state in ModelState.Values
                         from error in state.Errors
@@ -748,19 +786,57 @@ namespace BGBC.Web.Controllers
                     tenantInfo.ProfileInfo.BillingZip = tenantInfo.Zip;
                 }
 
-                TempData["tenantdata"] = tenantInfo;
+                if (file != null && file.ContentLength > 0)
+                {
+                    var path = Server.MapPath("~/Attactments/");
+                    var directory = new DirectoryInfo(path);
+                    if (directory.Exists == false) { directory.Create(); }
+
+                    tenantInfo.LeaseDocGUID = System.Guid.NewGuid().ToString();
+                    var filePath = (path + tenantInfo.LeaseDocGUID);
+                    file.SaveAs(filePath);
+                    tenantInfo.LeaseDocName = Path.GetFileName(file.FileName);
+                    tenantInfo.ContentType = file.ContentType;
+                }
+
                 return View(tenantInfo);
 
             }
             return View("Edit", tenantInfo);
         }
 
+
+        public FileContentResult FileDownload(int id, string Name)
+        {
+            //declare byte array to get file content from database and string to store file name
+            byte[] fileData;
+            string ContentType;
+            string FileName;
+            //create object of LINQ to SQL class
+            BGBCEntities context = new BGBCEntities();
+            //using LINQ expression to get record from database for given id value
+            var record = from p in context.LeaseFiles
+                         where p.TenantID == id
+                         select p;
+            fileData = (byte[])record.First().FileContent.ToArray();
+            ContentType = record.First().ContentType;
+            FileName = Name;
+
+            //only one record will be returned from database as expression uses condtion on primary field
+            //so get first record from returned values and retrive file content (binary) and filename
+
+            //return file and provide byte file content and file name
+            return File(fileData, ContentType, FileName);
+        }
+
+
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         [Authorize]
 
-        public ActionResult EditPost(TenantInfo tenantInfo)
+        public ActionResult EditPost(TenantInfo tenantInfo, string Command)
         {
+            if (Command == "Edit") { PopulateDropDown(); return View("Edit", tenantInfo); }
             if (tenantInfo == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -768,14 +844,15 @@ namespace BGBC.Web.Controllers
 
             try
             {
-                PopulateDropDown();
-                tenantInfo = (TenantInfo)TempData["tenantdata"];
+
                 //ModelState["AltEmail"].Errors.Clear();
                 User user = _userRepository.Get((int)tenantInfo.UserID);
                 if (user == null)
                 {
                     return HttpNotFound();
                 }
+                Property _property = _propertyRepo.Get((int)tenantInfo.PropertyID);
+                tenantInfo.LeaseDocument = _property.LeaseDocument;
 
                 user.FirstName = tenantInfo.FirstName;
                 user.LastName = tenantInfo.LastName;
@@ -793,6 +870,36 @@ namespace BGBC.Web.Controllers
                 profile.WorkPhone = tenantInfo.ProfileInfo.WorkPhone;
                 profile.MobilePhone = tenantInfo.ProfileInfo.MobilePhone;
                 _profileRepo.Update(profile);
+
+                if (tenantInfo.LeaseDocument)
+                {
+                    Tenant tenant = _tenantRepo.Get((int)user.Tenants.SingleOrDefault().TenantID);
+                    tenant.LeaseDocName = tenantInfo.LeaseDocName;
+                    _tenantRepo.Update(tenant);
+
+                    byte[] bytes = new byte[] { };
+                    if (System.IO.File.Exists(Server.MapPath("~/Attactments/") + tenantInfo.LeaseDocGUID))
+                    {
+                        bytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Attactments/") + tenantInfo.LeaseDocGUID);
+                    }
+
+                    //File is available then edit the content other wise create new record
+                    if (tenant.LeaseFiles.Count > 0)
+                    {
+                        LeaseFile leasefile = _uploasRepo.Get(tenant.LeaseFiles.FirstOrDefault().ID);
+                        leasefile.FileContent = bytes;
+                        leasefile.ContentType = HttpUtility.UrlDecode(tenantInfo.ContentType);
+                        _uploasRepo.Update(leasefile);
+                    }
+                    else
+                    {
+                        LeaseFile leasefile = new LeaseFile();
+                        leasefile.FileContent = bytes;
+                        leasefile.ContentType = tenantInfo.ContentType;
+                        leasefile.TenantID = tenant.TenantID;
+                        _uploasRepo.Add(leasefile);
+                    }
+                }
                 TempData["SucessMessage"] = "Tenant updated successfully.";
                 return RedirectToAction("PropertyTenants", "Owner", new { id = tenantInfo.PropertyID });
 
@@ -822,62 +929,56 @@ namespace BGBC.Web.Controllers
             }
 
             PopulateDropDown();
-            if (TempData["tenantdata"] == null)
+            TenantInfo tenantInfo = new TenantInfo();
+            tenantInfo.UserID = user.UserID;
+            tenantInfo.ProfileInfo = user.Profiles.Where(x => x.UserID == id).Single();
+            Tenant tenant = user.Tenants.Where(x => x.UserID == id).Single();
+            tenantInfo.TenantID = tenant.TenantID;
+            if (tenant == null)
             {
-                TenantInfo tenantInfo = new TenantInfo();
-                tenantInfo.UserID = user.UserID;
-                tenantInfo.ProfileInfo = user.Profiles.Where(x => x.UserID == id).Single();
-                Tenant tenant = user.Tenants.Where(x => x.UserID == id).Single();
-                tenantInfo.TenantID = tenant.TenantID;
-                if (tenant == null)
-                {
-                    return HttpNotFound();
-                }
-                Property _property = _propertyRepo.Get((int)tenant.PropertyID);
-
-                tenantInfo.FirstName = user.FirstName;
-                tenantInfo.LastName = user.LastName;
-                tenantInfo.Email = user.Email;
-                tenantInfo.ConfirmEmail = user.Email;
-
-                tenantInfo.RentAmount = tenant.RentAmount;
-                tenantInfo.FinalDueDate = tenant.FinalDueDate;
-                tenantInfo.Deposit = tenant.Deposit;
-                tenantInfo.DepostDueDate = tenant.DepostDueDate;
-                tenantInfo.PetDepositDue = (bool)tenant.PetDepositDue;
-                tenantInfo.PetDeposit = tenant.PetDeposit;
-
-                tenantInfo.PropertyID = _property.PropertyID;
-                tenantInfo.Address = _property.Address;
-                tenantInfo.Address2 = _property.Address2;
-                tenantInfo.City = _property.City;
-                tenantInfo.State = _property.State;
-                tenantInfo.Zip = _property.Zip;
-                ViewBag.UserID = _property.UserID;
-                ViewBag.PropertyID = _property.PropertyID;
-
-               
-                tenantInfo.PropertyName = _property.Name;
-                tenantInfo.OwnerName = string.Format("{0} {1}", _property.User.FirstName, _property.User.LastName);
-
-                // Get the action name of Url
-                ViewBag.Url = Request.UrlReferrer.Segments[2].ToString().Trim('/');
-
-                return View(tenantInfo);
+                return HttpNotFound();
             }
-            else
+            Property _property = _propertyRepo.Get((int)tenant.PropertyID);
+            tenantInfo.LeaseDocument = _property.LeaseDocument;
+            tenantInfo.FirstName = user.FirstName;
+            tenantInfo.LastName = user.LastName;
+            tenantInfo.Email = user.Email;
+            tenantInfo.ConfirmEmail = user.Email;
+
+            tenantInfo.RentAmount = tenant.RentAmount;
+            tenantInfo.FinalDueDate = tenant.FinalDueDate;
+            tenantInfo.Deposit = tenant.Deposit;
+            tenantInfo.DepostDueDate = tenant.DepostDueDate;
+            tenantInfo.PetDepositDue = (bool)tenant.PetDepositDue;
+            tenantInfo.PetDeposit = tenant.PetDeposit;
+
+            tenantInfo.PropertyID = _property.PropertyID;
+            tenantInfo.Address = _property.Address;
+            tenantInfo.Address2 = _property.Address2;
+            tenantInfo.City = _property.City;
+            tenantInfo.State = _property.State;
+            tenantInfo.Zip = _property.Zip;
+            ViewBag.UserID = _property.UserID;
+            ViewBag.PropertyID = _property.PropertyID;
+            
+            if (tenant.LeaseDocName != null)
             {
-                Tenant tenant = user.Tenants.Where(x => x.UserID == id).Single();
-                Property _property = _propertyRepo.Get((int)tenant.PropertyID);
-                ViewBag.UserID = _property.UserID;
-                ViewBag.PropertyID = _property.PropertyID;
-                return View("EditAdmin", (TenantInfo)TempData["tenantdata"]);
+                tenantInfo.LeaseDocName = tenant.LeaseDocName;
             }
+
+            tenantInfo.PropertyName = _property.Name;
+            tenantInfo.OwnerName = string.Format("{0} {1}", _property.User.FirstName, _property.User.LastName);
+
+            // Get the action name of Url
+            ViewBag.Url = Request.UrlReferrer.Segments[2].ToString().Trim('/');
+
+            return View(tenantInfo);
+
         }
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult ConfirmEditAdmin(TenantInfo tenantInfo)
+        public ActionResult ConfirmEditAdmin(TenantInfo tenantInfo, HttpPostedFileBase file)
         {
             if (!tenantInfo.ProfileInfo.BillingAddressSame)
             {
@@ -902,7 +1003,23 @@ namespace BGBC.Web.Controllers
                     tenantInfo.ProfileInfo.BillingState = tenantInfo.State;
                     tenantInfo.ProfileInfo.BillingZip = tenantInfo.Zip;
                 }
-                TempData["tenantdata"] = tenantInfo;
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    var fileToUpload = new BGBC.Web.Models.Files
+                    {
+                        ContentType = file.ContentType
+                    };
+                    using (var reader = new System.IO.BinaryReader(file.InputStream))
+                    {
+                        fileToUpload.FileContent = reader.ReadBytes(file.ContentLength);
+                    }
+                    tenantInfo.ContentType = fileToUpload.ContentType;
+                    tenantInfo.TenantID = tenantInfo.TenantID;
+                    var FileName = Path.GetFileName(file.FileName);
+                    tenantInfo.LeaseDocName = FileName;
+                }
+
                 return View(tenantInfo);
 
             }
@@ -914,8 +1031,9 @@ namespace BGBC.Web.Controllers
         [Authorize]
         [CustomAuthorize(Roles = "Admin")]
 
-        public ActionResult EditAdmin(TenantInfo tenantInfo)
+        public ActionResult EditAdmin(TenantInfo tenantInfo, string Command)
         {
+            if (Command == "Edit") { PopulateDropDown(); return View("EditAdmin", tenantInfo); }
             if (tenantInfo == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -923,8 +1041,7 @@ namespace BGBC.Web.Controllers
 
             try
             {
-                PopulateDropDown();
-                tenantInfo = (TenantInfo)TempData["tenantdata"];
+
                 User user = _userRepository.Get((int)tenantInfo.UserID);
                 if (user == null)
                 {
@@ -956,7 +1073,13 @@ namespace BGBC.Web.Controllers
                 tenant.DepostDueDate = tenantInfo.DepostDueDate;
                 tenant.PetDepositDue = tenantInfo.PetDepositDue;
                 tenant.PetDeposit = tenantInfo.PetDeposit;
+                tenant.LeaseDocName = tenantInfo.LeaseDocName;
                 _tenantRepo.Update(tenant);
+
+                LeaseFile leasefile = _uploasRepo.Get((int)tenant.LeaseFiles.FirstOrDefault().ID);
+                leasefile.ContentType = tenantInfo.ContentType;
+                leasefile.TenantID = tenant.TenantID;
+                _uploasRepo.Update(leasefile);
                 TempData["SucessMessage"] = "Tenant Updated successfully.";
                 return RedirectToAction("PropertyTenants", "Admin", new { id = tenantInfo.PropertyID });
 
@@ -1216,7 +1339,7 @@ namespace BGBC.Web.Controllers
                     }
                     ViewBag.SucessMessage = "Profile is updated successfull";
                     PopulateDropDown();
-                    return View();
+                    return View(userprofile);
                 }
             }
             catch (Exception ex)
@@ -1247,10 +1370,10 @@ namespace BGBC.Web.Controllers
                 pp.tenantRentPay = new List<Models.TenantRentPay>();
                 foreach (var t in property.Tenants)
                 {
-                    BGBC.Web.Models.TenantRentPay ttttttttt = new BGBC.Web.Models.TenantRentPay();
-                    ttttttttt.tname = t.User.FirstName;
-                    ttttttttt.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).Take(5).ToList();
-                    pp.tenantRentPay.Add(ttttttttt);
+                    BGBC.Web.Models.TenantRentPay tntRent = new BGBC.Web.Models.TenantRentPay();
+                    tntRent.tname = t.User.FirstName;
+                    tntRent.RentPayment = BGBCFunctions.RentPayments().Where(x => x.TenantUserID == t.User.UserID).Take(5).ToList();
+                    pp.tenantRentPay.Add(tntRent);
                 }
                 allPropertiesAndTenant.Add(pp);
             }
@@ -1388,6 +1511,17 @@ namespace BGBC.Web.Controllers
                 new SelectListItem() { Text="Wisconsin", Value="WI"},
                 new SelectListItem() { Text="Wyoming", Value="WY"}
             };
+        }
+
+        private void SendTenantLogMail(User user)
+        {
+            var token = BGBC.Core.Security.Cryptography.RandomString(32);
+            PasswordReset passwordreset = new PasswordReset();
+            passwordreset.EmailID = user.Email;
+            passwordreset.Token = token;
+            passwordresetRepo.Add(passwordreset);
+            BGBC.Web.Utilities.MailUtility obj = new Utilities.MailUtility();
+            obj.TenantAdd(user.Email, user.FirstName + " " + user.LastName, "http://" + HttpContext.Request.Url.Authority + "/Home/ResetPassword/" + token);
         }
     }
 }

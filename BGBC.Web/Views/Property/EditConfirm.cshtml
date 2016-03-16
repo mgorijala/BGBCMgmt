@@ -10,172 +10,228 @@
     }
 </style>
 <div class="back">
-    <h1>Edit Property - Confirm</h1>
-    
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Name)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Name)
-        </div>
-    </div>
+    @using (Html.BeginForm("Edit", "Property"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.PropertyID)
+        @Html.HiddenFor(model => model.UserID)
+        <h1>Edit Property - Confirm</h1>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Nickname)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Name)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Name)
+                @Html.DisplayFor(model => model.Name)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Nickname)
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Address)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Nickname)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Nickname)
+                @Html.DisplayFor(model => model.Nickname)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Address)
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Address2)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Address)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Address)
+                @Html.DisplayFor(model => model.Address)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Address2)
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.City)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Address2)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Address2)
+                @Html.DisplayFor(model => model.Address2)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.City)
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.State)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.City)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.City)
+                @Html.DisplayFor(model => model.City)
+            </div>
         </div>
-        <div class="col-md-9">
 
-            @Html.DisplayFor(model => model.State)
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.State)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.State)
+                @Html.DisplayFor(model => model.State)
+            </div>
         </div>
-    </div>
 
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Zip)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Zip)
+                @Html.DisplayFor(model => model.Zip)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.RentDueDay)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.RentDueDay)
+                @if ((Model.RentDueDay.ToString() == "1") | (Model.RentDueDay.ToString() == "21"))
+                {
+                    @Html.DisplayFor(model => model.RentDueDay)<span>st</span>
+                }
+                else if ((Model.RentDueDay.ToString() == "2") | (Model.RentDueDay.ToString() == "22"))
+                {
+                    @Html.DisplayFor(model => model.RentDueDay)<span>nd</span>
+                }
+                else if ((Model.RentDueDay.ToString() == "3") | (Model.RentDueDay.ToString() == "23"))
+                {
+                    @Html.DisplayFor(model => model.RentDueDay)<span>rd</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.RentDueDay)<span>th</span>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.GracePeriod)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.GracePeriod)
+                @Html.DisplayFor(model => model.GracePeriod)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Penalty)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Penalty)
+                @if (Model.Penalty.ToString() == "")
+                {
+                    <span>N/A</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.Penalty)
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.FinalDueDay)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.FinalDueDay)
+                @if ((Model.FinalDueDay.ToString() == "1") | (Model.FinalDueDay.ToString() == "21"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>st</span>
+                }
+                else if ((Model.FinalDueDay.ToString() == "2") | (Model.FinalDueDay.ToString() == "22"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>nd</span>
+                }
+                else if ((Model.FinalDueDay.ToString() == "3") | (Model.FinalDueDay.ToString() == "23"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>rd</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>th</span>
+                }
+        </div>
+       
+         </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.DailyPenalty)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.DailyPenalty)
+                @if (Model.DailyPenalty.ToString() == "")
+                {
+                    <span>N/A</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.DailyPenalty)
+                }
+            </div>
+        </div>
     <div class="row">
         <div class="col-md-3">
             <b>
-                @Html.DisplayNameFor(model => model.Zip)
+                @Html.HiddenFor(model => model.LeaseDocument)
+                @Html.DisplayNameFor(model => model.LeaseDocument)
             </b>
         </div>
         <div class="col-md-9">
-            @Html.DisplayFor(model => model.Zip)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.RentDueDay)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @if ((Model.RentDueDay.ToString() == "1") | (Model.RentDueDay.ToString() == "21"))
+            @if (Model.LeaseDocument == true)
             {
-                @Html.DisplayFor(model => model.RentDueDay)<span>st</span>
-            }
-            else if ((Model.RentDueDay.ToString() == "2") | (Model.RentDueDay.ToString() == "22"))
-            {
-                @Html.DisplayFor(model => model.RentDueDay)<span>nd</span>
-            }
-            else if ((Model.RentDueDay.ToString() == "3") | (Model.RentDueDay.ToString() == "23"))
-            {
-                @Html.DisplayFor(model => model.RentDueDay)<span>rd</span>
+                <p>Yes</p>
             }
             else
             {
-                @Html.DisplayFor(model => model.RentDueDay)<span>th</span>
+                <p>No</p>
             }
-            @*@Html.DisplayFor(model => model.RentDueDay)*@
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.GracePeriod)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.GracePeriod)
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Penalty)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @if (Model.Penalty.ToString() == "")
-            {
-                <span>N/A</span>
-            }
-            else
-            {
-            @Html.DisplayFor(model => model.Penalty)
-            }
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.DailyPenalty)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @if (Model.DailyPenalty.ToString() == "")
-        {
-            <span>N/A</span>
-        }
-        else
-        {
-            @Html.DisplayFor(model => model.DailyPenalty)
-        }
         </div>
     </div>
     <br/>
-    <div class="row">
-        <div class="col-md-6">
-            @using (Html.BeginForm("Edit", "Property"))
-            {
-                @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-actions no-color">
-                    <input type="submit" value="Save Property" class="btn-button btn-primary" /> 
-                   @Html.ActionLink("Edit", "Edit", "Property", new {id = Model.PropertyID }, new { @class = "btn-button btn-primary" })
-                @Html.ActionLink("Cancel", "MyProperties", "Owner", null, new { @class = "btn-button btn-primary" })
+                    <input id="btnSave" name="Command" type="submit" value="Save Property" class="btn-button btn-primary" />
+                    <input id="btnEdit" name="Command" type="submit" value="Edit" class="btn-button btn-primary" />
+                    @Html.ActionLink("Cancel", "MyProperties", "Owner", null, new { @class = "btn-button btn-primary" })
                 </div>
-            }
+            </div>
         </div>
-    </div>
+    }
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

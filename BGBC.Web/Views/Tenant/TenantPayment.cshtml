@@ -100,7 +100,7 @@
             <h4>Selected charges</h4>
             <br />
         </div>
-        <table class="table">
+        <table class="table" id="tblPayment">
             <tr>
                 <th>
                     Due Date
@@ -122,50 +122,70 @@
                         @Html.HiddenFor(p => Model.TenantRent[i].PropertyID)
                     </td>
                     <td>
-                        @Html.DisplayFor(p => Model.TenantRent[i].Charge)
+                        <span>@Html.DisplayFor(p => Model.TenantRent[i].Charge)</span> 
                         @Html.HiddenFor(p => Model.TenantRent[i].Charge)
                     </td>
                     <td>
-                        @Html.DisplayFor(p => Model.TenantRent[i].AmountDue)
+                        <span>@Html.DisplayFor(p => Model.TenantRent[i].AmountDue)</span> 
                         @Html.HiddenFor(p => Model.TenantRent[i].AmountDue)
                     </td>
 
                 </tr>
             }
-            <tr>
-                <td>
-                    Total
-                </td>
-                <td></td>
-                <td>
-                    @Html.DisplayFor(p => Model.OrderTotal)
-                    @Html.HiddenFor(p => Model.OrderTotal)
-                </td>
+            <tfoot>
+                <tr>
+                    <td>
+                        Total
+                    </td>
+                    <td></td>
+                    <td>
+                        <span>@Html.DisplayFor(p => Model.OrderTotal)</span>
+                        @Html.HiddenFor(p => Model.OrderTotal)
+                    </td>
 
-            </tr>
+                </tr>
+            </tfoot>
         </table>
 
         <h4>Payment Method</h4>
         <br />
+        <div class="row">
+            <div class="col-md-12 no-padd">
+                <div class="col-md-6">
         <div class="form-group">
             @Html.RadioButtonFor(model => model.PaymentMethod, "Credit Card", new { @id = "CreditCards", @onclick = "paymentMethodChange.call(this);" })Credit Card<br />
             @Html.RadioButtonFor(model => model.PaymentMethod, "eCheck", new { @id = "eChecks", @onclick = "paymentMethodChange.call(this);" })eCheck<br />
             @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger" })
         </div>
+                </div>
+            </div>
+        </div>
         <div class="row Creditcard">
-            <div class="col-md-7 no-padd">
+            <div class="col-md-6">
+                <div class="col-md-12 no-padd">
                 <div class="form-group">
                     <span>Accepted methods: American Express, Discover, MasterCard, Visa</span>
                 </div>
             </div>
-        </div>
-        <div class="form-group Creditcard">
+                <div class="row Creditcard">
+                    <div class="col-md-12 no-padd">
+                        <div class="form-group">
             @Html.LabelFor(model => model.CardNo, htmlAttributes: new { @class = "control-label required" })
             @Html.EditorFor(model => model.CardNo, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.CardNo, "", new { @class = "text-danger" })
         </div>
+                    </div>
+                </div>
+                <div class="row Creditcard hidden ">
+                    <div class="col-md-12 no-padd">
+                        <div class="form-group">
+                            @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
+                            @*@Html.LabelFor(model => model.CardExpMon, htmlAttributes: new { @class = "control-label required" })*@
+                        </div>
+                    </div>
+                </div>
         <div class="row Creditcard">
-            <div class="col-md-4 no-padd">
+                    <div class="col-md-12 no-padd">
                 <div class="form-group">
                     @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
                     <div class="col-md-4 col-xs-4 col-sm-3 no-padd">
@@ -174,7 +194,7 @@
                     </div>
 
                     <div class="col-md-6 col-xs-6 col-sm-4 col">
-                        @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years, new { @class = "form-control" })
+                                @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years, new { @class = "form-control " })
                         @Html.ValidationMessageFor(model => model.CardExpYear, "", new { @class = "text-danger" })
                     </div>
                     <div class="clearfix"></div>
@@ -182,22 +202,89 @@
             </div>
             <div class="clearfix"></div>
         </div>
-        <div class="form-group Creditcard">
+                <div class="row Creditcard">
+                    <div class="col-md-12 no-padd">
+                        <div class="form-group">
             @Html.LabelFor(model => model.CVV, htmlAttributes: new { @class = "control-label required" })
             @Html.EditorFor(model => model.CVV, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.CVV, "", new { @class = "text-danger" })
         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive Creditcard col-md-6">
+                <table class="table table-hover" style="border:1px solid #ddd">
+                    <thead>
+                        <tr>
+                            <th>
+                                Card Type
+                            </th>
+                            <th>
+                                Processing Fee(%)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                Visa
+                            </th>
+                            <td>8%</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                MasterCard
+                            </th>
+                            <td>8%</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Discover
+                            </th>
+                            <td>8%</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Amex
+                            </th>
+                            <td>10%</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
         <div class="row eCheck">
+            <div class="col-md-12">
             <div class="col-md-3 no-padd">
                 <div class="form-group">
                     @Html.LabelFor(model => model.BankAccountType, htmlAttributes: new { @class = "control-label required" })
-                    @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label form-control" }, { "onchange", "petDepositDueClick.call(this)" } })
+                        @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label form-control" } })
                     @Html.ValidationMessageFor(model => model.BankAccountType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+                <div class="table-responsive eCheck col-md-offset-6">
+                    <table class="table table-hover" style="border:1px solid #ddd">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Card Type
+                                </th>
+                                <th>
+                                    Processing Fee(%)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    eCheck
+                                </th>
+                                <td>10.75%</td>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
         <div class="row eCheck">
-            <div class="col-lg-6 no-padd">
+            <div class="col-lg-6">
                 <div class="form-group">
                     @Html.LabelFor(model => model.BankRoutingNumber, htmlAttributes: new { @class = "control-label required" })
                     @Html.EditorFor(model => model.BankRoutingNumber, new { htmlAttributes = new { @class = "form-control" } })
@@ -207,7 +294,7 @@
         </div>
 
         <div class="row eCheck">
-            <div class="col-lg-6 no-padd">
+            <div class="col-lg-6">
                 <div class="form-group">
                     @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label" })
                     @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
@@ -215,9 +302,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-1  col-xs-2 col-sm-2 no-padd" style="width:10px;">
-                <div class="form-group">
+    <div class="row savecard no-padd">
+        <div class="col-md-1  col-xs-2 col-sm-2" style="width:10px;">
+            <div class="form-group no-padd">
                     @Html.CheckBoxFor(model => model.SaveCard, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.SaveCard, "", new { @class = "text-danger" })
                 </div>
@@ -258,17 +345,69 @@
         };
 
         function paymentMethodChange() {
+            debugger;
             if ($('#CreditCards').prop('checked')) {
+                debugger;
                 $('.Creditcard').show();
                 $('.savecard').show();
                 $('.eCheck').hide();
                 $('#save_card').text("Save Card");
+                var result = $('#CardNo').validateCreditCard();
+                feechargecalc(result.card_type != null ? result.card_type.name : '')
             } else {
                 $('.Creditcard').hide();
                 $('.savecard').show();
                 $('.eCheck').show();
                 $('#save_card').text("Save Account");
+                feechargecalc('echeck');
             }
+        }
+        $('#CardNo').validateCreditCard(function (result) {
+            if (result.card_type != null) {
+                console.log(result);
+                feechargecalc(result.card_type.name);
+            }
+        }).keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A, Command+A
+                (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        function feechargecalc(cardtype) {
+            var totalProductsPrices = 0;
+            //for total product costs without tax and process fee
+            $('#tblPayment>tbody>tr>td:last-child:not(td:last)').each(function () {
+                totalProductsPrices += parseFloat(parseCurrency($(this).text()), 10);
+            });
+
+            //percentage caliculator on basis of card type
+            var objectResults = paymentCaliculation(cardtype, totalProductsPrices);
+           
+            var currsym = ($('#tblPayment>tbody>tr>td:last>span').text()!= null && $('#tblPayment>tbody>tr>td:last>span').text().trim().length > 0 ?$('#tblPayment>tbody>tr>td:last>span').text().trim().substring(0, 1) : '');
+            //for amount column change
+            $('#tblPayment>tbody>tr>td:last>span').text(currsym + objectResults.processFeeValue);
+            $('#tblPayment>tbody>tr>td:last :input[type=hidden]').val(objectResults.processFeeValue);
+            //for item column change
+            $('#tblPayment>tbody>tr>td:nth-child(2):last>span').text('Payment Processing and Convenience Fee (' + objectResults.conventionFee + '%)');
+            $('#tblPayment>tbody>tr>td:nth-child(2):last :input[type=hidden]').val('Payment Processing and Convenience Fee (' + objectResults.conventionFee + '%)');
+           
+            //for order total count
+            var totalResult = 0;
+            $('#tblPayment>tbody>tr>td:last-child').each(function () {
+                totalResult += parseFloat(parseCurrency($(this).find('span').text()), 10);
+            });
+            $('#tblPayment>tfoot>tr>td:last-child span').text(currsym + totalResult);
+            debugger;
+            $('#OrderTotal').val(totalResult);
         }
 
     </script>

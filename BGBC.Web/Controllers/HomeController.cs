@@ -296,7 +296,7 @@ namespace BGBC.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult PaymentProcess()
+        public ActionResult ERentPayment()
         {
             return View();
         }

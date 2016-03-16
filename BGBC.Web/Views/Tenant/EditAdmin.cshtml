@@ -6,7 +6,7 @@
 }
 
 <div class="back">
-    @using (Html.BeginForm("ConfirmEditAdmin", "Tenant"))
+    @using (Html.BeginForm("ConfirmEditAdmin", "Tenant",FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(p => p.PropertyID)
@@ -20,6 +20,11 @@
         @Html.HiddenFor(p => p.Zip)
         @Html.HiddenFor(p => p.OwnerName)
         @Html.HiddenFor(p => p.PropertyName)
+        @Html.HiddenFor(p => p.LeaseDocName)
+        @Html.HiddenFor(p => p.ContentType)
+        @Html.HiddenFor(p => p.FileContent)
+        @Html.HiddenFor(p => p.LeaseDocument)
+        @Html.HiddenFor(p => p.ID)
         <h1>@Model.PropertyName-Edit Tenants</h1>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -170,6 +175,20 @@
                 @Html.ValidationMessageFor(p => p.PetDeposit, "", new { @class = "text-danger" })
             </div>
         </div>
+    <div class="row">
+        <div class="form-group">
+            @if (@Model.LeaseDocument == true)
+            {
+                @Html.Label("Upload your Lease Documents")
+                <input type="file" id="fileToUpload" name="file" /><span>@Model.LeaseDocName &nbsp;&nbsp;&nbsp;</span>
+                if (Model.LeaseDocName != null)
+                {
+                    @Html.ActionLink("Download", "Filedownload", new { @id = Model.ID, @name = Model.LeaseDocName })
+                } 
+                @Html.ValidationMessage("file", "", new { @class = "text-danger" })
+            }
+        </div>
+    </div>
         <br />
         <div class="row col-md-offset-10">
             <div class="form-group">
@@ -196,10 +215,10 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript">
-        $(document).ready(function () {
-            billingAddressSame();
-            petDepositDueClick();
-        });
+        //$(document).ready(function () {
+        //    billingAddressSame();
+        //    petDepositDueClick();
+        //});
         function billingAddressSame() {
             if ($('#ProfileInfo_BillingAddressSame').prop('checked')) {
                 $('.billing-address-fields').addClass('hidden');
@@ -221,19 +240,31 @@
         }
 
         $(function () {
+            billingAddressSame();
+            petDepositDueClick();
             $('#FinalDueDate').datepicker({
                 changeMonth: true,
                 changeYear: true,
                 showButtonPanel: true,
-                dateFormat: 'MM yy',
-                beforeShow: function (el, dp) {
-                    $('#ui-datepicker-div').addClass('hide-calendar');
-                },
-                onClose: function (dateText, inst) {
-                    $('#ui-datepicker-div').removeClass('hide-calendar');
-                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                }
+                dateFormat: 'yy-mm'
+            }).focus(function () {
+                //if ($(this).attr('id') == "DepostDueDate")
+                //$('#ui-datepicker-div').removeClass('hide-calendar');
+                var thisCalendar = $(this);
+                $('.ui-datepicker-calendar').detach();
+                $('.ui-datepicker-close').click(function () {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    thisCalendar.datepicker('setDate', new Date(year, month, 1));
+                });
             });
         });
+
+        $(function () {
+            $('#DepostDueDate').datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        });
+
     </script>
 }

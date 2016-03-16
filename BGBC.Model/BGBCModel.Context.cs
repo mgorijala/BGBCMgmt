@@ -47,6 +47,7 @@ namespace BGBC.Model
         public virtual DbSet<UserCC> UserCCs { get; set; }
         public virtual DbSet<UserReference> UserReferences { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<ZipCode> ZipCodes { get; set; }
         public virtual DbSet<vProductOrder> vProductOrders { get; set; }
         public virtual DbSet<vRentPayment> vRentPayments { get; set; }
     

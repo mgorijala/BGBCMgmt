@@ -12,70 +12,85 @@
 </style>
 
 <div class="back">
+    @using (Html.BeginForm("Add", "Products"))
+    {
+        @Html.AntiForgeryToken()
 
-    <h1>Add a Product - Confirm</h1>
+        <h1>Add a Product - Confirm</h1>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Name)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Name)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Name)
+                @Html.DisplayFor(model => model.Name)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Name)
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Description)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Description)
+                @Html.DisplayFor(model => model.Description)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Description)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Price)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Price)
+                @Html.DisplayFor(model => model.Price)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Description)
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.DisOrder)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.DisOrder)
+                @Html.DisplayFor(model => model.DisOrder)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Price)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayName("Restrict to Houston Area Customers Only?")
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.isLocal)
+                @if (Model.isLocal.ToString() == "True")
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No (Available Nationally)</span>
+                }
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Price)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayName("Restrict to Houston Area Customers Only?")
-            </b>
-        </div>
-        <div class="col-md-9">
-           @if (Model.isLocal.ToString() == "True")
-           {
-            <span>Yes</span>
-           }
-           else
-           {
-            <span>No (Available Nationally)</span>
-           }
-        </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-md-6">
-            @using (Html.BeginForm("Add", "Products"))
-            {
-                @Html.AntiForgeryToken()
+        <br />
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-actions no-color">
-                    <input type="submit" value="Add Product" class="btn-button btn-primary" />
-                    @Html.ActionLink("Edit", "Add", "Products", null, new { @class = "btn-button btn-primary" })
+                    <input id="btnSave" name="Command" type="submit" value="Add Product" class="btn-button btn-primary" />
+                    <input id="btnEdit" name="Command" type="submit" value="Edit" class="btn-button btn-primary" />
                     @Html.ActionLink("Cancel", "Manage", "Products")
                 </div>
-            }
+            </div>
         </div>
-    </div>
+    }
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

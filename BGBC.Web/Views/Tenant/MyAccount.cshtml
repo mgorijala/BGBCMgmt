@@ -42,6 +42,12 @@
                 {
                     @Html.DisplayFor(model => model.RentDue)<span>th</span>
                 }
+                <br/>
+                @if(Model.LeaseDocName!=null)
+                { 
+                @Html.Label("Lease Document Download:", new { style = "display:inline;" })   @Html.ActionLink("Download", "Filedownload", new { @id = Model.TenantID,@name=Model.LeaseDocName })
+                }
+
             </div>
         </div>
 

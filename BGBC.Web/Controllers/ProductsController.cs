@@ -29,10 +29,7 @@ namespace BGBC.Web.Controllers
         [Authorize]
         public ActionResult Add()
         {
-            if (TempData["productdata"] == null)
-                return View();
-            else
-                return View("Add", (Product)TempData["productdata"]);
+            return View();
         }
 
         [HttpPost]
@@ -43,19 +40,17 @@ namespace BGBC.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                TempData["productdata"] = product;
                 return View(product);
             }
             return View("Add", product);
         }
 
         [CustomAuthorize(Roles = "Admin")]
-        [Authorize]        
+        [Authorize]
         public ActionResult ConfirmEdit(Product product)
         {
             if (ModelState.IsValid)
             {
-                TempData["productdata"] = product;
                 return View(product);
             }
             return View("Edit", product);
@@ -65,13 +60,13 @@ namespace BGBC.Web.Controllers
         [ValidateAntiForgeryToken]
         [CustomAuthorize(Roles = "Admin")]
         [Authorize]
-        public ActionResult Add(Product product)
+        public ActionResult Add(Product product, string Command)
         {
+            if (Command == "Edit") { return View("Add", product); }
             try
             {
-                product = (Product)TempData["productdata"];
                 _repository.Add(product);
-                TempData["SucessMessage"] = "Product "+ product.Name+" added successfully.";
+                TempData["SucessMessage"] = "Product " + product.Name + " added successfully.";
                 return RedirectToAction("Manage");
             }
             catch (Exception ex)
@@ -90,7 +85,7 @@ namespace BGBC.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = _repository.Get(id); 
+            Product product = _repository.Get(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -103,14 +98,14 @@ namespace BGBC.Web.Controllers
         [ValidateAntiForgeryToken]
         [CustomAuthorize(Roles = "Admin")]
         [Authorize]
-        public ActionResult Edit(Product product)
+        public ActionResult Edit(Product product, string Command)
         {
+            if (Command == "Edit") { return View("Edit", product); }
             try
             {
-                    product = (Product)TempData["productdata"];
-                    _repository.Update(product);
-                    TempData["SucessMessage"] = "Product updated successfully."; 
-                    return RedirectToAction("Manage");
+                _repository.Update(product);
+                TempData["SucessMessage"] = "Product updated successfully.";
+                return RedirectToAction("Manage");
             }
             catch (Exception ex)
             {
@@ -125,7 +120,7 @@ namespace BGBC.Web.Controllers
         [Authorize]
         public ActionResult Manage()
         {
-            return View(_repository.Get());
+            return View(_repository.Get().OrderBy(s => s.DisOrder).ThenBy(s => s.Name).ToList());
         }
 
         [CustomAuthorize(Roles = "Admin")]

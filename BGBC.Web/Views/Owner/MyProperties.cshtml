@@ -39,6 +39,9 @@
                     <th>
                         Rent
                     </th>
+                    <th>
+                        Lease Document
+                    </th>
                     <th>Options</th>
                 </tr>
             </thead>
@@ -60,7 +63,7 @@
                                 }
                                 else
                                 {
-                                    foreach (var tenant in item.Tenants.Where(x=>x.Deletedon == null))
+                                    foreach (var tenant in item.Tenants.Where(x => x.Deletedon == null))
                                     {
                                         <a onclick="location.href='@Url.Action("Edit", "Tenant", new { id = tenant.User.UserID })'" style=" cursor:pointer">
                                             @Html.DisplayFor(modelItem => tenant.User.FirstName) @Html.DisplayFor(modelItem => tenant.User.LastName)
@@ -79,6 +82,18 @@
                                     <br />
                                 }
                             }
+                        </td>
+                        <td>
+                            @if (item.LeaseDocument == true)
+                            {
+                                <span>Yes</span>
+
+                            }
+                            else
+                            {
+                                <span>No</span>
+                            }
+
                         </td>
                         <td>
                             <div class="pull-right">

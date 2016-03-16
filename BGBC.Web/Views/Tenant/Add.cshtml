@@ -6,10 +6,11 @@
 }
 
 <div class="back">
-    @using (Html.BeginForm("Confirm", "Tenant"))
+    @using (Html.BeginForm("Confirm", "Tenant", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(p => p.PropertyID)
+        @Html.HiddenFor(p => p.TenantID)
         @Html.HiddenFor(p => p.PropertyName)
         @Html.HiddenFor(p => p.OwnerName)
         @Html.HiddenFor(p => p.Address)
@@ -17,6 +18,7 @@
         @Html.HiddenFor(p => p.City)
         @Html.HiddenFor(p => p.State)
         @Html.HiddenFor(p => p.Zip)
+        @Html.HiddenFor(p => p.LeaseDocument)
 
         <h1>@Model.PropertyName - Add Tenants</h1>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -190,7 +192,17 @@
                         @Html.DropDownListFor(p => p.PetDepositDue, new List<SelectListItem> { new SelectListItem { Text = "Yes", Value = "true" }, new SelectListItem { Text = "No", Value = "false" } }, new Dictionary<String, object> { { "class", "control-label form-control" }, { "onchange", "petDepositDueClick.call(this)" } })
                     </div>
                 </div>
-                <div class="col-md-6 pet-deposit-due col-md-offset-4">
+                <div class="col-md-6 col-md-offset-4">
+                    @if (@Model.LeaseDocument == true)
+                    {
+                        @Html.Label("Upload your Lease Documents")
+                        <input type="file" id="fileToUpload" name="file" />
+                        @Html.ValidationMessage("file", "", new { @class = "text-danger" })
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 pet-deposit-due ">
                     <div class="form-group">
                         @Html.LabelFor(p => p.PetDeposit, htmlAttributes: new { @class = "control-label required" })
                         @Html.EditorFor(p => p.PetDeposit, new { htmlAttributes = new { @class = "form-control", @placeholder = "$00.00" } })
@@ -198,8 +210,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="row">
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-group">
                         @Html.LabelFor(p => p.PetRentAmount, htmlAttributes: new { @class = "control-label" })
                         @Html.EditorFor(p => p.PetRentAmount, new { htmlAttributes = new { @class = "form-control", @placeholder = "$00.00" } })
@@ -263,19 +275,31 @@
         }
 
         $(function () {
+            billingAddressSame();
+            petDepositDueClick();
             $('#FinalDueDate').datepicker({
                 changeMonth: true,
                 changeYear: true,
                 showButtonPanel: true,
-                dateFormat: 'MM yy',
-                beforeShow: function (el, dp) {
-                    $('#ui-datepicker-div').addClass('hide-calendar');
-                },
-                onClose: function (dateText, inst) {
-                    $('#ui-datepicker-div').removeClass('hide-calendar');
-                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                }
+                dateFormat: 'yy-mm'
+            }).focus(function () {
+                //if ($(this).attr('id') == "DepostDueDate")
+                //$('#ui-datepicker-div').removeClass('hide-calendar');
+                var thisCalendar = $(this);
+                $('.ui-datepicker-calendar').detach();
+                $('.ui-datepicker-close').click(function () {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    thisCalendar.datepicker('setDate', new Date(year, month, 1));
+                });
             });
         });
+
+        $(function () {
+            $('#DepostDueDate').datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        });
+
     </script>
 }

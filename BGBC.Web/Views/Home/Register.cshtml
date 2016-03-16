@@ -57,7 +57,7 @@
         </div>
     <div class="row">
         <div class="form-group">
-            @Html.CheckBoxFor(model => model.TermsAccepted)I accept the<a href="#"> terms & conditions</a>
+            @Html.CheckBoxFor(model => model.TermsAccepted)I accept the<a data-toggle="modal" href="#myModal"> terms & conditions</a>
             <br />
             @Html.ValidationMessageFor(model => model.TermsAccepted, "", new { @class = "text-danger" })
         </div>
@@ -67,8 +67,23 @@
     <input type="submit" value="Submit">
 
     }
-
-</div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"   aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    The Intellectual Property disclosure will inform users that your website, logo and visuals and other content you created is your property and protected by copyright laws.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnaccept">I accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
@@ -80,8 +95,19 @@
                 else if (this.options.selectedIndex == 2)
                     $('#UserType').attr('data-original-title', "Customer").attr('data-placement', "right").tooltip();
                 else
-                    $('#UserType').tooltip('destroy');            });
-
+                    $('#UserType').tooltip('destroy');
+            });
         })
+    </script>
+    <script type="text/javascript">
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').focus();
+        })
+    </script>
+   <script type="text/javascript">
+       $('#btnaccept').click(function () {
+           $('#myModal').modal('toggle');
+           $("#TermsAccepted").prop('checked', true);
+       });
     </script>
 }

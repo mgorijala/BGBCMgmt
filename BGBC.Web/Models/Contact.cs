@@ -33,8 +33,7 @@ namespace BGBC.Web.Models
 
         [DataType(DataType.Text)]
         [Display(Name = "How can we help you?")]
-        [RegularExpression(@"^[ A-Za-z0-9_@./#&+-]*$", ErrorMessage = "Use alphanumeric characters only")]
-
+        [RegularExpression(@"^[^<>!@#%/?*]+$", ErrorMessage = "Use alphanumeric characters only")] 
         public string MessageText { get; set; }
     }
 }

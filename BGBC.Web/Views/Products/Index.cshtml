@@ -66,17 +66,16 @@
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Price)
+                            @if (item.Price == 0)
+                            {<span>Free</span>}
+                            else
+                            {@Html.DisplayFor(modelItem => item.Price)}
                         </td>
                         <td>
                             @if (item.isLocal.ToString() == "True")
-                            {
-                                <span>Houston, TX</span>
-                            }
+                            {<span>Houston, TX</span>}
                             else
-                            {
-                                <span>National</span>
-                            }
+                            {<span>National</span>}
                         </td>
                         <td>
                             <div class="pull-right">

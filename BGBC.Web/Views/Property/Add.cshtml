@@ -95,6 +95,7 @@
                         </div>
                     </div>
                 </div>
+                <br />
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -113,6 +114,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-2" style="width:130px;padding-left:15px;">
+                        @Html.Label("Final Due Day :")
+                    </div>
+                    <div class="col-md-2 no-padd">
+                        <label id="lblDisplay"></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"> 
+                            @Html.CheckBoxFor(model => model.LeaseDocument) <span><b>Lease Document is Required </b></span>
+                        </div>
+                    </div>
+                    </div>
             </fieldset>
             <div class="alert alert-info">
                 <p class="alert-link">
@@ -141,4 +157,36 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        var RentDueDay = parseInt($("#RentDueDay option:selected").val(), 10);
+        var GracePeriod = parseInt($("#GracePeriod option:selected").val(),10);
+        var Total = RentDueDay + GracePeriod;
+        var RentDueDay = 0;
+        if (Total == 56 || Total == 28) {
+            RentDueDay = 28;
+        }
+        else {
+            RentDueDay = Total % 28;
+        }
+        $('#lblDisplay').text(RentDueDay);
+
+
+      
+        $('#RentDueDay,#GracePeriod').change(function () {
+            var RentDueDay = parseInt($("#RentDueDay option:selected").val(), 10);
+            var GracePeriod = parseInt($("#GracePeriod option:selected").val(),10);
+            var Total = RentDueDay + GracePeriod;
+            var RentDueDay = 0;
+            var days = parseInt(28);
+            if (Total == 56 || Total == 28) {
+                RentDueDay = 28;
+            }
+            else {
+                RentDueDay = Total % 28;
+            }
+            $('#lblDisplay').text(RentDueDay);
+        });
+    </script>
+
 }

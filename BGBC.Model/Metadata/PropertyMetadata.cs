@@ -50,6 +50,8 @@ namespace BGBC.Model.Metadata
         [Display(Name = "Grace Period")]
         public Nullable<short> GracePeriod { get; set; }
 
+        [Display(Name = "Final Due Day")]
+        public Nullable<short> FinalDueDay { get; set; }
         
         [Display(Name = "Late Penalty Charge")]
         [DataType(DataType.Currency)]
@@ -59,6 +61,9 @@ namespace BGBC.Model.Metadata
         [Display(Name = "Daily Late Penalty Charge")]
         [DataType(DataType.Currency)]
         public Nullable<decimal> DailyPenalty { get; set; }
+
+        [Display(Name = "Lease Document")]
+        public Nullable<bool> LeaseDocument { get; set; }
 
 
     }

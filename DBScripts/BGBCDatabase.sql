@@ -45,6 +45,8 @@ CREATE TABLE Properties(
 	GracePeriod smallint NULL,
 	Penalty decimal(15, 2) NULL,
 	DailyPenalty decimal(15, 2) NULL,
+	FinalDueDay smallint,
+	LeaseDocument bit not null,
 	Createdon datetime NULL,
 	Updatedon datetime NULL,
 	Deletedon datetime NULL
@@ -382,6 +384,17 @@ CREATE TABLE RentAutoPay(
 )
 GO
 
+IF OBJECT_ID('ZipCode', 'U') IS NOT NULL
+  DROP TABLE ZipCode; 
+GO
+
+CREATE TABLE ZipCode(
+	ZipCodeID int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	ZipCode int,
+	Createdon datetime NULL
+)
+GO
+
 ALTER TABLE Properties  WITH CHECK ADD  CONSTRAINT FK_Properties_Users FOREIGN KEY(UserID) REFERENCES Users (UserID)
 GO
 
@@ -453,13 +466,15 @@ insert into [Profile](UserID, BillingAddressSame, Createdon) values(@@IDENTITY,0
  
  insert into Product(Name, Description, Price, isLocal, Createdon) values('Rental Applicant Screening: EXECUTIVE Package', 'Our EXECUTIVE package provides you with the criminal, credit, employment, and rental background information you need for decision making. The EXECUTIVE package includes credit and criminal records as well as one of our expert team members dedicated to performing a full employment and rental background check on your behalf.',65,0, getdate())
 
-
-insert into Properties (Name, UserID, Nickname, Address, Address2, City, State, Zip, RentDueDay, GracePeriod, Penalty, DailyPenalty, Createdon)
-values('Test Property 1', 2, null, 'Address', 'Address2', 'City', 'State', '37201', 1, 2, 3, 4, getdate());
+ 
+insert into Properties (Name, UserID, Nickname, Address, Address2, City, State, Zip, RentDueDay, GracePeriod, Penalty, DailyPenalty, Createdon, LeaseDocument)
+values('Test Property 1', 2, null, 'Address', 'Address2', 'City', 'State', '37201', 1, 2, 3, 4, getdate(), 0);
 
 insert into Tenants(PropertyID, UserID, RentAmount, FinalDueDate, Deposit, PetDeposit, PetDepositDue, Createdon)
 values(1, 3, 100, '2020-10-1', 100, 1, 0, GETDATE())
 
+GO
+insert into ZipCode values(12345, GETDATE());
 GO
 
 /*

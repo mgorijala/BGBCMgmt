@@ -143,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Models\Files.cs" />
     <Compile Include="Utilities\JobScheduler.cs" />
     <Compile Include="Utilities\MailUtility.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -238,12 +239,12 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Logs\Log.txt" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\BGBC.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Logs\log.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -283,7 +284,7 @@
     <Content Include="Views\Home\ForgotPassword.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\PaymentProcess.cshtml" />
+    <Content Include="Views\Home\ERentPayment.cshtml" />
     <Content Include="Views\Home\RentalManagement.cshtml" />
     <Content Include="Views\Home\Tenants.cshtml" />
     <Content Include="Views\Owner\Index.cshtml" />

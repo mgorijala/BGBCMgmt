@@ -27,6 +27,11 @@ namespace BGBC.Model.Metadata
         [DataType(DataType.Currency)]
         public Nullable<decimal> Price { get; set; }
 
+        [Required]
+        [RegularExpression(@"^[1-9]+[0-9]*$", ErrorMessage = "Invalid Order Number")]
+        [Display(Name = "Display Order")]
+        public string DisOrder { get; set; }
+
         [Display(Name = "Availability Restrictions")]
         public Nullable<bool> isLocal { get; set; }
     }

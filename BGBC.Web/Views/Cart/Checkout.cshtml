@@ -184,7 +184,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             @Html.LabelFor(model => model.ServiceState, htmlAttributes: new { @class = "control-label required" })
-                            @Html.DropDownListFor(model => model.ServiceState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" } )
+                            @Html.DropDownListFor(model => model.ServiceState, (IEnumerable<SelectListItem>)ViewBag.States, "--Select Billing State--", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.ServiceState, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -203,6 +203,7 @@
             <fieldset>
                 <legend>Payment Method:</legend>
                 <div class="row">
+                    <div class="col-md-12 no-padd">
                     <div class="col-md-6">
                 <div class="form-group">
                     @Html.RadioButtonFor(model => model.PaymentMethod, "Credit Card", new { @id = "CreditCards", @checked = "true" })Credit Card<br />
@@ -210,17 +211,19 @@
                     @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger" })
                 </div>
                     </div>
+                        
+                        
+                    </div>
                 </div>
                 <div class="row Creditcard">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
+                        <div class="col-md-12 no-padd">
                         <div class="form-group">
                         <span>Accepted methods: American Express, Discover, MasterCard, Visa</span>
                     </div>
                 </div>
-                </div>
-               
                 <div class="row Creditcard">
-                    <div class="col-md-7">
+                            <div class="col-md-12 no-padd">
                         <div class="form-group">
                             @Html.LabelFor(model => model.CardNo, htmlAttributes: new { @class = "control-label required" })
                             @Html.EditorFor(model => model.CardNo, new { htmlAttributes = new { @class = "form-control" } })
@@ -229,7 +232,7 @@
                     </div>
                 </div>
                 <div class="row Creditcard hidden ">
-                    <div class="col-md-4">
+                            <div class="col-md-12 no-padd">
                         <div class="form-group">
                             @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
                             @*@Html.LabelFor(model => model.CardExpMon, htmlAttributes: new { @class = "control-label required" })*@
@@ -237,7 +240,7 @@
                     </div>
                 </div>
                 <div class="row Creditcard">
-                    <div class="col-md-4">
+                            <div class="col-md-12 no-padd">
                         <div class="form-group">
                             @Html.Label("Card Expiry Date", htmlAttributes: new { @class = "control-label required" })
                             <div class="col-md-4 col-xs-4 col-sm-3 no-padd">
@@ -246,7 +249,7 @@
                             </div>
 
                             <div class="col-md-6 col-xs-6 col-sm-4 col">
-                                @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years,  new { @class = "form-control " } )
+                                        @Html.DropDownListFor(model => model.CardExpYear, (IEnumerable<SelectListItem>)ViewBag.Years, new { @class = "form-control " })
                                 @Html.ValidationMessageFor(model => model.CardExpYear, "", new { @class = "text-danger" })
                             </div>
                             <div class="clearfix"></div>
@@ -255,7 +258,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="row Creditcard">
-                    <div class="col-md-7">
+                            <div class="col-md-12 no-padd">
                         <div class="form-group">
                             @Html.LabelFor(model => model.CVV, htmlAttributes: new { @class = "control-label required" })
                             @Html.EditorFor(model => model.CVV, new { htmlAttributes = new { @class = "form-control" } })
@@ -263,14 +266,77 @@
                         </div>
                     </div>
                 </div>
+                    </div>
+                    
+                        <div class="table-responsive Creditcard col-md-6">
+                            <table  class="table table-hover" style="border:1px solid #ddd">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Card Type
+                                        </th>
+                                        <th>
+                                            Processing Fee(%)
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Visa
+                                        </th>
+                                        <td>8%</td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            MasterCard
+                                        </th>
+                                        <td>8%</td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Discover
+                                        </th>
+                                        <td>8%</td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Amex
+                                        </th>
+                                        <td>10%</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                 <div class="row eCheck">
-                    <div class="col-md-3">
+                    <div class="col-md-12">
+                        <div class="col-md-3 no-padd">
                         <div class="form-group">
                         @Html.LabelFor(model => model.BankAccountType, htmlAttributes: new { @class = "control-label required" })
                         @Html.DropDownListFor(model => model.BankAccountType, new List<SelectListItem> { new SelectListItem { Text = "Checking", Value = "Checking" }, new SelectListItem { Text = "Saving", Value = "Saving" } }, "Please Select", new Dictionary<String, object> { { "class", "control-label form-control" } })
                         @Html.ValidationMessageFor(model => model.BankAccountType, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                        <div class="table-responsive eCheck col-md-offset-6">
+                            <table class="table table-hover" style="border:1px solid #ddd">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Card Type
+                                        </th>
+                                        <th>
+                                            Processing Fee(%)
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            eCheck
+                                        </th>
+                                        <td>10.75%</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="row eCheck">
@@ -292,16 +358,16 @@
                     </div>
                 </div>
                 </div>
-                <div class="row savecard">
+                            <div class="row savecard no-padd">
                     <div class="col-md-1  col-xs-2 col-sm-2" style="width:10px;">
-                        <div class="form-group">
+                                    <div class="form-group no-padd">
                             @Html.CheckBoxFor(model => model.SaveCard, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.SaveCard, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.SaveCard, htmlAttributes: new { @class = "control-label", @id="save_card" })
+                                        @Html.LabelFor(model => model.SaveCard, htmlAttributes: new { @class = "control-label", @id = "save_card" })
                         </div>
                     </div>
                 </div>

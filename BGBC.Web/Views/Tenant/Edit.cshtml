@@ -6,7 +6,7 @@
 }
 
 <div class="back">
-    @using (Html.BeginForm("ConfirmEdit", "Tenant"))
+    @using (Html.BeginForm("ConfirmEdit", "Tenant", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(p => p.PropertyID)
@@ -23,10 +23,13 @@
         @Html.HiddenFor(p => p.Deposit)
         @Html.HiddenFor(p => p.DepostDueDate)
         @Html.HiddenFor(p => p.PetDepositDue)
+        @Html.HiddenFor(p => p.PetRentAmount)
         @Html.HiddenFor(p => p.PetDeposit)
         @Html.HiddenFor(p => p.OwnerName)
         @Html.HiddenFor(p => p.PropertyName)
-        <h1>@Model.PropertyName-Edit Tenants</h1>
+        @Html.HiddenFor(p => p.LeaseDocument)
+
+        <h1>@Model.PropertyName - Edit Tenants</h1>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <h5><span style="color:red">&#42;</span>indicates a required field</h5>
         <h5> <span style="color:blue">&#134;</span> indicates information that can only be updated by BGBC Management To request a change, please fill out <a onclick="location.href='@Url.Action("Contact", "Home", null ,null)'" style=" cursor:pointer">this form.</a></h5>
@@ -131,7 +134,20 @@
                 @Html.ValidationMessageFor(p => p.ProfileInfo.MobilePhone, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <div class="Row">
+            <div class="form-group">
+                @if (@Model.LeaseDocument == true)
+                {
+                    @Html.Label("Upload your Lease Documents")
+                    <input type="file" id="fileToUpload" name="file" /><span>@Model.LeaseDocName &nbsp;&nbsp;&nbsp;</span>
+                    if (Model.LeaseDocName != null)
+                    {
+                        @Html.ActionLink("Download", "Filedownload", new { @id = Model.TenantID, @name = Model.LeaseDocName })
+                    }
+                    @Html.ValidationMessage("file", "", new { @class = "text-danger" })
+                }
+            </div>
+        </div>
         <div class="Row">
             <div class="form-group">
                 @Html.LabelFor(p => p.RentAmount, htmlAttributes: new { @class = "control-label " })<span style="color:blue"> &#134; </span>

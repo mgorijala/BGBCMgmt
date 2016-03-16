@@ -29,7 +29,7 @@ SET NOCOUNT ON
                    MONTH(@DT_SELDATE), 
                    Year(@DT_SELDATE), 
                    @DT_SELDATE, 
-                   T.RentAmount, 
+                   T.RentAmount + ISNULL(T.PetRentAmount, 0), 
                    CONCAT('Rent ', Datename(MONTH, @DT_SELDATE), ' - ', 
                    Year(@DT_SELDATE)), 
                    1, 

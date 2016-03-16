@@ -76,7 +76,15 @@ namespace BGBC.Web.Utilities
             this._subject = "Forgot password";
             _body = "<html><head><title></title></head><style>td { font-size: 12px; font-family: Arial;}</style><body><table><tr><td><span>Hi " + Name + ",</span><br/><br/></td></tr><tr><td>You requested a password reset. Please visit this link to enter your new password.</td></tr><tr><td></td></tr><tr><td><a href='" + ResetUrl + "'>"
                 + ResetUrl + "</a><br/><br/><br/></td></tr></br><tr><td>Thank you,</td></tr><tr><td>BGBC Customer Service.</td></tr></table></body></html>";
-            this.Send();
+            try
+            {
+                IRepository<Email, int?> mailRepo = new EmailRepository();
+                mailRepo.Add(new Email { ToAddress = ToAddress, Subject = _subject, Body = _body });
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
         }
 
         public void TenantAdd(string ToAddress, string Name, string ResetUrl)
@@ -85,8 +93,15 @@ namespace BGBC.Web.Utilities
             this._subject = "Tenant User Created";
             _body = "<html><head><title></title></head><style>td { font-size: 12px; font-family: Arial;}</style><body><table><tr><td><span>Hi " + Name + ",</span><br/><br/></td></tr><tr><td>New login has been created by your property owner. Please visit this link to enter your new password.</td></tr><tr><td></td></tr><tr><td><a href='" + ResetUrl + "'>"
                 + ResetUrl + "</a><br/><br/><br/></td></tr></br><tr><td>Thank you,</td></tr><tr><td>BGBC Customer Service.</td></tr></table></body></html>";
-            IRepository<Email, int?> mailRepo = new EmailRepository();
-            mailRepo.Add(new Email { ToAddress = ToAddress, Subject = _subject, Body = _body });
+            try
+            {
+                IRepository<Email, int?> mailRepo = new EmailRepository();
+                mailRepo.Add(new Email { ToAddress = ToAddress, Subject = _subject, Body = _body });
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
         }
 
         public void TenantReferral(BGBC.Model.TenantReferral tenantRef)

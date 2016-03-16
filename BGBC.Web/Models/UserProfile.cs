@@ -125,7 +125,7 @@ namespace BGBC.Web.Models
         public Nullable<decimal> RentAmount { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:MMM-yyyy}")]
+       // [DisplayFormat(DataFormatString = "{0:MMM-yyyy}")]
         [Display(Name = "Tenant Rent-Final Month Due")]
         public Nullable<System.DateTime> FinalDueDate { get; set; }
 
@@ -134,7 +134,7 @@ namespace BGBC.Web.Models
         public Nullable<decimal> Deposit { get; set; }
 
         [Display(Name = "Deposit Due Date")]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public Nullable<System.DateTime> DepostDueDate { get; set; }
 
 
@@ -144,6 +144,12 @@ namespace BGBC.Web.Models
         [Display(Name = "Pet Deposit Amount")]
         [DataType(DataType.Currency)]
         public Nullable<decimal> PetDeposit { get; set; }
+
+
+        public string LeaseDocName { get; set; }
+        public string LeaseDocGUID { get; set; }
+        public bool LeaseDocument { get; set; }
+        public string ContentType { get; set; }
 
         [Display(Name = "Pet Rent Amount")]
         [DataType(DataType.Currency)]
@@ -170,6 +176,8 @@ namespace BGBC.Web.Models
 
         [DataType(DataType.PostalCode)]
         public string Zip { get; set; }
+
+        public List<Web.Models.Files> Files { get; set; } 
     }
 
 }

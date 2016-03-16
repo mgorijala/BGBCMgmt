@@ -106,6 +106,31 @@
         <div class="row">
             <div class="col-md-3">
                 <b>
+                    @Html.DisplayNameFor(model => model.FinalDueDay)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @if ((Model.FinalDueDay.ToString() == "1") | (Model.FinalDueDay.ToString() == "21"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>st</span>
+                }
+                else if ((Model.FinalDueDay.ToString() == "2") | (Model.FinalDueDay.ToString() == "22"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>nd</span>
+                }
+                else if ((Model.FinalDueDay.ToString() == "3") | (Model.FinalDueDay.ToString() == "23"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>rd</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>th</span>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
                     @Html.DisplayNameFor(model => model.Penalty)
                 </b>
             </div>

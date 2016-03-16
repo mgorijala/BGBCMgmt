@@ -167,6 +167,8 @@
           <Property Name="GracePeriod" Type="smallint" />
           <Property Name="Penalty" Type="decimal" Precision="15" Scale="2" />
           <Property Name="DailyPenalty" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="FinalDueDay" Type="smallint" />
+          <Property Name="LeaseDocument" Type="bit" Nullable="false" />
           <Property Name="Createdon" Type="datetime" />
           <Property Name="Updatedon" Type="datetime" />
           <Property Name="Deletedon" Type="datetime" />
@@ -313,6 +315,14 @@
           <Property Name="Createdon" Type="datetime" />
           <Property Name="Updatedon" Type="datetime" />
           <Property Name="Deletedon" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ZipCode">
+          <Key>
+            <PropertyRef Name="ZipCodeID" />
+          </Key>
+          <Property Name="ZipCodeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ZipCode" Type="int" />
+          <Property Name="Createdon" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'BGBC.dbo.vProductOrders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -639,6 +649,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySet Name="UserCC" EntityType="Self.UserCC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserReferences" EntityType="Self.UserReferences" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZipCode" EntityType="Self.ZipCode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="vProductOrders" EntityType="Self.vProductOrders" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vProductOrders].[ProductOrderID] AS [ProductOrderID], 
@@ -772,6 +783,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <EntitySet Name="UserCCs" EntityType="BGBCModel.UserCC" />
           <EntitySet Name="UserReferences" EntityType="BGBCModel.UserReference" />
           <EntitySet Name="Users" EntityType="BGBCModel.User" />
+          <EntitySet Name="ZipCodes" EntityType="BGBCModel.ZipCode" />
           <EntitySet Name="vProductOrders" EntityType="BGBCModel.vProductOrder" />
           <EntitySet Name="vRentPayments" EntityType="BGBCModel.vRentPayment" />
           <AssociationSet Name="FK_LeaseFiles_Tenant" Association="BGBCModel.FK_LeaseFiles_Tenant">
@@ -1053,6 +1065,8 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Name="GracePeriod" Type="Int16" />
           <Property Name="Penalty" Type="Decimal" Precision="15" Scale="2" />
           <Property Name="DailyPenalty" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="FinalDueDay" Type="Int16" />
+          <Property Name="LeaseDocument" Type="Boolean" Nullable="false" />
           <Property Name="Createdon" Type="DateTime" Precision="3" />
           <Property Name="Updatedon" Type="DateTime" Precision="3" />
           <Property Name="Deletedon" Type="DateTime" Precision="3" />
@@ -1225,6 +1239,14 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <NavigationProperty Name="UserCarts" Relationship="BGBCModel.FK_UserCart_Users" FromRole="User" ToRole="UserCart" />
           <NavigationProperty Name="UserCCs" Relationship="BGBCModel.FK_UserCC_User" FromRole="User" ToRole="UserCC" />
           <NavigationProperty Name="UserReferences" Relationship="BGBCModel.FK_UserReferences_Users" FromRole="User" ToRole="UserReference" />
+        </EntityType>
+        <EntityType Name="ZipCode">
+          <Key>
+            <PropertyRef Name="ZipCodeID" />
+          </Key>
+          <Property Name="ZipCodeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ZipCode1" Type="Int32" />
+          <Property Name="Createdon" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="vProductOrder">
           <Key>
@@ -1499,7 +1521,7 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
           <Property Type="String" Name="Email" Nullable="true" MaxLength="255" />
           <Property Type="Decimal" Name="Balance" Nullable="false" Precision="38" Scale="2" />
         </ComplexType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1666,6 +1688,8 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
                 <ScalarProperty Name="Deletedon" ColumnName="Deletedon" />
                 <ScalarProperty Name="Updatedon" ColumnName="Updatedon" />
                 <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="LeaseDocument" ColumnName="LeaseDocument" />
+                <ScalarProperty Name="FinalDueDay" ColumnName="FinalDueDay" />
                 <ScalarProperty Name="DailyPenalty" ColumnName="DailyPenalty" />
                 <ScalarProperty Name="Penalty" ColumnName="Penalty" />
                 <ScalarProperty Name="GracePeriod" ColumnName="GracePeriod" />
@@ -1831,6 +1855,15 @@ warning 6002: The table/view 'BGBC.dbo.vRentPayment' does not have a primary key
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZipCodes">
+            <EntityTypeMapping TypeName="BGBCModel.ZipCode">
+              <MappingFragment StoreEntitySet="ZipCode">
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="ZipCode1" ColumnName="ZipCode" />
+                <ScalarProperty Name="ZipCodeID" ColumnName="ZipCodeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

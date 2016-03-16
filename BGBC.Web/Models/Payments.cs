@@ -114,7 +114,7 @@ namespace BGBC.Web.Models
         [Display(Name = "Save Card")]
         public bool SaveCard { get; set; }
 
-        [RegularExpression(@"^[ A-Za-z0-9_@./#&+-]*$", ErrorMessage = "Use alphanumeric characters only")]
+        [RegularExpression(@"^[^<>!@#%/?*]+$", ErrorMessage = "Use alphanumeric characters only")] 
         public string Comments { get; set; }
 
         [Display(Name = "Order Total:")]

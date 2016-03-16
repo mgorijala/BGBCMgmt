@@ -11,165 +11,221 @@
 </style>
 
 <div class="back">
-    <h1>Add a Property - Confirm</h1>
+    @using (Html.BeginForm("Add", "Property"))
+    {
+        @Html.AntiForgeryToken()
+        <h1>Add a Property - Confirm</h1>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Name)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Name)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Name)
+                @Html.DisplayFor(model => model.Name)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Name)
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Nickname)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Nickname)
+                @Html.DisplayFor(model => model.Nickname)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Nickname)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Address)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Address)
+                @Html.DisplayFor(model => model.Address)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Nickname)
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Address2)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Address2)
+                @Html.DisplayFor(model => model.Address2)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Address)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.City)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.City)
+                @Html.DisplayFor(model => model.City)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Address)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Address2)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Address2)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.City)
-            </b>
-        </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.City)
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.State)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.State)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.State)
+                @Html.DisplayFor(model => model.State)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.State)
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Zip)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Zip)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Zip)
+                @Html.DisplayFor(model => model.Zip)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.Zip)
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.RentDueDay)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.RentDueDay)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.RentDueDay)
+                @Html.DisplayFor(model => model.RentDueDay)
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.RentDueDay)
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.GracePeriod)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.GracePeriod)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.GracePeriod)
+                @Html.DisplayFor(model => model.GracePeriod)<span>  days</span>
+            </div>
         </div>
-        <div class="col-md-9">
-            @Html.DisplayFor(model => model.GracePeriod)<span>  days</span>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.FinalDueDay)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.FinalDueDay)
+                @if ((Model.FinalDueDay.ToString() == "1") | (Model.FinalDueDay.ToString() == "21"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>st</span>
+                }
+                else if ((Model.FinalDueDay.ToString() == "2") | (Model.FinalDueDay.ToString() == "22"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>nd</span>
+                }
+                else if ((Model.FinalDueDay.ToString() == "3") | (Model.FinalDueDay.ToString() == "23"))
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>rd</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.FinalDueDay)<span>th</span>
+                }
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.Penalty)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.Penalty)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.Penalty)
+                @if (Model.Penalty.ToString() == "")
+                {
+                    <span>N/A</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.Penalty)
+                }
+            </div>
         </div>
-        <div class="col-md-9">
-            @if (Model.Penalty.ToString() == "")
-            {
-                <span>N/A</span>
-            }
-            else
-            {
-            @Html.DisplayFor(model => model.Penalty)
-            }
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <b>
-                @Html.DisplayNameFor(model => model.DailyPenalty)
-            </b>
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.DisplayNameFor(model => model.DailyPenalty)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @Html.HiddenFor(model => model.DailyPenalty)
+                @if (Model.DailyPenalty.ToString() == "")
+                {
+                    <span>N/A</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.DailyPenalty)
+                }
+            </div>
         </div>
-        <div class="col-md-9">
-            @if (Model.DailyPenalty.ToString() == "")
-            {
-                <span>N/A</span>
-            }
-            else
-            {
-            @Html.DisplayFor(model => model.DailyPenalty)
-            }
+        <div class="row">
+            <div class="col-md-3">
+                <b>
+                    @Html.HiddenFor(model => model.LeaseDocument)
+                    @Html.DisplayNameFor(model => model.LeaseDocument)
+                </b>
+            </div>
+            <div class="col-md-9">
+                @if (Model.LeaseDocument == true)
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
+            </div>
         </div>
-    </div>
-    <div class="clearfix">&nbsp;</div>
-    <div class="alert alert-info">
-        <p class="alert-link">
-            Please note that you will not be able to change the following fields once you've added this tenant.
-            <br />
-            You will need to contact BGBC Management to change these values.
-        </p>
-        <div style="padding-left:15px;padding-bottom:20px;">
-            <li>Rent Due Monthly On</li>
-            <li>Grace Period</li>
-            <li>Late Penalty Charge</li>
-            <li>Daily Late Penalty Charge</li>
+        <div class="clearfix">&nbsp;</div>
+        <div class="alert alert-info">
+            <p class="alert-link">
+                Please note that you will not be able to change the following fields once you've added this tenant.
+                <br />
+                You will need to contact BGBC Management to change these values.
+            </p>
+            <div style="padding-left:15px;padding-bottom:20px;">
+                <li>Rent Due Monthly On</li>
+                <li>Grace Period</li>
+                <li>Late Penalty Charge</li>
+                <li>Daily Late Penalty Charge</li>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            @using (Html.BeginForm("Add", "Property"))
-            {
-                @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-6">
+
                 <div class="form-actions no-color">
-                    <input type="submit" value="Add Property" class="btn-button btn-primary" />
+                    <input id="btnSave" name="Command" type="submit" value="Add Property" class="btn-button btn-primary" />
+                    <input id="btnEdit" name="Command" type="submit" value="Edit" class="btn-button btn-primary" />
 
-                    @Html.ActionLink("Edit", "Add", "Property", null, new { @class = "btn-button btn-primary" })
                     @Html.ActionLink("Cancel", "MyProperties", "Owner")
                 </div>
-            }
+            </div>
         </div>
-    </div>
+    }
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

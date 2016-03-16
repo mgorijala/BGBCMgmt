@@ -14,10 +14,11 @@ namespace BGBC.Web.Controllers
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(PropertyController));
         // GET: Property
         private IRepository<Property, int> _repository;
-
+        private IRepository<ZipCode, int> _Zip;
         public PropertyController()
         {
             _repository = new PropertyRepository();
+            _Zip = new ZipRepository();
         }
 
         public ActionResult Index()
@@ -29,12 +30,9 @@ namespace BGBC.Web.Controllers
         [Authorize]
         public ActionResult Add()
         {
+
             PopulateDropDown();
-            if (TempData["propertydata"] == null)
-                return View();
-            else
-                return View("Add", (Property)TempData["propertydata"]);
-            
+            return View();
         }
 
         [HttpPost]
@@ -42,29 +40,58 @@ namespace BGBC.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(Property property)
         {
-            PopulateDropDown();
+            var query = from state in ModelState.Values
+                        from error in state.Errors
+                        select error.ErrorMessage;
+
+            int newval = Convert.ToInt32(property.Zip);
+            ZipCode zipcode = _Zip.Get(newval);
+
+            // int value = _Zip.Get(newval);
+
             if (ModelState.IsValid)
             {
-                TempData["propertydata"] = property;
-                return View(property);
+                // IF(F20=28,F20,MOD(F20,28))
+                int totalDay = Convert.ToInt32(property.RentDueDay + property.GracePeriod);
+                int finalday = 0;
+                if ((totalDay == 56) || (totalDay == 28))
+                {
+                    finalday = 28;
+                }
+                else
+                {
+                    finalday = totalDay % 28;
+                }
+                property.FinalDueDay = Convert.ToInt16(finalday);
+               
+
+                if (zipcode != null)
+                {
+                    return View(property);
+                }
+                else
+                {
+                    ModelState.AddModelError("Zip", "The Zip you entered is not in our location");
+                }
             }
+            PopulateDropDown();
             return View("Add", property);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Add(Property property)
+        public ActionResult Add(Property property, string Command)
         {
+            if (Command == "Edit") { PopulateDropDown(); return View("Add", property); }
             try
             {
                 PopulateDropDown();
-                property = (Property)TempData["propertydata"];
-                    property.UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId;
-                    _repository.Add(property);
-                    TempData["SucessMessage"] = "Property " + property.Name + " added successfully."; 
-                    return RedirectToAction("MyProperties","Owner");
-              
+                property.UserID = ((BGBC.Core.CustomPrincipal)(User)).UserId;
+                _repository.Add(property);
+                TempData["SucessMessage"] = "Property " + property.Name + " added successfully.";
+                return RedirectToAction("MyProperties", "Owner");
+
             }
             catch (Exception ex)
             {
@@ -76,35 +103,34 @@ namespace BGBC.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Property property = _repository.Get(id.Value);
+            if (property == null)
+            {
+                return HttpNotFound();
+            }
+            if (property.UserID != ((BGBC.Core.CustomPrincipal)(User)).UserId)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             PopulateDropDown();
-            if (TempData["propertydata"] == null)
-            {
-            Property property = _repository.Get(id);
-           // if (TempData["propertydata"] == null)
-           //   return View();
-           // else
-           //return View("Edit", (Property)TempData["propertydata"]);
-            
-                return View(property);
-            }
-            else
-            {
-                return View("Edit", (Property)TempData["propertydata"]);
-            }
-                
-           
+            return View(property);
         }
 
         [Authorize]
         [HttpPost]
         public ActionResult EditConfirm(Property property)
         {
-            PopulateDropDown();
-          if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                TempData["propertydata"] = property;
+                PopulateDropDown();
                 return View(property);
             }
             return View("Edit", property);
@@ -117,7 +143,6 @@ namespace BGBC.Web.Controllers
             ViewBag.UserID = property.UserID;
             if (ModelState.IsValid)
             {
-                TempData["propertydata"] = property;
                 return View(property);
             }
             return View("AdminEdit", property);
@@ -126,16 +151,16 @@ namespace BGBC.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit(Property property)
+        public ActionResult Edit(Property property, string Command)
         {
+            if (Command == "Edit") { PopulateDropDown(); return View("Edit", property); }
             try
             {
-                    PopulateDropDown();
-                    property = (Property)TempData["propertydata"];
-                    TempData["SucessMessage"] = "Property updated successfully.";
-                    _repository.Update(property);
-                    return RedirectToAction("MyProperties","Owner");
-                
+                PopulateDropDown();
+                TempData["SucessMessage"] = "Property updated successfully.";
+                _repository.Update(property);
+                return RedirectToAction("MyProperties", "Owner");
+
             }
             catch (Exception ex)
             {
@@ -155,7 +180,7 @@ namespace BGBC.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Property property = _repository.Get((int)id);
-          
+
             if (property == null)
             {
                 return HttpNotFound();
@@ -180,7 +205,7 @@ namespace BGBC.Web.Controllers
                 {
                     _repository.Remove(_repository.Get((int)id));
                     TempData["SucessMessage"] = "Property removed successfully.";
-                    return RedirectToAction("MyProperties","Owner");
+                    return RedirectToAction("MyProperties", "Owner");
                 }
             }
             catch (Exception ex)
@@ -189,14 +214,14 @@ namespace BGBC.Web.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-            return RedirectToAction("MyProperties","Owner");
+            return RedirectToAction("MyProperties", "Owner");
         }
-     
+
         [CustomAuthorize(Roles = "Admin")]
         [Authorize]
         public ActionResult AdminEdit(int? id)
         {
-           
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -209,17 +234,9 @@ namespace BGBC.Web.Controllers
                 return HttpNotFound();
             }
             PopulateDropDown();
-            if (TempData["propertydata"] == null)
-            {
 
-                //Property property = _repository.Get((int)id);
-                return View(property);
-            }
-            else
-            {
-                ViewBag.UserID = property.UserID;
-                return View("AdminEdit", (Property)TempData["propertydata"]);
-            }
+            return View(property);
+
         }
 
         [HttpPost]
@@ -230,14 +247,13 @@ namespace BGBC.Web.Controllers
         {
             ViewBag.UserID = property.UserID;
             try
-            { 
-                    property = (Property)TempData["propertydata"];
-                    _repository.Update(property);
-                    TempData["SucessMessage"] = "Property Updated successfully.";
+            {
+                _repository.Update(property);
+                TempData["SucessMessage"] = "Property Updated successfully.";
 
-                    // PropertyId is wrong -- It display's empty Values
-                    return RedirectToAction("OwnerProperties", "Admin", new { id = property.UserID });
-                
+                // PropertyId is wrong -- It display's empty Values
+                return RedirectToAction("OwnerProperties", "Admin", new { id = property.UserID });
+
             }
             catch (Exception ex)
             {
@@ -251,7 +267,7 @@ namespace BGBC.Web.Controllers
         private void PopulateDropDown()
         {
             ViewBag.MonthDays = Enumerable.Range(1, 28).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() });
-            
+
             ViewBag.States = new List<SelectListItem>()
             {
                 new SelectListItem() {Text="Alabama", Value="AL"},
